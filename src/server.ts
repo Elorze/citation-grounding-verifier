@@ -3,6 +3,7 @@ import { Hono } from 'hono';
 import { env } from './config.js';
 import { AppError, toErrorBody, type ErrorCode } from './errors.js';
 import { VerifyRequest } from './schema.js';
+import { baselineVerifier } from './verifiers/baseline.js';
 import { stubVerifier } from './verifiers/stub.js';
 import type { Verifier } from './verifiers/types.js';
 
@@ -10,30 +11,33 @@ const MAX_BODY_BYTES = 1_000_000;
 
 const verifiers: Record<string, Verifier> = {
   stub: stubVerifier,
+  baseline: baselineVerifier,
 };
 
-export function registerVerifier(v: Verifier): void {
-  verifiers[v.name] = v;
-}
+let llmReady: Promise<void> | null = null;
 
-function resolveApproach(raw: string | undefined): Verifier {
-  const name = raw ?? env.VERIFIER;
-  const v = verifiers[name];
-  if (!v) {
-    throw new AppError(
-      'INVALID_REQUEST',
-      `Unknown approach "${name}". Available: ${Object.keys(verifiers).join(', ')}`,
-      400,
+function ensureLlmVerifiers(): Promise<void> {
+  if (verifiers.minimal && verifiers.optimized) return Promise.resolve();
+  if (!env.ZHIPU_API_KEY) {
+    return Promise.reject(
+      new AppError(
+        'INVALID_REQUEST',
+        'ZHIPU_API_KEY is required for LLM approaches',
+        400,
+      ),
     );
   }
-  if ((name === 'minimal' || name === 'optimized') && !env.ZHIPU_API_KEY) {
-    throw new AppError(
-      'INVALID_REQUEST',
-      'ZHIPU_API_KEY is required for LLM approaches',
-      400,
-    );
+  if (!llmReady) {
+    llmReady = (async () => {
+      const { llmMinimalVerifier } = await import('./verifiers/llmMinimal.js');
+      const { llmOptimizedVerifier } = await import(
+        './verifiers/llmOptimized.js'
+      );
+      verifiers.minimal = llmMinimalVerifier;
+      verifiers.optimized = llmOptimizedVerifier;
+    })();
   }
-  return v;
+  return llmReady;
 }
 
 const STATUS_BY_CODE: Record<ErrorCode, number> = {
@@ -45,10 +49,33 @@ const STATUS_BY_CODE: Record<ErrorCode, number> = {
   INTERNAL_ERROR: 500,
 };
 
+async function resolveApproach(raw: string | undefined): Promise<Verifier> {
+  const name = raw ?? env.VERIFIER;
+  if (name === 'minimal' || name === 'optimized') {
+    await ensureLlmVerifiers();
+  }
+  const v = verifiers[name];
+  if (!v) {
+    throw new AppError(
+      'INVALID_REQUEST',
+      `Unknown approach "${name}". Available: ${Object.keys(verifiers).join(', ')} (LLM needs ZHIPU_API_KEY)`,
+      400,
+    );
+  }
+  return v;
+}
+
 export const app = new Hono();
 
 app.get('/health', (c) =>
-  c.json({ ok: true, model: env.LLM_MODEL, verifiers: Object.keys(verifiers) }),
+  c.json({
+    ok: true,
+    model: env.LLM_MODEL,
+    verifiers: [
+      ...Object.keys(verifiers),
+      ...(env.ZHIPU_API_KEY ? ['minimal', 'optimized'] : []),
+    ].filter((v, i, a) => a.indexOf(v) === i),
+  }),
 );
 
 app.post('/verify', async (c) => {
@@ -80,7 +107,7 @@ app.post('/verify', async (c) => {
       );
     }
 
-    const verifier = resolveApproach(c.req.query('approach'));
+    const verifier = await resolveApproach(c.req.query('approach'));
     const { response } = await verifier.verify(parsed.data);
     return c.json(response);
   } catch (err) {
