@@ -21,16 +21,75 @@ describe('claimSimilarity', () => {
     ).toBeLessThan(0.5);
   });
 
-  it('uses CJK bigrams', () => {
+  it('uses CJK bigrams for identical Chinese claims', () => {
     const s = claimSimilarity(
       'Hillcrest 健身房工作日早上 5 点开门。',
       'Hillcrest 健身房工作日早上 5 点开门。',
     );
     expect(s).toBeGreaterThan(0.9);
   });
+
+  it('matches shorter Chinese pred to longer gold (case_022 style)', () => {
+    expect(
+      claimSimilarity(
+        'Hillcrest 健身房月卡 50 美元。',
+        '月卡 50 美元',
+      ),
+    ).toBeGreaterThanOrEqual(0.5);
+    expect(
+      claimSimilarity(
+        'Hillcrest 健身房月卡包含所有团课。',
+        '月卡包含所有团课',
+      ),
+    ).toBeGreaterThanOrEqual(0.5);
+  });
 });
 
 describe('matchClaims', () => {
+  it('aligns case_022-style gold/pred without missed+extra', () => {
+    const gold = [
+      {
+        claim_text: 'Hillcrest 健身房工作日早上 5 点开门。',
+        verdict: 'SUPPORTED' as const,
+        citations: [],
+      },
+      {
+        claim_text: 'Hillcrest 健身房月卡 50 美元。',
+        verdict: 'CONTRADICTED' as const,
+        citations: [],
+      },
+      {
+        claim_text: 'Hillcrest 健身房月卡包含所有团课。',
+        verdict: 'SUPPORTED' as const,
+        citations: [],
+      },
+    ];
+    const pred: Claim[] = [
+      {
+        claim_text: 'Hillcrest 健身房工作日早上 5 点开门。',
+        verdict: 'SUPPORTED',
+        reasoning: '',
+        citations: [],
+      },
+      {
+        claim_text: '月卡 50 美元',
+        verdict: 'CONTRADICTED',
+        reasoning: '',
+        citations: [],
+      },
+      {
+        claim_text: '月卡包含所有团课',
+        verdict: 'SUPPORTED',
+        reasoning: '',
+        citations: [],
+      },
+    ];
+    const m = matchClaims(gold, pred);
+    expect(m.matches).toHaveLength(3);
+    expect(m.missedGold).toHaveLength(0);
+    expect(m.extraPred).toHaveLength(0);
+  });
+
   it('greedily assigns one-to-one pairs', () => {
     const gold = [
       {

@@ -114,24 +114,54 @@ export function hasCjk(text: string): boolean {
   return CJK_RE.test(text);
 }
 
-/** Tokenize for matching / BM25. CJK → character bigrams; else words. */
+function cjkBigrams(chars: string[]): string[] {
+  if (chars.length === 0) return [];
+  if (chars.length === 1) return chars;
+  const bigrams: string[] = [];
+  for (let i = 0; i < chars.length - 1; i++) {
+    bigrams.push(chars[i]! + chars[i + 1]!);
+  }
+  return bigrams;
+}
+
+/**
+ * Tokenize for matching / BM25.
+ * Mixed scripts: Latin/digits as words, CJK runs as character bigrams
+ * (avoids exploding "Hillcrest" into letter-bigrams that dilute Jaccard).
+ */
 export function tokenize(text: string, dropStopwords = true): string[] {
   const lower = text.toLowerCase();
-  if (hasCjk(lower)) {
-    const chars = [...lower.replace(/\s+/g, '')].filter((c) => /\S/.test(c));
-    if (chars.length === 1) return chars;
-    const bigrams: string[] = [];
-    for (let i = 0; i < chars.length - 1; i++) {
-      bigrams.push(chars[i]! + chars[i + 1]!);
+  const tokens: string[] = [];
+  // Latin/num words OR contiguous CJK (Han + kana + compat ideographs)
+  const re =
+    /[a-z0-9]+(?:'[a-z]+)?|[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]+/g;
+  let m: RegExpExecArray | null;
+  let sawAny = false;
+  while ((m = re.exec(lower)) !== null) {
+    sawAny = true;
+    const piece = m[0]!;
+    if (hasCjk(piece)) {
+      tokens.push(...cjkBigrams([...piece]));
+    } else if (!dropStopwords || !ENGLISH_STOPWORDS.has(piece)) {
+      tokens.push(piece);
     }
-    return bigrams;
   }
-  const words = lower
-    .replace(/[^\p{L}\p{N}\s]/gu, ' ')
-    .split(/\s+/)
-    .filter(Boolean);
-  if (!dropStopwords) return words;
-  return words.filter((w) => !ENGLISH_STOPWORDS.has(w));
+  if (!sawAny) {
+    // Fallback for odd punctuation-only strings
+    const words = lower
+      .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+      .split(/\s+/)
+      .filter(Boolean);
+    return dropStopwords
+      ? words.filter((w) => !ENGLISH_STOPWORDS.has(w))
+      : words;
+  }
+  return tokens;
+}
+
+/** Strip punctuation/whitespace for containment checks in claim matching. */
+export function normalizeClaimKey(text: string): string {
+  return text.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
 }
 
 export function jaccard(a: string[], b: string[]): number {

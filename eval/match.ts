@@ -1,7 +1,9 @@
-import { jaccard, tokenize } from '../src/text.js';
+import { jaccard, normalizeClaimKey, tokenize } from '../src/text.js';
 import type { Claim, Verdict } from '../src/schema.js';
 
 export const MATCH_THRESHOLD = 0.5;
+/** Shorter normalized key must be at least this long for containment boost. */
+const CONTAINMENT_MIN_LEN = 6;
 
 export interface GoldClaim {
   claim_text: string;
@@ -28,8 +30,22 @@ export function normalizeTokens(text: string): string[] {
   return tokenize(text, true);
 }
 
+/**
+ * Jaccard over hybrid tokens, with a containment boost for asymmetric
+ * Chinese/English claims (e.g. gold has "Hillcrest …", pred omits the name).
+ */
 export function claimSimilarity(a: string, b: string): number {
-  return jaccard(normalizeTokens(a), normalizeTokens(b));
+  const jac = jaccard(normalizeTokens(a), normalizeTokens(b));
+  const na = normalizeClaimKey(a);
+  const nb = normalizeClaimKey(b);
+  if (
+    na.length >= CONTAINMENT_MIN_LEN &&
+    nb.length >= CONTAINMENT_MIN_LEN &&
+    (na.includes(nb) || nb.includes(na))
+  ) {
+    return Math.max(jac, 1);
+  }
+  return jac;
 }
 
 /**

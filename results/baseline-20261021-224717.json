@@ -1,12 +1,12 @@
 {
   "config": {
     "approach": "baseline",
-    "label": "M5 baseline after abbr fix",
-    "model": "glm-4.7-flash",
+    "label": "M5 baseline v1.1",
+    "model": "deepseek-chat",
     "thinking": "disabled",
     "temperature": 0.1,
     "matchThreshold": 0.5,
-    "gitCommit": "54d911b",
+    "gitCommit": "ff69bd6",
     "caseCount": 24
   },
   "metrics": {
@@ -17,26 +17,26 @@
       ],
       "matrix": [
         [
-          6,
-          0,
-          10,
-          12
-        ],
-        [
-          5,
-          0,
-          4,
-          6
-        ],
-        [
-          0,
-          0,
-          6,
-          6
-        ],
-        [
-          0,
+          8,
           1,
+          9,
+          10
+        ],
+        [
+          3,
+          0,
+          7,
+          5
+        ],
+        [
+          1,
+          0,
+          3,
+          8
+        ],
+        [
+          0,
+          0,
           3,
           0
         ]
@@ -44,9 +44,9 @@
     },
     "perClass": {
       "SUPPORTED": {
-        "precision": 0.5454545454545454,
-        "recall": 0.21428571428571427,
-        "f1": 0.30769230769230765,
+        "precision": 0.6666666666666666,
+        "recall": 0.2857142857142857,
+        "f1": 0.4,
         "support": 28
       },
       "CONTRADICTED": {
@@ -56,29 +56,29 @@
         "support": 15
       },
       "UNSUPPORTED": {
-        "precision": 0.2608695652173913,
-        "recall": 0.5,
-        "f1": 0.3428571428571428,
+        "precision": 0.13636363636363635,
+        "recall": 0.25,
+        "f1": 0.1764705882352941,
         "support": 12
       }
     },
-    "macroF1": 0.21684981684981683,
-    "verdictAccuracy": 0.3870967741935484,
-    "endToEndAccuracy": 0.21818181818181817,
+    "macroF1": 0.19215686274509802,
+    "verdictAccuracy": 0.34375,
+    "endToEndAccuracy": 0.2,
     "citationValidityRaw": 1,
     "citationValidityFinal": 1,
-    "citationAgreement": 0.8181818181818182,
+    "citationAgreement": 0.8333333333333334,
     "claimCountExactPct": 0.25,
     "claimCountAbsDiffMean": 1,
     "caseExactMatchPct": 0.041666666666666664,
-    "borderlineMatchCount": 9,
-    "matchedPairs": 31,
+    "borderlineMatchCount": 4,
+    "matchedPairs": 32,
     "totalGoldClaims": 55,
     "totalPredClaims": 35,
     "latencyMs": {
       "p50": 0,
       "p95": 1,
-      "mean": 0.5833333333333334
+      "mean": 0.4583333333333333
     },
     "tokens": {
       "inputTotal": 0,
@@ -97,25 +97,24 @@
     "- **case_003** (supported): MISSED gold=SUPPORTED \"The Maple Street Community Pool has six lanes.\"",
     "- **case_004** (multi_passage): gold=SUPPORTED pred=UNSUPPORTED | gold=\"A student who enrolls at Tidewell High School gets a free Tidewell Library card.\" | pred=\"A student who enrolls at Tidewell High School gets a free library card and can borrow up to 10 books at a time.\" | reasoning=\"Coverage=0.53 below thresholds (hand-picked constants; not tuned on test set).\"",
     "- **case_004** (multi_passage): MISSED gold=SUPPORTED \"A Tidewell High School student can borrow up to 10 books at a time from Tidewell Library.\"",
-    "- **case_005** (subtle_distortion): gold=CONTRADICTED pred=SUPPORTED | gold=\"Registration for the Glenrock 5K costs $15 for children under 13.\" | pred=\"Registration for the Glenrock 5K costs $25 for adults and $15 for children under 13.\" | reasoning=\"BM25 best sentence coverage=0.70 ≥ 0.7.\"",
-    "- **case_005** (subtle_distortion): MISSED gold=SUPPORTED \"Registration for the Glenrock 5K costs $25 for adults.\"",
-    "- **case_006** (subtle_distortion): gold=CONTRADICTED pred=SUPPORTED | gold=\"Kestrel Robotics Lab was founded by Dr. Samuel Reyes.\" | pred=\"Kestrel Robotics Lab was founded in 2019 by Dr. Samuel Reyes.\" | reasoning=\"BM25 best sentence coverage=0.75 ≥ 0.7.\"",
-    "- **case_006** (subtle_distortion): MISSED gold=SUPPORTED \"Kestrel Robotics Lab was founded in 2019.\"",
-    "- **case_007** (subtle_distortion): MISSED gold=CONTRADICTED \"Bluefin Snacks acquired Northgate Foods in 2021.\"",
-    "- **case_008** (subtle_distortion): MISSED gold=CONTRADICTED \"Silver Pines cabins are pet-friendly.\"",
-    "- **case_009** (subtle_distortion): gold=SUPPORTED pred=UNSUPPORTED | gold=\"All Corwin County libraries offer free Wi-Fi.\" | pred=\"Every Corwin County library is open on Sundays, and all of them offer free Wi-Fi.\" | reasoning=\"Coverage=0.42 below thresholds (hand-picked constants; not tuned on test set).\"",
-    "- **case_009** (subtle_distortion): MISSED gold=CONTRADICTED \"Every Corwin County library is open on Sundays.\"",
+    "- **case_005** (subtle_distortion): MISSED gold=CONTRADICTED \"Registration for the Glenrock 5K costs $15 for children under 13.\"",
+    "- **case_006** (subtle_distortion): MISSED gold=CONTRADICTED \"Kestrel Robotics Lab was founded by Dr. Samuel Reyes.\"",
+    "- **case_007** (subtle_distortion): gold=CONTRADICTED pred=UNSUPPORTED | gold=\"Bluefin Snacks acquired Northgate Foods in 2021.\" | pred=\"Bluefin Snacks acquired Northgate Foods in 2021 and has since doubled its annual revenue.\" | reasoning=\"Coverage=0.60 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **case_007** (subtle_distortion): MISSED gold=UNSUPPORTED \"Bluefin Snacks has doubled its annual revenue since 2021.\"",
+    "- **case_008** (subtle_distortion): gold=CONTRADICTED pred=UNSUPPORTED | gold=\"Silver Pines cabins are pet-friendly.\" | pred=\"Silver Pines cabins are pet-friendly, and each one comes with a private hot tub.\" | reasoning=\"Coverage=0.27 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **case_008** (subtle_distortion): MISSED gold=UNSUPPORTED \"Each Silver Pines cabin comes with a private hot tub.\"",
+    "- **case_009** (subtle_distortion): gold=CONTRADICTED pred=UNSUPPORTED | gold=\"Every Corwin County library is open on Sundays.\" | pred=\"Every Corwin County library is open on Sundays, and all of them offer free Wi-Fi.\" | reasoning=\"Coverage=0.42 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **case_009** (subtle_distortion): MISSED gold=SUPPORTED \"All Corwin County libraries offer free Wi-Fi.\"",
     "- **case_010** (subtle_distortion): gold=CONTRADICTED pred=UNSUPPORTED | gold=\"Any order over $50 ships for free, no matter where it is going.\" | pred=\"Any order over $50 ships for free, no matter where it is going.\" | reasoning=\"Coverage=0.33 below thresholds (hand-picked constants; not tuned on test set).\"",
     "- **case_011** (mixed): gold=SUPPORTED pred=UNSUPPORTED | gold=\"Sales at the Juniper Street store rose 20% in March.\" | pred=\"Sales at the Juniper Street store rose 20% in March because the store launched a loyalty app that month.\" | reasoning=\"Coverage=0.62 below thresholds (hand-picked constants; not tuned on test set).\"",
     "- **case_011** (mixed): MISSED gold=SUPPORTED \"The Juniper Street store launched a loyalty app in March.\"",
     "- **case_011** (mixed): MISSED gold=UNSUPPORTED \"The Juniper Street store's 20% sales rise in March was caused by the loyalty app.\"",
-    "- **case_012** (extrinsic_hallucination): MISSED gold=SUPPORTED \"The Eiffel Tower is open to visitors every day.\"",
+    "- **case_012** (extrinsic_hallucination): gold=SUPPORTED pred=CONTRADICTED | gold=\"The Eiffel Tower is open to visitors every day.\" | pred=\"The Eiffel Tower is open every day, and it was completed in 1889 for the World's Fair.\" | reasoning=\"Partial coverage=0.56 with number/negation mismatch vs best sentence.\"",
     "- **case_012** (extrinsic_hallucination): MISSED gold=UNSUPPORTED \"The Eiffel Tower was completed in 1889.\"",
     "- **case_012** (extrinsic_hallucination): MISSED gold=UNSUPPORTED \"The Eiffel Tower was built for the World's Fair.\"",
-    "- **case_012** (extrinsic_hallucination): EXTRA pred=CONTRADICTED \"The Eiffel Tower is open every day, and it was completed in 1889 for the World's Fair.\"",
     "- **case_013** (extrinsic_hallucination): gold=SUPPORTED pred=UNSUPPORTED | gold=\"Riverside Café roasts its own coffee beans.\" | pred=\"Riverside Café roasts its own beans and serves the best coffee in town.\" | reasoning=\"Coverage=0.67 below thresholds (hand-picked constants; not tuned on test set).\"",
     "- **case_013** (extrinsic_hallucination): MISSED gold=UNSUPPORTED \"Riverside Café serves the best coffee in town.\"",
-    "- **case_014** (subtle_distortion): gold=CONTRADICTED pred=UNSUPPORTED | gold=\"Lumen's PowerSaver mode eliminates battery drain on supported devices.\" | pred=\"Lumen's PowerSaver mode eliminates battery drain on supported devices, and it is available on Android 12 and later.\" | reasoning=\"Coverage=0.46 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **case_014** (subtle_distortion): gold=CONTRADICTED pred=UNSUPPORTED | gold=\"Lumen's PowerSaver mode eliminates battery drain on supported devices.\" | pred=\"Lumen's PowerSaver mode eliminates battery drain on supported devices, and it is available on Android 12 and later.\" | reasoning=\"Coverage=0.50 below thresholds (hand-picked constants; not tuned on test set).\"",
     "- **case_014** (subtle_distortion): MISSED gold=SUPPORTED \"Lumen's PowerSaver mode is available on Android 12 and later.\"",
     "- **case_015** (subtle_distortion): gold=SUPPORTED pred=UNSUPPORTED | gold=\"The Ridgeback Trail is about 8 kilometers long.\" | pred=\"The Ridgeback Trail is about 8 kilometers long and climbs 610 feet to the summit.\" | reasoning=\"Coverage=0.30 below thresholds (hand-picked constants; not tuned on test set).\"",
     "- **case_015** (subtle_distortion): MISSED gold=CONTRADICTED \"The Ridgeback Trail climbs 610 feet to the summit.\"",
@@ -126,12 +125,13 @@
     "- **case_018** (subtle_distortion): gold=CONTRADICTED pred=SUPPORTED | gold=\"Registration for the Oakridge coding camp closes on May 3.\" | pred=\"Registration for the Oakridge coding camp closes on May 3.\" | reasoning=\"BM25 best sentence coverage=1.00 ≥ 0.7.\"",
     "- **case_020** (edge_case): EXTRA pred=UNSUPPORTED \"Thanks for asking!\"",
     "- **case_020** (edge_case): EXTRA pred=UNSUPPORTED \"I hope this helps, and feel free to reach out if you have more questions.\"",
+    "- **case_021** (edge_case): gold=UNSUPPORTED pred=SUPPORTED | gold=\"Lakeview Park is the largest park in the city.\" | pred=\"Lakeview Park is the largest park in the city and covers 120 hectares.\" | reasoning=\"BM25 best sentence coverage=0.75 ≥ 0.7.\"",
     "- **case_021** (edge_case): gold=CONTRADICTED pred=UNSUPPORTED | gold=\"Dogs may run off-leash anywhere in Lakeview Park.\" | pred=\"Dogs may run off-leash anywhere in the park.\" | reasoning=\"Coverage=0.50 below thresholds (hand-picked constants; not tuned on test set).\"",
     "- **case_021** (edge_case): gold=CONTRADICTED pred=UNSUPPORTED | gold=\"Lakeview Park has three playgrounds.\" | pred=\"There are three playgrounds and a dog park.\" | reasoning=\"Coverage=0.60 below thresholds (hand-picked constants; not tuned on test set).\"",
     "- **case_021** (edge_case): MISSED gold=SUPPORTED \"Lakeview Park covers 120 hectares.\"",
     "- **case_021** (edge_case): MISSED gold=SUPPORTED \"Lakeview Park has a dog park.\"",
     "- **case_021** (edge_case): MISSED gold=SUPPORTED \"Lakeview Park closes at 10 p.m.\"",
-    "- **case_022** (edge_case): gold=SUPPORTED pred=UNSUPPORTED | gold=\"Hillcrest 健身房工作日早上 5 点开门。\" | pred=\"Hillcrest 健身房工作日早上 5 点开门，月卡 50 美元，包含所有团课。\" | reasoning=\"Coverage=0.00 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **case_022** (edge_case): gold=SUPPORTED pred=UNSUPPORTED | gold=\"Hillcrest 健身房工作日早上 5 点开门。\" | pred=\"Hillcrest 健身房工作日早上 5 点开门，月卡 50 美元，包含所有团课。\" | reasoning=\"Coverage=0.11 below thresholds (hand-picked constants; not tuned on test set).\"",
     "- **case_022** (edge_case): MISSED gold=CONTRADICTED \"Hillcrest 健身房月卡 50 美元。\"",
     "- **case_022** (edge_case): MISSED gold=SUPPORTED \"Hillcrest 健身房月卡包含所有团课。\"",
     "- **case_023** (extrinsic_hallucination): MISSED gold=UNSUPPORTED \"The Halden Bridge was designed by Mara Lind.\"",
@@ -232,7 +232,7 @@
         "outputTokens": 0,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 5
+        "latencyMs": 3
       },
       "caseExact": false
     },
@@ -352,7 +352,7 @@
           {
             "goldIndex": 0,
             "predIndex": 0,
-            "score": 0.7777777777777778,
+            "score": 1,
             "goldVerdict": "SUPPORTED",
             "predVerdict": "SUPPORTED"
           },
@@ -377,7 +377,7 @@
         "outputTokens": 0,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 0
+        "latencyMs": 1
       },
       "caseExact": false
     },
@@ -488,15 +488,15 @@
       "match": {
         "matches": [
           {
-            "goldIndex": 1,
+            "goldIndex": 0,
             "predIndex": 0,
-            "score": 0.8,
-            "goldVerdict": "CONTRADICTED",
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
             "predVerdict": "SUPPORTED"
           }
         ],
         "missedGold": [
-          0
+          1
         ],
         "extraPred": [],
         "borderlineCount": 0
@@ -508,7 +508,7 @@
         "outputTokens": 0,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1
+        "latencyMs": 0
       },
       "caseExact": false
     },
@@ -559,15 +559,15 @@
       "match": {
         "matches": [
           {
-            "goldIndex": 1,
+            "goldIndex": 0,
             "predIndex": 0,
-            "score": 0.875,
-            "goldVerdict": "CONTRADICTED",
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
             "predVerdict": "SUPPORTED"
           }
         ],
         "missedGold": [
-          0
+          1
         ],
         "extraPred": [],
         "borderlineCount": 0
@@ -614,15 +614,15 @@
       "match": {
         "matches": [
           {
-            "goldIndex": 1,
+            "goldIndex": 0,
             "predIndex": 0,
-            "score": 0.7,
-            "goldVerdict": "UNSUPPORTED",
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
             "predVerdict": "UNSUPPORTED"
           }
         ],
         "missedGold": [
-          0
+          1
         ],
         "extraPred": [],
         "borderlineCount": 0
@@ -634,7 +634,7 @@
         "outputTokens": 0,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 0
+        "latencyMs": 1
       },
       "caseExact": false
     },
@@ -669,18 +669,18 @@
       "match": {
         "matches": [
           {
-            "goldIndex": 1,
+            "goldIndex": 0,
             "predIndex": 0,
-            "score": 0.5833333333333334,
-            "goldVerdict": "UNSUPPORTED",
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
             "predVerdict": "UNSUPPORTED"
           }
         ],
         "missedGold": [
-          0
+          1
         ],
         "extraPred": [],
-        "borderlineCount": 1
+        "borderlineCount": 0
       },
       "stats": {
         "llmCalls": 0,
@@ -733,18 +733,18 @@
       "match": {
         "matches": [
           {
-            "goldIndex": 1,
+            "goldIndex": 0,
             "predIndex": 0,
-            "score": 0.5384615384615384,
-            "goldVerdict": "SUPPORTED",
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
             "predVerdict": "UNSUPPORTED"
           }
         ],
         "missedGold": [
-          0
+          1
         ],
         "extraPred": [],
-        "borderlineCount": 1
+        "borderlineCount": 0
       },
       "stats": {
         "llmCalls": 0,
@@ -852,7 +852,7 @@
           {
             "goldIndex": 0,
             "predIndex": 0,
-            "score": 0.5833333333333334,
+            "score": 1,
             "goldVerdict": "SUPPORTED",
             "predVerdict": "UNSUPPORTED"
           }
@@ -862,7 +862,7 @@
           2
         ],
         "extraPred": [],
-        "borderlineCount": 1
+        "borderlineCount": 0
       },
       "stats": {
         "llmCalls": 0,
@@ -904,7 +904,7 @@
         {
           "claim_text": "The Eiffel Tower is open every day, and it was completed in 1889 for the World's Fair.",
           "verdict": "CONTRADICTED",
-          "reasoning": "Partial coverage=0.50 with number/negation mismatch vs best sentence.",
+          "reasoning": "Partial coverage=0.56 with number/negation mismatch vs best sentence.",
           "citations": [
             {
               "index": 0,
@@ -916,16 +916,21 @@
         }
       ],
       "match": {
-        "matches": [],
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 0.5,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
         "missedGold": [
-          0,
           1,
           2
         ],
-        "extraPred": [
-          0
-        ],
-        "borderlineCount": 0
+        "extraPred": [],
+        "borderlineCount": 1
       },
       "stats": {
         "llmCalls": 0,
@@ -1022,7 +1027,7 @@
         {
           "claim_text": "Lumen's PowerSaver mode eliminates battery drain on supported devices, and it is available on Android 12 and later.",
           "verdict": "UNSUPPORTED",
-          "reasoning": "Coverage=0.46 below thresholds (hand-picked constants; not tuned on test set).",
+          "reasoning": "Coverage=0.50 below thresholds (hand-picked constants; not tuned on test set).",
           "citations": []
         }
       ],
@@ -1031,7 +1036,7 @@
           {
             "goldIndex": 0,
             "predIndex": 0,
-            "score": 0.6923076923076923,
+            "score": 1,
             "goldVerdict": "CONTRADICTED",
             "predVerdict": "UNSUPPORTED"
           }
@@ -1049,7 +1054,7 @@
         "outputTokens": 0,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 0
+        "latencyMs": 1
       },
       "caseExact": false
     },
@@ -1091,7 +1096,7 @@
           {
             "goldIndex": 0,
             "predIndex": 0,
-            "score": 0.6,
+            "score": 1,
             "goldVerdict": "SUPPORTED",
             "predVerdict": "UNSUPPORTED"
           }
@@ -1100,7 +1105,7 @@
           1
         ],
         "extraPred": [],
-        "borderlineCount": 1
+        "borderlineCount": 0
       },
       "stats": {
         "llmCalls": 0,
@@ -1151,7 +1156,7 @@
           {
             "goldIndex": 0,
             "predIndex": 0,
-            "score": 0.7777777777777778,
+            "score": 1,
             "goldVerdict": "SUPPORTED",
             "predVerdict": "UNSUPPORTED"
           }
@@ -1169,7 +1174,7 @@
         "outputTokens": 0,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1
+        "latencyMs": 0
       },
       "caseExact": false
     },
@@ -1213,7 +1218,7 @@
           {
             "goldIndex": 0,
             "predIndex": 0,
-            "score": 0.6666666666666666,
+            "score": 1,
             "goldVerdict": "CONTRADICTED",
             "predVerdict": "SUPPORTED"
           }
@@ -1231,7 +1236,7 @@
         "outputTokens": 0,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1
+        "latencyMs": 0
       },
       "caseExact": false
     },
@@ -1329,7 +1334,7 @@
         "outputTokens": 0,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1
+        "latencyMs": 0
       },
       "caseExact": true
     },
@@ -1376,7 +1381,7 @@
       "category": "edge_case",
       "gold": [
         {
-          "claim_text": "Lakeview Park is a green space.",
+          "claim_text": "Lakeview Park is the largest park in the city.",
           "verdict": "UNSUPPORTED",
           "citations": []
         },
@@ -1468,10 +1473,17 @@
       ],
       "pred": [
         {
-          "claim_text": "Lakeview Park is a large green space covering 120 hectares.",
-          "verdict": "UNSUPPORTED",
-          "reasoning": "Coverage=0.50 below thresholds (hand-picked constants; not tuned on test set).",
-          "citations": []
+          "claim_text": "Lakeview Park is the largest park in the city and covers 120 hectares.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.75 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Lakeview Park covers 120 hectares and includes a 3-kilometer walking loop.",
+              "start_char": 0,
+              "end_char": 74
+            }
+          ]
         },
         {
           "claim_text": "It has a 3-kilometer walking loop.",
@@ -1534,6 +1546,13 @@
       "match": {
         "matches": [
           {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
             "goldIndex": 5,
             "predIndex": 3,
             "score": 0.8571428571428571,
@@ -1562,13 +1581,6 @@
             "predVerdict": "SUPPORTED"
           },
           {
-            "goldIndex": 0,
-            "predIndex": 0,
-            "score": 0.5,
-            "goldVerdict": "UNSUPPORTED",
-            "predVerdict": "UNSUPPORTED"
-          },
-          {
             "goldIndex": 3,
             "predIndex": 2,
             "score": 0.5,
@@ -1589,7 +1601,7 @@
           8
         ],
         "extraPred": [],
-        "borderlineCount": 4
+        "borderlineCount": 3
       },
       "stats": {
         "llmCalls": 0,
@@ -1598,7 +1610,7 @@
         "outputTokens": 0,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1
+        "latencyMs": 0
       },
       "caseExact": false
     },
@@ -1641,7 +1653,7 @@
         {
           "claim_text": "Hillcrest 健身房工作日早上 5 点开门，月卡 50 美元，包含所有团课。",
           "verdict": "UNSUPPORTED",
-          "reasoning": "Coverage=0.00 below thresholds (hand-picked constants; not tuned on test set).",
+          "reasoning": "Coverage=0.11 below thresholds (hand-picked constants; not tuned on test set).",
           "citations": []
         }
       ],
@@ -1650,7 +1662,7 @@
           {
             "goldIndex": 0,
             "predIndex": 0,
-            "score": 0.5555555555555556,
+            "score": 1,
             "goldVerdict": "SUPPORTED",
             "predVerdict": "UNSUPPORTED"
           }
@@ -1660,7 +1672,7 @@
           2
         ],
         "extraPred": [],
-        "borderlineCount": 1
+        "borderlineCount": 0
       },
       "stats": {
         "llmCalls": 0,
@@ -1669,7 +1681,7 @@
         "outputTokens": 0,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 0
+        "latencyMs": 1
       },
       "caseExact": false
     },
