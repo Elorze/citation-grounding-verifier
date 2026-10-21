@@ -1,6 +1,6 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
-import { env } from './config.js';
+import { env, hasLlmKey } from './config.js';
 import { AppError, toErrorBody, type ErrorCode } from './errors.js';
 import { VerifyRequest } from './schema.js';
 import { baselineVerifier } from './verifiers/baseline.js';
@@ -18,11 +18,11 @@ let llmReady: Promise<void> | null = null;
 
 function ensureLlmVerifiers(): Promise<void> {
   if (verifiers.minimal && verifiers.optimized) return Promise.resolve();
-  if (!env.ZHIPU_API_KEY) {
+  if (!hasLlmKey()) {
     return Promise.reject(
       new AppError(
         'INVALID_REQUEST',
-        'ZHIPU_API_KEY is required for LLM approaches',
+        'LLM_API_KEY is required for LLM approaches',
         400,
       ),
     );
@@ -58,7 +58,7 @@ async function resolveApproach(raw: string | undefined): Promise<Verifier> {
   if (!v) {
     throw new AppError(
       'INVALID_REQUEST',
-      `Unknown approach "${name}". Available: ${Object.keys(verifiers).join(', ')} (LLM needs ZHIPU_API_KEY)`,
+      `Unknown approach "${name}". Available: ${Object.keys(verifiers).join(', ')} (LLM needs LLM_API_KEY)`,
       400,
     );
   }
@@ -71,9 +71,10 @@ app.get('/health', (c) =>
   c.json({
     ok: true,
     model: env.LLM_MODEL,
+    provider: env.LLM_PROVIDER,
     verifiers: [
       ...Object.keys(verifiers),
-      ...(env.ZHIPU_API_KEY ? ['minimal', 'optimized'] : []),
+      ...(hasLlmKey() ? ['minimal', 'optimized'] : []),
     ].filter((v, i, a) => a.indexOf(v) === i),
   }),
 );

@@ -10,12 +10,12 @@ let _model: ReturnType<ReturnType<typeof createOpenAICompatible>> | null = null;
 
 function getModel() {
   if (_model) return _model;
-  const zhipu = createOpenAICompatible({
-    name: 'zhipu',
+  const client = createOpenAICompatible({
+    name: env.LLM_PROVIDER,
     apiKey: requireLlmKey(),
     baseURL: env.LLM_BASE_URL,
   });
-  _model = zhipu(env.LLM_MODEL);
+  _model = client(env.LLM_MODEL);
   return _model;
 }
 
@@ -92,9 +92,10 @@ async function generateOnce(
   instructions: string,
   messages: { role: 'user' | 'assistant'; content: string }[],
 ) {
-  // Zhipu glm-4.7-flash does not support response_format / structuredOutputs.
-  // Spec fallback: plain generateText → JSON.parse → Zod.
+  // Prefer plain generateText → JSON.parse → Zod (provider JSON schema varies).
   // AI SDK v7: system prompt goes in `instructions`, not messages.
+  const isZhipu =
+    env.LLM_PROVIDER === 'zhipu' || env.LLM_BASE_URL.includes('bigmodel');
   return generateText({
     model: getModel(),
     instructions,
@@ -102,11 +103,13 @@ async function generateOnce(
     temperature: env.LLM_TEMPERATURE,
     abortSignal: AbortSignal.timeout(env.LLM_TIMEOUT_MS),
     maxRetries: 0, // we handle 429 ourselves with longer backoff
-    providerOptions: {
-      zhipu: {
-        thinking: { type: env.LLM_THINKING },
-      },
-    },
+    ...(isZhipu
+      ? {
+          providerOptions: {
+            zhipu: { thinking: { type: env.LLM_THINKING } },
+          },
+        }
+      : {}),
   });
 }
 

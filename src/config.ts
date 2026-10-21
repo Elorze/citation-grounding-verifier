@@ -4,11 +4,12 @@ import { z } from 'zod';
 loadDotenv();
 
 const EnvSchema = z.object({
+  LLM_API_KEY: z.string().optional(),
+  DEEPSEEK_API_KEY: z.string().optional(),
   ZHIPU_API_KEY: z.string().optional(),
-  LLM_BASE_URL: z
-    .string()
-    .default('https://open.bigmodel.cn/api/paas/v4'),
-  LLM_MODEL: z.string().default('glm-4.7-flash'),
+  LLM_BASE_URL: z.string().default('https://api.deepseek.com'),
+  LLM_MODEL: z.string().default('deepseek-chat'),
+  LLM_PROVIDER: z.string().default('deepseek'),
   LLM_THINKING: z.enum(['disabled', 'enabled']).default('disabled'),
   LLM_TEMPERATURE: z.coerce.number().default(0.1),
   LLM_TIMEOUT_MS: z.coerce.number().int().positive().default(60_000),
@@ -34,11 +35,20 @@ function parseEnv(): AppConfig {
 
 export const env = parseEnv();
 
+export function resolveLlmApiKey(): string | undefined {
+  return env.LLM_API_KEY || env.DEEPSEEK_API_KEY || env.ZHIPU_API_KEY;
+}
+
 export function requireLlmKey(): string {
-  if (!env.ZHIPU_API_KEY) {
+  const key = resolveLlmApiKey();
+  if (!key) {
     throw new Error(
-      'ZHIPU_API_KEY is required for LLM verifiers. Set it in .env',
+      'LLM_API_KEY is required for LLM verifiers. Set it in .env',
     );
   }
-  return env.ZHIPU_API_KEY;
+  return key;
+}
+
+export function hasLlmKey(): boolean {
+  return Boolean(resolveLlmApiKey());
 }

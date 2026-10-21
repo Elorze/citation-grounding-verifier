@@ -1,0 +1,527 @@
+{
+  "config": {
+    "approach": "minimal",
+    "label": "deepseek-chat M4 smoke5",
+    "model": "deepseek-chat",
+    "thinking": "disabled",
+    "temperature": 0.1,
+    "matchThreshold": 0.5,
+    "gitCommit": "6a40d8c",
+    "caseCount": 5
+  },
+  "metrics": {
+    "confusion": {
+      "labels": [
+        "row=gold S/C/U/(extra)",
+        "col=pred S/C/U/(missed)"
+      ],
+      "matrix": [
+        [
+          7,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "perClass": {
+      "SUPPORTED": {
+        "precision": 1,
+        "recall": 0.875,
+        "f1": 0.9333333333333333,
+        "support": 8
+      },
+      "CONTRADICTED": {
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "support": 2
+      },
+      "UNSUPPORTED": {
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "support": 1
+      }
+    },
+    "macroF1": 0.9777777777777779,
+    "verdictAccuracy": 1,
+    "endToEndAccuracy": 0.9090909090909091,
+    "citationValidityRaw": 1,
+    "citationValidityFinal": 1,
+    "citationAgreement": 1,
+    "claimCountExactPct": 0.8,
+    "claimCountAbsDiffMean": 0.2,
+    "caseExactMatchPct": 0.8,
+    "borderlineMatchCount": 1,
+    "matchedPairs": 10,
+    "totalGoldClaims": 11,
+    "totalPredClaims": 10,
+    "latencyMs": {
+      "p50": 1375,
+      "p95": 1893,
+      "mean": 1462.8
+    },
+    "tokens": {
+      "inputTotal": 1244,
+      "outputTotal": 800,
+      "perCaseInput": 248.8,
+      "perCaseOutput": 160
+    },
+    "llmCallsTotal": 5,
+    "validationRetriesTotal": 0,
+    "llmCallsPerCase": 1
+  },
+  "failures": [
+    "- **case_003** (supported): MISSED gold=SUPPORTED \"The Maple Street Community Pool has six lanes.\""
+  ],
+  "perCase": [
+    {
+      "id": "case_001",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "Northwind Notes lets annual subscribers request a refund within 30 days.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Northwind Notes offers a 30-day refund window for annual plans."
+            }
+          ]
+        },
+        {
+          "claim_text": "Standard tier team workspaces can have up to 100 members.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Team workspaces on the Standard tier support up to 50 members."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Enterprise tier includes 24/7 phone support.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Northwind Notes lets annual subscribers request a refund within 30 days.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states a 30-day refund window for annual plans.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Northwind Notes offers a 30-day refund window for annual plans.",
+              "start_char": 0,
+              "end_char": 63
+            }
+          ]
+        },
+        {
+          "claim_text": "Standard tier team workspaces can have up to 100 members.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 says the Standard tier supports up to 50 members, not 100.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Team workspaces on the Standard tier support up to 50 members.",
+              "start_char": 0,
+              "end_char": 62
+            }
+          ]
+        },
+        {
+          "claim_text": "The Enterprise tier also includes 24/7 phone support.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Passage 1 mentions SSO and no member limit for Enterprise, but does not mention 24/7 phone support.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 0.875,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 302,
+        "outputTokens": 208,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1893
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_002",
+      "category": "supported",
+      "gold": [
+        {
+          "claim_text": "On weekdays, Harbor Lane Bakery starts serving customers at half past six in the morning.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Harbor Lane Bakery opens at 6:30 a.m. on weekdays"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "On weekdays, Harbor Lane Bakery starts serving customers at 6:30 a.m.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states the bakery opens at 6:30 a.m. on weekdays, which matches 'half past six in the morning.'",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Harbor Lane Bakery opens at 6:30 a.m. on weekdays",
+              "start_char": 0,
+              "end_char": 49
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 0.5,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 1
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 233,
+        "outputTokens": 100,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1375
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_003",
+      "category": "supported",
+      "gold": [
+        {
+          "claim_text": "The Maple Street Community Pool is 25 meters long.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Maple Street Community Pool is 25 meters long"
+            }
+          ]
+        },
+        {
+          "claim_text": "The Maple Street Community Pool has six lanes.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "has six lanes"
+            }
+          ]
+        },
+        {
+          "claim_text": "Lap swimming at the Maple Street Community Pool runs from 6 a.m. to 9 a.m. daily.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Lap swimming is available from 6 a.m. to 9 a.m. every day."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The Maple Street Community Pool is 25 meters long with six lanes.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states the pool is 25 meters long and has six lanes.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Maple Street Community Pool is 25 meters long and has six lanes.",
+              "start_char": 0,
+              "end_char": 68
+            }
+          ]
+        },
+        {
+          "claim_text": "Lap swimming runs from 6 a.m. to 9 a.m. daily.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 states lap swimming is available from 6 a.m. to 9 a.m. every day.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Lap swimming is available from 6 a.m. to 9 a.m. every day.",
+              "start_char": 0,
+              "end_char": 58
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 0.7777777777777778,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 0.6363636363636364,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [
+          1
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 237,
+        "outputTokens": 167,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1286
+      },
+      "caseExact": false
+    },
+    {
+      "id": "case_004",
+      "category": "multi_passage",
+      "gold": [
+        {
+          "claim_text": "A student who enrolls at Tidewell High School gets a free Tidewell Library card.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Students at Tidewell High School receive a free Tidewell Library card when they enroll."
+            }
+          ]
+        },
+        {
+          "claim_text": "A Tidewell High School student can borrow up to 10 books at a time from Tidewell Library.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Students at Tidewell High School receive a free Tidewell Library card when they enroll."
+            },
+            {
+              "index": 0,
+              "quote": "Every Tidewell Library card holder may borrow up to 10 books at a time."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "A student who enrolls at Tidewell High School gets a free library card.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 states students receive a free card upon enrollment.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Students at Tidewell High School receive a free Tidewell Library card when they enroll.",
+              "start_char": 0,
+              "end_char": 87
+            }
+          ]
+        },
+        {
+          "claim_text": "A student who enrolls at Tidewell High School can borrow up to 10 books at a time.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 says every card holder may borrow up to 10 books, and passage 1 establishes students receive a card.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Every Tidewell Library card holder may borrow up to 10 books at a time.",
+              "start_char": 0,
+              "end_char": 71
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 0.75,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 233,
+        "outputTokens": 169,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1385
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_005",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Registration for the Glenrock 5K costs $25 for adults.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Registration costs $25 for adults"
+            }
+          ]
+        },
+        {
+          "claim_text": "Registration for the Glenrock 5K costs $15 for children under 13.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Registration costs $25 for adults and $15 for children under 12."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Registration for the Glenrock 5K costs $25 for adults.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 states the adult registration cost is $25.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Registration costs $25 for adults and $15 for children under 12.",
+              "start_char": 0,
+              "end_char": 64
+            }
+          ]
+        },
+        {
+          "claim_text": "Registration for the Glenrock 5K costs $15 for children under 13.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 says the $15 rate applies to children under 12, not under 13.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Registration costs $25 for adults and $15 for children under 12.",
+              "start_char": 0,
+              "end_char": 64
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 239,
+        "outputTokens": 156,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1375
+      },
+      "caseExact": true
+    }
+  ]
+}
