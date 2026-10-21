@@ -1,0 +1,2171 @@
+{
+  "config": {
+    "approach": "minimal",
+    "label": "deepseek-chat M4 full24",
+    "model": "deepseek-chat",
+    "thinking": "disabled",
+    "temperature": 0.1,
+    "matchThreshold": 0.5,
+    "gitCommit": "291bcd7",
+    "caseCount": 24
+  },
+  "metrics": {
+    "confusion": {
+      "labels": [
+        "row=gold S/C/U/(extra)",
+        "col=pred S/C/U/(missed)"
+      ],
+      "matrix": [
+        [
+          24,
+          0,
+          0,
+          4
+        ],
+        [
+          0,
+          14,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          10,
+          1
+        ],
+        [
+          1,
+          1,
+          0,
+          0
+        ]
+      ]
+    },
+    "perClass": {
+      "SUPPORTED": {
+        "precision": 0.9230769230769231,
+        "recall": 0.8571428571428571,
+        "f1": 0.888888888888889,
+        "support": 28
+      },
+      "CONTRADICTED": {
+        "precision": 0.9333333333333333,
+        "recall": 0.9333333333333333,
+        "f1": 0.9333333333333333,
+        "support": 15
+      },
+      "UNSUPPORTED": {
+        "precision": 1,
+        "recall": 0.8333333333333334,
+        "f1": 0.9090909090909091,
+        "support": 12
+      }
+    },
+    "macroF1": 0.9104377104377105,
+    "verdictAccuracy": 0.9795918367346939,
+    "endToEndAccuracy": 0.8727272727272727,
+    "citationValidityRaw": 1,
+    "citationValidityFinal": 1,
+    "citationAgreement": 1,
+    "claimCountExactPct": 0.8333333333333334,
+    "claimCountAbsDiffMean": 0.16666666666666666,
+    "caseExactMatchPct": 0.7916666666666666,
+    "borderlineMatchCount": 4,
+    "matchedPairs": 49,
+    "totalGoldClaims": 55,
+    "totalPredClaims": 51,
+    "latencyMs": {
+      "p50": 1420,
+      "p95": 1743,
+      "mean": 1439.4166666666667
+    },
+    "tokens": {
+      "inputTotal": 5488,
+      "outputTotal": 3970,
+      "perCaseInput": 228.66666666666666,
+      "perCaseOutput": 165.41666666666666
+    },
+    "llmCallsTotal": 24,
+    "validationRetriesTotal": 0,
+    "llmCallsPerCase": 1
+  },
+  "failures": [
+    "- **case_003** (supported): MISSED gold=SUPPORTED \"The Maple Street Community Pool has six lanes.\"",
+    "- **case_006** (subtle_distortion): MISSED gold=SUPPORTED \"Kestrel Robotics Lab was founded in 2019.\"",
+    "- **case_012** (extrinsic_hallucination): MISSED gold=UNSUPPORTED \"The Eiffel Tower was completed in 1889.\"",
+    "- **case_021** (edge_case): gold=UNSUPPORTED pred=SUPPORTED | gold=\"Lakeview Park is a green space.\" | pred=\"Lakeview Park is a large green space covering 120 hectares.\" | reasoning=\"Passage 0 states the park covers 120 hectares.\"",
+    "- **case_021** (edge_case): MISSED gold=SUPPORTED \"Lakeview Park covers 120 hectares.\"",
+    "- **case_022** (edge_case): MISSED gold=CONTRADICTED \"Hillcrest 健身房月卡 50 美元。\"",
+    "- **case_022** (edge_case): MISSED gold=SUPPORTED \"Hillcrest 健身房月卡包含所有团课。\"",
+    "- **case_022** (edge_case): EXTRA pred=CONTRADICTED \"月卡 50 美元\"",
+    "- **case_022** (edge_case): EXTRA pred=SUPPORTED \"月卡包含所有团课\""
+  ],
+  "perCase": [
+    {
+      "id": "case_001",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "Northwind Notes lets annual subscribers request a refund within 30 days.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Northwind Notes offers a 30-day refund window for annual plans."
+            }
+          ]
+        },
+        {
+          "claim_text": "Standard tier team workspaces can have up to 100 members.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Team workspaces on the Standard tier support up to 50 members."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Enterprise tier includes 24/7 phone support.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Northwind Notes lets annual subscribers request a refund within 30 days.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states a 30-day refund window for annual plans.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Northwind Notes offers a 30-day refund window for annual plans.",
+              "start_char": 0,
+              "end_char": 63
+            }
+          ]
+        },
+        {
+          "claim_text": "Standard tier team workspaces can have up to 100 members.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 says Standard tier supports up to 50 members, not 100.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Team workspaces on the Standard tier support up to 50 members.",
+              "start_char": 0,
+              "end_char": 62
+            }
+          ]
+        },
+        {
+          "claim_text": "The Enterprise tier also includes 24/7 phone support.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Passage 1 mentions Enterprise removes member limit and adds SSO, but does not mention 24/7 phone support.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 0.875,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 302,
+        "outputTokens": 207,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1583
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_002",
+      "category": "supported",
+      "gold": [
+        {
+          "claim_text": "On weekdays, Harbor Lane Bakery starts serving customers at half past six in the morning.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Harbor Lane Bakery opens at 6:30 a.m. on weekdays"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "On weekdays, Harbor Lane Bakery starts serving customers at 6:30 a.m.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states the bakery opens at 6:30 a.m. on weekdays, which matches 'half past six in the morning.'",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Harbor Lane Bakery opens at 6:30 a.m. on weekdays",
+              "start_char": 0,
+              "end_char": 49
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 0.5,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 1
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 233,
+        "outputTokens": 100,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1739
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_003",
+      "category": "supported",
+      "gold": [
+        {
+          "claim_text": "The Maple Street Community Pool is 25 meters long.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Maple Street Community Pool is 25 meters long"
+            }
+          ]
+        },
+        {
+          "claim_text": "The Maple Street Community Pool has six lanes.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "has six lanes"
+            }
+          ]
+        },
+        {
+          "claim_text": "Lap swimming at the Maple Street Community Pool runs from 6 a.m. to 9 a.m. daily.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Lap swimming is available from 6 a.m. to 9 a.m. every day."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The Maple Street Community Pool is 25 meters long with six lanes.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states the pool is 25 meters long and has six lanes.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Maple Street Community Pool is 25 meters long and has six lanes.",
+              "start_char": 0,
+              "end_char": 68
+            }
+          ]
+        },
+        {
+          "claim_text": "Lap swimming runs from 6 a.m. to 9 a.m. daily.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 states lap swimming is available from 6 a.m. to 9 a.m. every day.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Lap swimming is available from 6 a.m. to 9 a.m. every day.",
+              "start_char": 0,
+              "end_char": 58
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 0.7777777777777778,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 0.6363636363636364,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [
+          1
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 237,
+        "outputTokens": 167,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1612
+      },
+      "caseExact": false
+    },
+    {
+      "id": "case_004",
+      "category": "multi_passage",
+      "gold": [
+        {
+          "claim_text": "A student who enrolls at Tidewell High School gets a free Tidewell Library card.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Students at Tidewell High School receive a free Tidewell Library card when they enroll."
+            }
+          ]
+        },
+        {
+          "claim_text": "A Tidewell High School student can borrow up to 10 books at a time from Tidewell Library.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Students at Tidewell High School receive a free Tidewell Library card when they enroll."
+            },
+            {
+              "index": 0,
+              "quote": "Every Tidewell Library card holder may borrow up to 10 books at a time."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "A student who enrolls at Tidewell High School gets a free library card.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 states students receive a free card upon enrollment.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Students at Tidewell High School receive a free Tidewell Library card when they enroll.",
+              "start_char": 0,
+              "end_char": 87
+            }
+          ]
+        },
+        {
+          "claim_text": "A student who enrolls at Tidewell High School can borrow up to 10 books at a time.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 says every card holder may borrow up to 10 books, and passage 1 establishes students receive a card.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Every Tidewell Library card holder may borrow up to 10 books at a time.",
+              "start_char": 0,
+              "end_char": 71
+            },
+            {
+              "index": 1,
+              "quote": "Students at Tidewell High School receive a free Tidewell Library card when they enroll.",
+              "start_char": 0,
+              "end_char": 87
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 0.75,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 233,
+        "outputTokens": 193,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1372
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_005",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Registration for the Glenrock 5K costs $25 for adults.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Registration costs $25 for adults"
+            }
+          ]
+        },
+        {
+          "claim_text": "Registration for the Glenrock 5K costs $15 for children under 13.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Registration costs $25 for adults and $15 for children under 12."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Registration for the Glenrock 5K costs $25 for adults.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 states the adult registration cost is $25.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Registration costs $25 for adults",
+              "start_char": 0,
+              "end_char": 33
+            }
+          ]
+        },
+        {
+          "claim_text": "Registration for the Glenrock 5K costs $15 for children under 13.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 says the $15 rate applies to children under 12, not under 13.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "$15 for children under 12",
+              "start_char": 38,
+              "end_char": 63
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 239,
+        "outputTokens": 141,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1420
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_006",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Kestrel Robotics Lab was founded in 2019.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Dr. Lena Okafor founded the Kestrel Robotics Lab in 2019."
+            }
+          ]
+        },
+        {
+          "claim_text": "Kestrel Robotics Lab was founded by Dr. Samuel Reyes.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Dr. Lena Okafor founded the Kestrel Robotics Lab in 2019."
+            },
+            {
+              "index": 1,
+              "quote": "Dr. Samuel Reyes, who joined in 2022"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Kestrel Robotics Lab was founded in 2019 by Dr. Samuel Reyes.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 0 states the lab was founded in 2019 by Dr. Lena Okafor, not Dr. Samuel Reyes. Passage 1 says Dr. Samuel Reyes is the current director who joined in 2022.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Dr. Lena Okafor founded the Kestrel Robotics Lab in 2019.",
+              "start_char": 0,
+              "end_char": 57
+            },
+            {
+              "index": 1,
+              "quote": "The lab's current director is Dr. Samuel Reyes, who joined in 2022.",
+              "start_char": 0,
+              "end_char": 67
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 1,
+            "predIndex": 0,
+            "score": 0.875,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [
+          0
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 225,
+        "outputTokens": 140,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1312
+      },
+      "caseExact": false
+    },
+    {
+      "id": "case_007",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Bluefin Snacks acquired Northgate Foods in 2021.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "In 2021, Northgate Foods acquired the smaller company Bluefin Snacks."
+            }
+          ]
+        },
+        {
+          "claim_text": "Bluefin Snacks has doubled its annual revenue since 2021.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Bluefin Snacks acquired Northgate Foods in 2021.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "The passage states the opposite: Northgate Foods acquired Bluefin Snacks in 2021.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "In 2021, Northgate Foods acquired the smaller company Bluefin Snacks.",
+              "start_char": 0,
+              "end_char": 69
+            }
+          ]
+        },
+        {
+          "claim_text": "Bluefin Snacks has since doubled its annual revenue.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage mentions revenue or any financial figures for Bluefin Snacks.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 0.8571428571428571,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 223,
+        "outputTokens": 129,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1316
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_008",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Silver Pines cabins are pet-friendly.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Pets are not allowed in the Silver Pines cabins."
+            }
+          ]
+        },
+        {
+          "claim_text": "Each Silver Pines cabin comes with a private hot tub.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Silver Pines cabins are pet-friendly.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 0 explicitly states pets are not allowed in the Silver Pines cabins, with service animals being the only exception.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Pets are not allowed in the Silver Pines cabins.",
+              "start_char": 0,
+              "end_char": 48
+            }
+          ]
+        },
+        {
+          "claim_text": "Each Silver Pines cabin comes with a private hot tub.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "The passages mention a kitchen and wood stove in each cabin but do not mention a hot tub.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 218,
+        "outputTokens": 131,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1150
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_009",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Every Corwin County library is open on Sundays.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Nine of the ten Corwin County libraries are open on Sundays."
+            },
+            {
+              "index": 0,
+              "quote": "The Eastgate branch is closed on Sundays for renovation."
+            }
+          ]
+        },
+        {
+          "claim_text": "All Corwin County libraries offer free Wi-Fi.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "All branches offer free Wi-Fi."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Every Corwin County library is open on Sundays.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 0 states nine of ten libraries are open Sundays and Eastgate is closed Sundays, so not every library is open Sundays.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Nine of the ten Corwin County libraries are open on Sundays. The Eastgate branch is closed on Sundays for renovation.",
+              "start_char": 0,
+              "end_char": 117
+            }
+          ]
+        },
+        {
+          "claim_text": "All Corwin County libraries offer free Wi-Fi.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 states all branches offer free Wi-Fi.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "All branches offer free Wi-Fi.",
+              "start_char": 0,
+              "end_char": 30
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 222,
+        "outputTokens": 151,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1224
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_010",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Any order over $50 ships for free, no matter where it is going.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Orders over $50 shipped within the EU qualify for free shipping."
+            },
+            {
+              "index": 0,
+              "quote": "Orders to other regions pay a flat $12 fee."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Any order over $50 ships for free, no matter where it is going.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 0 states that free shipping for orders over $50 applies only within the EU; orders to other regions pay a flat $12 fee.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Orders over $50 shipped within the EU qualify for free shipping. Orders to other regions pay a flat $12 fee.",
+              "start_char": 0,
+              "end_char": 108
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 224,
+        "outputTokens": 104,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1451
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_011",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "Sales at the Juniper Street store rose 20% in March.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Sales at the Juniper Street store rose 20% in March."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Juniper Street store launched a loyalty app in March.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "In March, the Juniper Street store launched a loyalty app for its customers."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Juniper Street store's 20% sales rise in March was caused by the loyalty app.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Sales at the Juniper Street store rose 20% in March.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 directly states this.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Sales at the Juniper Street store rose 20% in March.",
+              "start_char": 0,
+              "end_char": 52
+            }
+          ]
+        },
+        {
+          "claim_text": "The Juniper Street store launched a loyalty app in March.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 states the store launched a loyalty app in March.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "In March, the Juniper Street store launched a loyalty app for its customers.",
+              "start_char": 0,
+              "end_char": 76
+            }
+          ]
+        },
+        {
+          "claim_text": "The sales rise at the Juniper Street store was because the store launched a loyalty app that month.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Neither passage states a causal relationship between the loyalty app launch and the sales increase; the answer asserts causation not present in the context.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 0.5,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 1
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 225,
+        "outputTokens": 204,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1351
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_012",
+      "category": "extrinsic_hallucination",
+      "gold": [
+        {
+          "claim_text": "The Eiffel Tower is open to visitors every day.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Eiffel Tower in Paris is open to visitors every day of the year."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Eiffel Tower was completed in 1889.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        },
+        {
+          "claim_text": "The Eiffel Tower was built for the World's Fair.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The Eiffel Tower is open every day.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states the tower is open to visitors every day of the year.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Eiffel Tower in Paris is open to visitors every day of the year.",
+              "start_char": 0,
+              "end_char": 68
+            }
+          ]
+        },
+        {
+          "claim_text": "The Eiffel Tower was completed in 1889 for the World's Fair.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "None of the passages mention the completion date or the World's Fair.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 0.8333333333333334,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 0.625,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [
+          1
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 225,
+        "outputTokens": 128,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1421
+      },
+      "caseExact": false
+    },
+    {
+      "id": "case_013",
+      "category": "extrinsic_hallucination",
+      "gold": [
+        {
+          "claim_text": "Riverside Café roasts its own coffee beans.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Riverside Café roasts its own coffee beans on site."
+            }
+          ]
+        },
+        {
+          "claim_text": "Riverside Café serves the best coffee in town.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Riverside Café roasts its own beans.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 directly states that the café roasts its own coffee beans on site.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Riverside Café roasts its own coffee beans on site.",
+              "start_char": 0,
+              "end_char": 51
+            }
+          ]
+        },
+        {
+          "claim_text": "Riverside Café serves the best coffee in town.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage states anything about the quality of the coffee or compares it to other cafés in town.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 0.8333333333333334,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 217,
+        "outputTokens": 125,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 840
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_014",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Lumen's PowerSaver mode eliminates battery drain on supported devices.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "may reduce battery drain by up to 15%"
+            }
+          ]
+        },
+        {
+          "claim_text": "Lumen's PowerSaver mode is available on Android 12 and later.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "available on Android 12 and later"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Lumen's PowerSaver mode eliminates battery drain on supported devices.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "The passage states PowerSaver may reduce battery drain by up to 15%, not eliminate it.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "PowerSaver mode in the Lumen mobile app may reduce battery drain by up to 15% on supported devices.",
+              "start_char": 0,
+              "end_char": 99
+            }
+          ]
+        },
+        {
+          "claim_text": "PowerSaver mode is available on Android 12 and later.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 directly states this availability requirement.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "PowerSaver mode is available on Android 12 and later.",
+              "start_char": 0,
+              "end_char": 53
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 0.75,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 234,
+        "outputTokens": 205,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1718
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_015",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "The Ridgeback Trail is about 8 kilometers long.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Ridgeback Trail is 8.4 kilometers long."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Ridgeback Trail climbs 610 feet to the summit.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The trail climbs 610 meters from the parking lot to the summit."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The Ridgeback Trail is about 8 kilometers long.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states the trail is 8.4 kilometers long, which is consistent with 'about 8 kilometers.'",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Ridgeback Trail is 8.4 kilometers long.",
+              "start_char": 0,
+              "end_char": 43
+            }
+          ]
+        },
+        {
+          "claim_text": "The Ridgeback Trail climbs 610 feet to the summit.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 says the climb is 610 meters, not 610 feet.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The trail climbs 610 meters from the parking lot to the summit.",
+              "start_char": 0,
+              "end_char": 63
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 217,
+        "outputTokens": 152,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1559
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_016",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "The Pinecrest ferry used to leave every 30 minutes.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Until December 2025, the Pinecrest ferry departed every 30 minutes."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Pinecrest ferry still leaves every 30 minutes today.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Since January 2026, the Pinecrest ferry departs once every hour."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The Pinecrest ferry used to leave every 30 minutes.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states that until December 2025 the ferry departed every 30 minutes, confirming the past schedule.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Until December 2025, the Pinecrest ferry departed every 30 minutes.",
+              "start_char": 0,
+              "end_char": 67
+            }
+          ]
+        },
+        {
+          "claim_text": "The Pinecrest ferry still leaves every 30 minutes today.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 states that since January 2026 the ferry departs once every hour, contradicting the claim that it still departs every 30 minutes.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Since January 2026, the Pinecrest ferry departs once every hour.",
+              "start_char": 0,
+              "end_char": 64
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 225,
+        "outputTokens": 178,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1743
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_017",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "The AquaPure A100 pitcher holds 3 liters.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The AquaPure A100 water filter pitcher holds 2 liters."
+            }
+          ]
+        },
+        {
+          "claim_text": "The AquaPure A100 pitcher has a filter-life indicator.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The AquaPure A100 pitcher holds 3 liters.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 0 states the A100 holds 2 liters, not 3 liters.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The AquaPure A100 water filter pitcher holds 2 liters.",
+              "start_char": 0,
+              "end_char": 54
+            }
+          ]
+        },
+        {
+          "claim_text": "The AquaPure A100 pitcher has a filter-life indicator.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage states that the A100 has a filter-life indicator; passage 1 attributes that feature to the A200.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 224,
+        "outputTokens": 136,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1531
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_018",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Registration for the Oakridge coding camp closes on May 3.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "this notice replaces the earlier schedule, and registration for the Oakridge coding camp now closes on May 10."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Registration for the Oakridge coding camp closes on May 3.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 explicitly updates the earlier schedule and states registration now closes on May 10, replacing the May 3 date.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "registration for the Oakridge coding camp now closes on May 10",
+              "start_char": 55,
+              "end_char": 117
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 222,
+        "outputTokens": 87,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1379
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_019",
+      "category": "edge_case",
+      "gold": [
+        {
+          "claim_text": "The Westfield Museum is free to visit on Mondays.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The Westfield Museum is free to visit on Mondays.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No context passages were provided, so this claim cannot be verified. [forced: empty context]",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 178,
+        "outputTokens": 51,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 948
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_020",
+      "category": "edge_case",
+      "gold": [],
+      "pred": [],
+      "match": {
+        "matches": [],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 201,
+        "outputTokens": 5,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 786
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_021",
+      "category": "edge_case",
+      "gold": [
+        {
+          "claim_text": "Lakeview Park is a green space.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        },
+        {
+          "claim_text": "Lakeview Park covers 120 hectares.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Lakeview Park covers 120 hectares"
+            }
+          ]
+        },
+        {
+          "claim_text": "Lakeview Park has a 3-kilometer walking loop.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "includes a 3-kilometer walking loop"
+            }
+          ]
+        },
+        {
+          "claim_text": "Lakeview Park has three playgrounds.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The park has two playgrounds and a dog park."
+            }
+          ]
+        },
+        {
+          "claim_text": "Lakeview Park has a dog park.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The park has two playgrounds and a dog park."
+            }
+          ]
+        },
+        {
+          "claim_text": "Dogs may run off-leash anywhere in Lakeview Park.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Dogs must be kept on a leash outside the dog park."
+            }
+          ]
+        },
+        {
+          "claim_text": "Parking at Lakeview Park is free on weekdays.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "Parking is free on weekdays"
+            }
+          ]
+        },
+        {
+          "claim_text": "Parking at Lakeview Park costs $5 per day on weekends.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "costs $5 per day on weekends"
+            }
+          ]
+        },
+        {
+          "claim_text": "Lakeview Park closes at 10 p.m.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "The park closes at 10 p.m."
+            }
+          ]
+        },
+        {
+          "claim_text": "Lakeview Park hosts a farmers market every Sunday.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Lakeview Park is a large green space covering 120 hectares.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states the park covers 120 hectares.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Lakeview Park covers 120 hectares",
+              "start_char": 0,
+              "end_char": 33
+            }
+          ]
+        },
+        {
+          "claim_text": "Lakeview Park has a 3-kilometer walking loop.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 explicitly mentions the 3-kilometer walking loop.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "includes a 3-kilometer walking loop",
+              "start_char": 38,
+              "end_char": 73
+            }
+          ]
+        },
+        {
+          "claim_text": "There are three playgrounds at Lakeview Park.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 says the park has two playgrounds, not three.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The park has two playgrounds",
+              "start_char": 0,
+              "end_char": 28
+            }
+          ]
+        },
+        {
+          "claim_text": "Lakeview Park has a dog park.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 states the park has a dog park.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The park has two playgrounds and a dog park.",
+              "start_char": 0,
+              "end_char": 44
+            }
+          ]
+        },
+        {
+          "claim_text": "Dogs may run off-leash anywhere in the park.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 says dogs must be kept on a leash outside the dog park, so they may not run off-leash anywhere.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Dogs must be kept on a leash outside the dog park.",
+              "start_char": 45,
+              "end_char": 95
+            }
+          ]
+        },
+        {
+          "claim_text": "Parking is free on weekdays.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 2 states parking is free on weekdays.",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "Parking is free on weekdays",
+              "start_char": 0,
+              "end_char": 27
+            }
+          ]
+        },
+        {
+          "claim_text": "On weekends, parking costs $5 per day.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 2 states weekend parking costs $5 per day.",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "costs $5 per day on weekends",
+              "start_char": 32,
+              "end_char": 60
+            }
+          ]
+        },
+        {
+          "claim_text": "The park closes at 10 p.m.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 2 states the park closes at 10 p.m.",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "The park closes at 10 p.m.",
+              "start_char": 62,
+              "end_char": 88
+            }
+          ]
+        },
+        {
+          "claim_text": "Lakeview Park hosts a farmers market every Sunday.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "None of the passages mention a farmers market.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 4,
+            "predIndex": 3,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 9,
+            "predIndex": 8,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 5,
+            "predIndex": 4,
+            "score": 0.8571428571428571,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 8,
+            "predIndex": 7,
+            "score": 0.8333333333333334,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 2,
+            "score": 0.8,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 7,
+            "predIndex": 6,
+            "score": 0.75,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 6,
+            "predIndex": 5,
+            "score": 0.6,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 0.5,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [
+          1
+        ],
+        "extraPred": [],
+        "borderlineCount": 2
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 318,
+        "outputTokens": 740,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 2670
+      },
+      "caseExact": false
+    },
+    {
+      "id": "case_022",
+      "category": "edge_case",
+      "gold": [
+        {
+          "claim_text": "Hillcrest 健身房工作日早上 5 点开门。",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Hillcrest Gym opens at 5 a.m. on weekdays."
+            }
+          ]
+        },
+        {
+          "claim_text": "Hillcrest 健身房月卡 50 美元。",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Monthly membership costs $40"
+            }
+          ]
+        },
+        {
+          "claim_text": "Hillcrest 健身房月卡包含所有团课。",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "includes access to all group classes"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Hillcrest 健身房工作日早上 5 点开门",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states the gym opens at 5 a.m. on weekdays.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Hillcrest Gym opens at 5 a.m. on weekdays.",
+              "start_char": 0,
+              "end_char": 46
+            }
+          ]
+        },
+        {
+          "claim_text": "月卡 50 美元",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 says the monthly membership costs $40, not $50.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Monthly membership costs $40",
+              "start_char": 0,
+              "end_char": 28
+            }
+          ]
+        },
+        {
+          "claim_text": "月卡包含所有团课",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 states the membership includes access to all group classes.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "includes access to all group classes",
+              "start_char": 33,
+              "end_char": 69
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 0.9523809523809523,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [
+          1,
+          2
+        ],
+        "extraPred": [
+          1,
+          2
+        ],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 226,
+        "outputTokens": 189,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1598
+      },
+      "caseExact": false
+    },
+    {
+      "id": "case_023",
+      "category": "extrinsic_hallucination",
+      "gold": [
+        {
+          "claim_text": "The Halden Bridge opened in 1998.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Halden Bridge opened to traffic in 1998."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Halden Bridge was designed by Mara Lind.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        },
+        {
+          "claim_text": "The Halden Bridge spans 420 meters.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "spans 420 meters"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The Halden Bridge opened in 1998.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 explicitly states the bridge opened to traffic in 1998.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Halden Bridge opened to traffic in 1998.",
+              "start_char": 0,
+              "end_char": 44
+            }
+          ]
+        },
+        {
+          "claim_text": "The Halden Bridge was designed by Mara Lind.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage mentions the designer of the bridge.",
+          "citations": []
+        },
+        {
+          "claim_text": "The Halden Bridge spans 420 meters.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 states the bridge spans 420 meters.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The bridge spans 420 meters and has two lanes in each direction.",
+              "start_char": 0,
+              "end_char": 64
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 220,
+        "outputTokens": 234,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1585
+      },
+      "caseExact": true
+    },
+    {
+      "id": "case_024",
+      "category": "supported",
+      "gold": [
+        {
+          "claim_text": "The Fernwood Clinic is open six days a week.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Fernwood Clinic is open Monday through Saturday."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The Fernwood Clinic is open six days a week.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states the clinic is open Monday through Saturday, which is six days per week.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Fernwood Clinic is open Monday through Saturday.",
+              "start_char": 0,
+              "end_char": 52
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 200,
+        "outputTokens": 73,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1238
+      },
+      "caseExact": true
+    }
+  ]
+}
