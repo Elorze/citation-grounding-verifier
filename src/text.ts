@@ -61,20 +61,46 @@ export interface SentenceSpan {
   end: number;
 }
 
+/** Protect common abbreviations so "a.m." / "Dr." do not split sentences. */
+function maskAbbreviations(text: string): { masked: string; restore: (s: string) => string } {
+  const placeholders: string[] = [];
+  const masked = text.replace(
+    /\b(?:a\.m|p\.m|mr|mrs|ms|dr|prof|vs|etc|approx)\./gi,
+    (m) => {
+      const i = placeholders.length;
+      placeholders.push(m);
+      return `__ABBR${i}__`;
+    },
+  );
+  return {
+    masked,
+    restore: (s) => s.replace(/__ABBR(\d+)__/g, (_, n) => placeholders[Number(n)] ?? _),
+  };
+}
+
 /** Split text into sentences while keeping character offsets. */
 export function splitSentences(text: string): SentenceSpan[] {
   if (!text) return [];
+  const { masked, restore } = maskAbbreviations(text);
   const spans: SentenceSpan[] = [];
   const re = /[^.!?。！？\n]+[.!?。！？]?/g;
   let m: RegExpExecArray | null;
-  while ((m = re.exec(text)) !== null) {
+  while ((m = re.exec(masked)) !== null) {
     const raw = m[0];
-    const trimmed = raw.trim();
-    if (!trimmed) continue;
+    const trimmedMasked = raw.trim();
+    if (!trimmedMasked) continue;
     const leading = raw.length - raw.trimStart().length;
     const start = m.index + leading;
-    const end = start + trimmed.length;
-    spans.push({ text: trimmed, start, end });
+    const end = start + trimmedMasked.length;
+    const restored = restore(trimmedMasked);
+    // Map offsets back onto the original string via restored length at start.
+    const prefixRestored = restore(masked.slice(0, start));
+    const origStart = prefixRestored.length;
+    spans.push({
+      text: restored,
+      start: origStart,
+      end: origStart + restored.length,
+    });
   }
   if (spans.length === 0 && text.trim()) {
     const trimmed = text.trim();

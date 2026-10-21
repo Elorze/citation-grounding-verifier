@@ -1,5 +1,5 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
-import { generateText, NoObjectGeneratedError, Output } from 'ai';
+import { APICallError, generateText, RetryError } from 'ai';
 import { env, requireLlmKey } from './config.js';
 import { AppError } from './errors.js';
 import { LlmOutput, type Claim } from './schema.js';
@@ -23,7 +23,6 @@ export interface CallOptions {
   system: string;
   user: string;
   passages: string[];
-  /** When false, skip validation retries — parse+Zod only then repair. */
   withValidation?: boolean;
 }
 
@@ -46,57 +45,127 @@ function countInvalidCitations(claims: Claim[], passages: string[]): number {
   ).length;
 }
 
+/** Strip ```json fences and extract the first JSON object. */
+export function extractJsonObject(text: string): unknown {
+  let t = text.trim();
+  const fence = t.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fence) t = fence[1]!.trim();
+  const start = t.indexOf('{');
+  const end = t.lastIndexOf('}');
+  if (start < 0 || end < 0 || end <= start) {
+    throw new Error('No JSON object found in model text');
+  }
+  return JSON.parse(t.slice(start, end + 1));
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+/** Shared cooldown across calls (free-tier 429). */
+let rateLimitUntil = 0;
+
+async function respectRateLimit(): Promise<void> {
+  const wait = rateLimitUntil - Date.now();
+  if (wait > 0) {
+    console.warn(`[llm] cooling down ${wait}ms before next call…`);
+    await sleep(wait);
+  }
+}
+
+function bumpRateLimit(ms: number): void {
+  rateLimitUntil = Math.max(rateLimitUntil, Date.now() + ms);
+}
+
+function isRateLimited(err: unknown): boolean {
+  if (APICallError.isInstance(err) && err.statusCode === 429) return true;
+  if (RetryError.isInstance(err)) {
+    return err.errors.some(
+      (e) => APICallError.isInstance(e) && e.statusCode === 429,
+    );
+  }
+  const msg = err instanceof Error ? err.message : String(err);
+  return /429|访问量过大|rate.?limit/i.test(msg);
+}
+
+async function generateOnce(
+  instructions: string,
+  messages: { role: 'user' | 'assistant'; content: string }[],
+) {
+  // Zhipu glm-4.7-flash does not support response_format / structuredOutputs.
+  // Spec fallback: plain generateText → JSON.parse → Zod.
+  // AI SDK v7: system prompt goes in `instructions`, not messages.
+  return generateText({
+    model: getModel(),
+    instructions,
+    messages,
+    temperature: env.LLM_TEMPERATURE,
+    abortSignal: AbortSignal.timeout(env.LLM_TIMEOUT_MS),
+    maxRetries: 0, // we handle 429 ourselves with longer backoff
+    providerOptions: {
+      zhipu: {
+        thinking: { type: env.LLM_THINKING },
+      },
+    },
+  });
+}
+
 export async function callWithValidation(
   opts: CallOptions,
 ): Promise<{ claims: Claim[]; stats: VerifyStats }> {
   const withValidation = opts.withValidation !== false;
   const stats = emptyStats();
   const started = Date.now();
-  const model = getModel();
 
   type Msg =
-    | { role: 'system'; content: string }
     | { role: 'user'; content: string }
     | { role: 'assistant'; content: string };
 
-  const messages: Msg[] = [
-    { role: 'system', content: opts.system },
-    { role: 'user', content: opts.user },
-  ];
+  const messages: Msg[] = [{ role: 'user', content: opts.user }];
 
   let lastClaims: Claim[] | null = null;
   let lastRawText = '';
   let firstAttemptInvalid: number | null = null;
   const maxAttempts = withValidation ? env.LLM_MAX_RETRIES + 1 : 1;
+  const transportRetries = 5;
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     if (attempt > 0) stats.validationRetries += 1;
     stats.llmCalls += 1;
 
     try {
-      const result = await generateText({
-        model,
-        messages,
-        temperature: env.LLM_TEMPERATURE,
-        output: Output.object({ schema: LlmOutput }),
-        abortSignal: AbortSignal.timeout(env.LLM_TIMEOUT_MS),
-        maxRetries: 2,
-        providerOptions: {
-          zhipu: {
-            thinking: { type: env.LLM_THINKING },
-          },
-        },
-      });
+      let result;
+      for (let t = 0; t < transportRetries; t++) {
+        try {
+          await respectRateLimit();
+          result = await generateOnce(opts.system, messages);
+          break;
+        } catch (err) {
+          if (isRateLimited(err) && t < transportRetries - 1) {
+            const wait = Math.min(60_000, 5000 * 2 ** t);
+            console.warn(`[llm] 429 rate limited, waiting ${wait}ms…`);
+            bumpRateLimit(wait);
+            await sleep(wait);
+            continue;
+          }
+          throw err;
+        }
+      }
+      if (!result) throw new Error('No LLM result');
 
       stats.inputTokens += result.usage?.inputTokens ?? 0;
       stats.outputTokens += result.usage?.outputTokens ?? 0;
+      lastRawText = result.text ?? '';
 
-      const parsed = result.output;
-      if (!parsed) {
-        throw new Error('No structured output from model');
+      const json = extractJsonObject(lastRawText);
+      const parsed = LlmOutput.safeParse(json);
+      if (!parsed.success) {
+        throw new Error(
+          `Zod validation failed: ${parsed.error.issues.map((i) => i.message).join('; ')}`,
+        );
       }
-      lastClaims = toClaims(parsed);
-      lastRawText = JSON.stringify(parsed);
+
+      lastClaims = toClaims(parsed.data);
 
       if (firstAttemptInvalid === null) {
         firstAttemptInvalid = countInvalidCitations(lastClaims, opts.passages);
@@ -145,21 +214,15 @@ export async function callWithValidation(
         throw new AppError('UPSTREAM_TIMEOUT', 'LLM request timed out', 504);
       }
 
-      let raw = lastRawText;
-      if (NoObjectGeneratedError.isInstance(err)) {
-        raw = err.text ?? raw;
-      }
-
       if (attempt < maxAttempts - 1 && withValidation) {
         messages.push({
           role: 'assistant',
-          content: raw || '(no output)',
+          content: lastRawText || '(no output)',
         });
         messages.push({
           role: 'user',
-          content: `Your previous JSON had these problems:\n- Could not parse into the required schema: ${err instanceof Error ? err.message : String(err)}\nReturn the complete corrected JSON.`,
+          content: `Your previous JSON had these problems:\n- Could not parse into the required schema: ${err instanceof Error ? err.message : String(err)}\nReturn the complete corrected JSON only, no markdown.`,
         });
-        lastRawText = raw;
         continue;
       }
 
@@ -171,13 +234,21 @@ export async function callWithValidation(
         return { claims: repaired.claims, stats };
       }
 
+      if (isRateLimited(err)) {
+        throw new AppError(
+          'UPSTREAM_ERROR',
+          'Upstream LLM rate limited (429)',
+          502,
+        );
+      }
+
       const msg = err instanceof Error ? err.message : String(err);
-      if (/429|5\d\d|network|fetch/i.test(msg)) {
+      if (/5\d\d|network|fetch/i.test(msg)) {
         throw new AppError('UPSTREAM_ERROR', 'Upstream LLM error', 502);
       }
       throw new AppError(
         'MODEL_OUTPUT_INVALID',
-        'Model output could not be parsed into claims',
+        `Model output could not be parsed into claims: ${msg}`,
         502,
       );
     }

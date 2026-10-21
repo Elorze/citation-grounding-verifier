@@ -1,0 +1,153 @@
+{
+  "config": {
+    "approach": "minimal",
+    "label": "M4 minimal smoke",
+    "model": "glm-4.7-flash",
+    "thinking": "disabled",
+    "temperature": 0.1,
+    "matchThreshold": 0.5,
+    "gitCommit": "54d911b",
+    "caseCount": 1
+  },
+  "metrics": {
+    "confusion": {
+      "labels": [
+        "row=gold S/C/U/(extra)",
+        "col=pred S/C/U/(missed)"
+      ],
+      "matrix": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "perClass": {
+      "SUPPORTED": {
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "support": 1
+      },
+      "CONTRADICTED": {
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "support": 1
+      },
+      "UNSUPPORTED": {
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "support": 1
+      }
+    },
+    "macroF1": 0,
+    "verdictAccuracy": 0,
+    "endToEndAccuracy": 0,
+    "citationValidityRaw": null,
+    "citationValidityFinal": 1,
+    "citationAgreement": null,
+    "claimCountExactPct": 0,
+    "claimCountAbsDiffMean": 3,
+    "caseExactMatchPct": 0,
+    "borderlineMatchCount": 0,
+    "matchedPairs": 0,
+    "totalGoldClaims": 3,
+    "totalPredClaims": 0,
+    "latencyMs": {
+      "p50": 41,
+      "p95": 41,
+      "mean": 41
+    },
+    "tokens": {
+      "inputTotal": 0,
+      "outputTotal": 0,
+      "perCaseInput": 0,
+      "perCaseOutput": 0
+    },
+    "llmCallsTotal": 0,
+    "validationRetriesTotal": 0,
+    "llmCallsPerCase": 0
+  },
+  "failures": [
+    "- **case_001** (mixed): MISSED gold=SUPPORTED \"Northwind Notes lets annual subscribers request a refund within 30 days.\" | error=Model output could not be parsed into claims: Invalid prompt: System messages are not allowed in the prompt or messages fields. Use the instructions option instead.",
+    "- **case_001** (mixed): MISSED gold=CONTRADICTED \"Standard tier team workspaces can have up to 100 members.\" | error=Model output could not be parsed into claims: Invalid prompt: System messages are not allowed in the prompt or messages fields. Use the instructions option instead.",
+    "- **case_001** (mixed): MISSED gold=UNSUPPORTED \"The Enterprise tier includes 24/7 phone support.\" | error=Model output could not be parsed into claims: Invalid prompt: System messages are not allowed in the prompt or messages fields. Use the instructions option instead."
+  ],
+  "perCase": [
+    {
+      "id": "case_001",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "Northwind Notes lets annual subscribers request a refund within 30 days.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Northwind Notes offers a 30-day refund window for annual plans."
+            }
+          ]
+        },
+        {
+          "claim_text": "Standard tier team workspaces can have up to 100 members.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Team workspaces on the Standard tier support up to 50 members."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Enterprise tier includes 24/7 phone support.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [],
+      "match": {
+        "matches": [],
+        "missedGold": [
+          0,
+          1,
+          2
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 41
+      },
+      "error": "Model output could not be parsed into claims: Invalid prompt: System messages are not allowed in the prompt or messages fields. Use the instructions option instead.",
+      "caseExact": false
+    }
+  ]
+}

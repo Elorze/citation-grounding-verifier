@@ -111,7 +111,9 @@ async function runOnce(
   let totalRetries = 0;
   const failures: string[] = [];
 
-  for (const c of cases) {
+  for (let caseIdx = 0; caseIdx < cases.length; caseIdx++) {
+    const c = cases[caseIdx]!;
+    console.log(`[${caseIdx + 1}/${cases.length}] ${c.id}…`);
     const t0 = Date.now();
     let predClaims: Claim[] = [];
     let stats: VerifyStats = {
