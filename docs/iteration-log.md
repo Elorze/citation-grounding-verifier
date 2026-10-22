@@ -264,3 +264,43 @@ Source: `results/5-byGroup.md`. Descriptive only; n per group too small for sign
 | general | 1.000 | 0.955 | 0.985 |
 
 Full write-up: `docs/5-conclusion.md`.
+
+## prompt6 (detail / condition / relation rules + worked example)
+
+**Change:** New approach `prompt6` (`src/verifiers/llmPrompt6.ts`). Step-2 rules: one event-detail per claim; keep condition/time unless only the bare fact is supported (then emit both); causal/ordering as relation-only claims; resolve vague references. Optional `facts` still discarded via `LlmOutput`.
+
+**Disclosure:** Example patterns were informed by inspecting failures on `eval/2-4.jsonl`. Example entities (Brookside Library / Carter family) are fictional and do not appear in any dataset.
+
+**Dev `1-1.jsonl` (1 run):** macro-F1 **1.000**, e2e 1.000, case exact 100% → `results/6-prompt6-1-1.*`. Failures: none.
+
+**Hard `2-4.jsonl` (3 runs):** macro-F1 mean **0.955** (0.949–0.963), e2e mean **0.944** (0.936–0.949) → `results/6-prompt6.*`. Reused prompt2/3/5 result files.
+
+### Statistical check (prompt6 vs prompt2 / prompt3 / prompt5)
+
+Case-level paired bootstrap, 10000 resamples, seed 42, averaged over 3 runs.
+
+| Pair | Metric | A | B=prompt6 | diff | 95% CI |
+| --- | --- | ---: | ---: | ---: | --- |
+| vs prompt2 | macro-F1 | 0.950 | 0.955 | +0.005 | [−0.018, 0.031] |
+| vs prompt2 | end-to-end | 0.906 | 0.944 | +0.038 | [0.000, 0.082] |
+| vs prompt3 | macro-F1 | 0.950 | 0.955 | +0.004 | [−0.036, 0.044] |
+| vs prompt3 | end-to-end | 0.910 | 0.944 | +0.034 | [−0.022, 0.092] |
+| vs prompt5 | macro-F1 | 0.941 | 0.955 | +0.013 | [−0.005, 0.034] |
+| vs prompt5 | end-to-end | 0.915 | 0.944 | +0.030 | [−0.016, 0.074] |
+
+**Conclusion:** directionally positive on macro-F1 and e2e vs prior prompts; **not significant at n=20** (all macro-F1 CIs include 0; e2e vs prompt2 CI touches 0 at the lower bound).
+
+**Unstable cases (case exact differs across 3 runs):** prompt2 — hard_019; prompt3 — hard_017; prompt5 — hard_014, hard_017, hard_018, hard_019; prompt6 — hard_002, hard_011, hard_016, hard_017, hard_019.
+
+### Per-group (with prompt6)
+
+Source: `results/6-byGroup.md`. Descriptive only; n per group too small for significance.
+
+| Group | prompt2 | prompt3 | prompt5 | prompt6 |
+| --- | ---: | ---: | ---: | ---: |
+| T1 | 0.854 | 0.875 | 0.854 | 0.938 |
+| T2 | 0.900 | 0.900 | 0.900 | 0.983 |
+| T3 | 0.850 | 0.900 | 0.900 | 0.850 |
+| general | 1.000 | 0.955 | 0.985 | 1.000 |
+
+Full write-up: `docs/6-conclusion.md`.

@@ -17,7 +17,12 @@ const verifiers: Record<string, Verifier> = {
 let llmReady: Promise<void> | null = null;
 
 function ensureLlmVerifiers(): Promise<void> {
-  if (verifiers.minimal && verifiers.optimized && verifiers.prompt5) {
+  if (
+    verifiers.minimal &&
+    verifiers.optimized &&
+    verifiers.prompt5 &&
+    verifiers.prompt6
+  ) {
     return Promise.resolve();
   }
   if (!hasLlmKey()) {
@@ -37,10 +42,12 @@ function ensureLlmVerifiers(): Promise<void> {
       );
       const { llmWordingVerifier } = await import('./verifiers/llmWording.js');
       const { llmPrompt5Verifier } = await import('./verifiers/llmPrompt5.js');
+      const { llmPrompt6Verifier } = await import('./verifiers/llmPrompt6.js');
       verifiers.minimal = llmMinimalVerifier;
       verifiers.optimized = llmOptimizedVerifier;
       verifiers.wording = llmWordingVerifier;
       verifiers.prompt5 = llmPrompt5Verifier;
+      verifiers.prompt6 = llmPrompt6Verifier;
     })();
   }
   return llmReady;
@@ -61,7 +68,8 @@ async function resolveApproach(raw: string | undefined): Promise<Verifier> {
     name === 'minimal' ||
     name === 'optimized' ||
     name === 'wording' ||
-    name === 'prompt5'
+    name === 'prompt5' ||
+    name === 'prompt6'
   ) {
     await ensureLlmVerifiers();
   }
@@ -86,7 +94,7 @@ app.get('/health', (c) =>
     verifiers: [
       ...Object.keys(verifiers),
       ...(hasLlmKey()
-        ? ['minimal', 'optimized', 'wording', 'prompt5']
+        ? ['minimal', 'optimized', 'wording', 'prompt5', 'prompt6']
         : []),
     ].filter((v, i, a) => a.indexOf(v) === i),
   }),
