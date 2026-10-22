@@ -392,3 +392,9 @@ Source: `results/8-byGroup.md`. Descriptive only; n per group too small for sign
 | general | 1.000 | 0.955 | 0.985 | 1.000 | 1.000 | 1.000 |
 
 Full write-up: `docs/8-conclusion.md`.
+
+## Ship: `optimized` = prompt8
+
+**Change:** `src/verifiers/llmOptimized.ts` now delegates to `llmPrompt8Verifier` (name remains `optimized`). README rewritten as the assignment evaluation report: baseline / minimal / optimized quality tables, latency/cost, key failures, and hill-climbing summary (minimal → M6a → hard set → prompt5–8 → ship prompt8). Ablation approaches (`wording`, `prompt5`…`prompt8`) stay registered for reproduction.
+
+**Decision:** stop climbing; no prompt9 (best hard-set mean so far; variance at n=20).
