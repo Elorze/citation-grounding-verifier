@@ -1,5 +1,6 @@
+import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, isAbsolute, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
 import { env } from '../src/config.js';
@@ -16,6 +17,7 @@ import {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
+const DEFAULT_DATASET = join('eval', 'cases.jsonl');
 
 function parseArgs(argv: string[]) {
   const out: {
@@ -24,7 +26,8 @@ function parseArgs(argv: string[]) {
     ids?: string[];
     limit?: number;
     repeat: number;
-  } = { approach: 'stub', repeat: 1 };
+    dataset: string;
+  } = { approach: 'stub', repeat: 1, dataset: DEFAULT_DATASET };
 
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i]!;
@@ -33,13 +36,22 @@ function parseArgs(argv: string[]) {
     else if (a === '--ids') out.ids = argv[++i]!.split(',');
     else if (a === '--limit') out.limit = Number(argv[++i]);
     else if (a === '--repeat') out.repeat = Number(argv[++i]);
+    else if (a === '--dataset' || a === '--cases') out.dataset = argv[++i]!;
   }
   return out;
 }
 
-function loadCases(): EvalCase[] {
-  const path = join(ROOT, 'eval', 'cases.jsonl');
-  const lines = readFileSync(path, 'utf8')
+function resolveDatasetPath(relOrAbs: string): string {
+  return isAbsolute(relOrAbs) ? relOrAbs : join(ROOT, relOrAbs);
+}
+
+function sha256File(absPath: string): string {
+  return createHash('sha256').update(readFileSync(absPath)).digest('hex');
+}
+
+function loadCases(datasetPath: string): EvalCase[] {
+  const abs = resolveDatasetPath(datasetPath);
+  const lines = readFileSync(abs, 'utf8')
     .split(/\r?\n/)
     .map((l) => l.trim())
     .filter(Boolean);
@@ -101,6 +113,7 @@ async function runOnce(
   verifier: Verifier,
   cases: EvalCase[],
   label: string | undefined,
+  datasetMeta: { path: string; sha256: string },
 ) {
   const state = createMetricState();
   const perCase: unknown[] = [];
@@ -211,6 +224,8 @@ async function runOnce(
       matchThreshold: MATCH_THRESHOLD,
       gitCommit: getGitCommit(),
       caseCount: cases.length,
+      dataset: datasetMeta.path,
+      datasetSha256: datasetMeta.sha256,
     },
     metrics: {
       ...metrics,
@@ -247,6 +262,10 @@ function toMarkdown(report: Awaited<ReturnType<typeof runOnce>>): string {
   lines.push('```json');
   lines.push(JSON.stringify(report.config, null, 2));
   lines.push('```');
+  lines.push('');
+  lines.push(
+    `Dataset: \`${report.config.dataset}\` (sha256 \`${report.config.datasetSha256}\`)`,
+  );
   lines.push('');
   lines.push('## Headline');
   lines.push(`- macro-F1: **${m.macroF1.toFixed(3)}**`);
@@ -289,7 +308,12 @@ function toMarkdown(report: Awaited<ReturnType<typeof runOnce>>): string {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
-  let cases = loadCases();
+  const datasetAbs = resolveDatasetPath(args.dataset);
+  const datasetMeta = {
+    path: args.dataset.replace(/\\/g, '/'),
+    sha256: sha256File(datasetAbs),
+  };
+  let cases = loadCases(args.dataset);
   if (args.ids?.length) cases = cases.filter((c) => args.ids!.includes(c.id));
   if (args.limit) cases = cases.slice(0, args.limit);
 
@@ -297,9 +321,9 @@ async function main() {
   const runs: Awaited<ReturnType<typeof runOnce>>[] = [];
   for (let i = 0; i < args.repeat; i++) {
     console.log(
-      `Run ${i + 1}/${args.repeat}: ${args.approach} on ${cases.length} cases…`,
+      `Run ${i + 1}/${args.repeat}: ${args.approach} on ${cases.length} cases (${datasetMeta.path})…`,
     );
-    runs.push(await runOnce(verifier, cases, args.label));
+    runs.push(await runOnce(verifier, cases, args.label, datasetMeta));
   }
 
   const primary = runs[0]!;
