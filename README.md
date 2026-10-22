@@ -48,6 +48,7 @@ Ablation aliases used during climbing (`wording`, `prompt5`…`prompt8`) remain 
 | --- | --- |
 | `eval/1-1.jsonl` | 24-case **dev** set (v1.1); primary tuning surface |
 | `eval/2-4.jsonl` | 20-case **held-out** hard split (groups T1/T2/T3/general); used to check generalization |
+| `eval/3-confirmation.jsonl` | 20-case **blind confirmation** set after prompt8 freeze (do not retune on it); see [`docs/confirmation-report.md`](docs/confirmation-report.md) |
 | `eval/cases_test.jsonl` | Earlier freeze of a hard split (related content) |
 
 Gold quotes are verbatim substrings. Labeling notes: `示范用例库.md`.
@@ -79,6 +80,8 @@ Claim matching: Jaccard over hybrid tokens (Latin words + CJK bigrams) + contain
 | optimized (=prompt8) | **0.967** mean (0.963–0.972) | **0.940** mean | 3 runs | [md](results/8-prompt8.md) |
 
 Paired bootstrap on `2-4` (10000 resamples, seed 42): optimized/prompt8 vs wording-only (prompt2) and vs prompt5 — macro-F1 CI **excludes 0**; vs early M6a-style prompt3 / intermediate prompt6–7 — directionally better, not always significant at n=20. Details: `docs/8-conclusion.md`, `docs/iteration-log.md`.
+
+**Blind confirmation `3-confirmation.jsonl`** (frozen sha256 `1fa1ea8c…`; analysis only, no prompt retune): baseline macro-F1 **0.425**; minimal **0.943** mean; optimized **0.932** mean / e2e **0.978** mean (3 runs). Full tables + prompt6 appendix: [`docs/confirmation-report.md`](docs/confirmation-report.md).
 
 ### Latency / cost (same model)
 

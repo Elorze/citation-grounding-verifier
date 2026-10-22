@@ -1,0 +1,2526 @@
+{
+  "config": {
+    "approach": "baseline",
+    "label": "confirmation baseline",
+    "model": "deepseek-chat",
+    "thinking": "disabled",
+    "temperature": 0.1,
+    "matchThreshold": 0.5,
+    "gitCommit": "3e01b80",
+    "caseCount": 20,
+    "dataset": "eval/3-confirmation.jsonl",
+    "datasetSha256": "1fa1ea8c976265df8c4687e3664c14d75d399af5ac948f0628b77b9d605efb2c"
+  },
+  "metrics": {
+    "confusion": {
+      "labels": [
+        "row=gold S/C/U/(extra)",
+        "col=pred S/C/U/(missed)"
+      ],
+      "matrix": [
+        [
+          25,
+          8,
+          9,
+          16
+        ],
+        [
+          3,
+          4,
+          5,
+          2
+        ],
+        [
+          0,
+          0,
+          5,
+          0
+        ],
+        [
+          2,
+          0,
+          1,
+          0
+        ]
+      ]
+    },
+    "perClass": {
+      "SUPPORTED": {
+        "precision": 0.8333333333333334,
+        "recall": 0.43103448275862066,
+        "f1": 0.5681818181818181,
+        "support": 58
+      },
+      "CONTRADICTED": {
+        "precision": 0.3333333333333333,
+        "recall": 0.2857142857142857,
+        "f1": 0.30769230769230765,
+        "support": 14
+      },
+      "UNSUPPORTED": {
+        "precision": 0.25,
+        "recall": 1,
+        "f1": 0.4,
+        "support": 5
+      }
+    },
+    "macroF1": 0.42529137529137523,
+    "verdictAccuracy": 0.576271186440678,
+    "endToEndAccuracy": 0.44155844155844154,
+    "citationValidityRaw": 1,
+    "citationValidityFinal": 1,
+    "citationAgreement": 0.75,
+    "claimCountExactPct": 0.3,
+    "claimCountAbsDiffMean": 0.95,
+    "caseExactMatchPct": 0.05,
+    "borderlineMatchCount": 0,
+    "matchedPairs": 59,
+    "totalGoldClaims": 77,
+    "totalPredClaims": 62,
+    "latencyMs": {
+      "p50": 0,
+      "p95": 1,
+      "mean": 0.65
+    },
+    "tokens": {
+      "inputTotal": 0,
+      "outputTotal": 0,
+      "perCaseInput": 0,
+      "perCaseOutput": 0
+    },
+    "llmCallsTotal": 0,
+    "validationRetriesTotal": 0,
+    "llmCallsPerCase": 0
+  },
+  "failures": [
+    "- **conf_001** (subtle_distortion): gold=CONTRADICTED pred=SUPPORTED | gold=\"SQLite automatically checkpoints when the WAL file reaches 100 pages.\" | pred=\"SQLite automatically checkpoints when the WAL file reaches 100 pages.\" | reasoning=\"BM25 best sentence coverage=0.78 ≥ 0.7.\"",
+    "- **conf_001** (subtle_distortion): gold=SUPPORTED pred=CONTRADICTED | gold=\"In WAL mode, readers do not block writers.\" | pred=\"In WAL mode, readers do not block writers and writing can proceed concurrently with reading.\" | reasoning=\"Partial coverage=0.44 with number/negation mismatch vs best sentence.\"",
+    "- **conf_001** (subtle_distortion): MISSED gold=SUPPORTED \"In WAL mode, writing can proceed concurrently with reading.\"",
+    "- **conf_002** (subtle_distortion): gold=CONTRADICTED pred=SUPPORTED | gold=\"volatile-ttl evicts keys that have the longest remaining TTL.\" | pred=\"volatile-ttl evicts keys that have the longest remaining TTL.\" | reasoning=\"BM25 best sentence coverage=0.71 ≥ 0.7.\"",
+    "- **conf_003** (subtle_distortion): gold=SUPPORTED pred=CONTRADICTED | gold=\"File-based log shipping is asynchronous.\" | pred=\"File-based log shipping is asynchronous, so there is a window for data loss if the primary fails.\" | reasoning=\"Partial coverage=0.45 with number/negation mismatch vs best sentence.\"",
+    "- **conf_003** (subtle_distortion): MISSED gold=SUPPORTED \"PostgreSQL WAL segment files are shipped one file at a time.\"",
+    "- **conf_003** (subtle_distortion): MISSED gold=SUPPORTED \"There is a window for data loss if the primary fails under file-based log shipping.\"",
+    "- **conf_004** (subtle_distortion): gold=SUPPORTED pred=CONTRADICTED | gold=\"no-store forbids storing the response in any cache.\" | pred=\"no-store also forbids storing the response in any cache.\" | reasoning=\"Partial coverage=0.43 with number/negation mismatch vs best sentence.\"",
+    "- **conf_005** (extrinsic_hallucination): gold=SUPPORTED pred=UNSUPPORTED | gold=\"SQLite WAL mode does not work over a network filesystem.\" | pred=\"SQLite WAL mode does not work over a network filesystem because processes must share memory on the same host.\" | reasoning=\"Coverage=0.64 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **conf_005** (extrinsic_hallucination): gold=SUPPORTED pred=UNSUPPORTED | gold=\"WAL has been available since version 3.7.0.\" | pred=\"WAL has been available since version 3.\" | reasoning=\"Coverage=0.40 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **conf_005** (extrinsic_hallucination): MISSED gold=SUPPORTED \"WAL requires processes to share memory on the same host.\"",
+    "- **conf_005** (extrinsic_hallucination): EXTRA pred=SUPPORTED \"7.\"",
+    "- **conf_006** (extrinsic_hallucination): gold=SUPPORTED pred=CONTRADICTED | gold=\"Docker's default restart policy is no.\" | pred=\"Docker's default restart policy is no, meaning the container is not restarted automatically.\" | reasoning=\"Partial coverage=0.50 with number/negation mismatch vs best sentence.\"",
+    "- **conf_006** (extrinsic_hallucination): gold=SUPPORTED pred=UNSUPPORTED | gold=\"The restart backoff starts at 100 milliseconds and doubles each time.\" | pred=\"The restart backoff starts at 100 milliseconds and doubles each time up to a maximum delay of 1 minute.\" | reasoning=\"Coverage=0.38 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **conf_006** (extrinsic_hallucination): MISSED gold=SUPPORTED \"The maximum restart delay is 1 minute.\"",
+    "- **conf_008** (extrinsic_hallucination): gold=SUPPORTED pred=CONTRADICTED | gold=\"A 304 Not Modified response is returned for a conditional GET or HEAD when the condition evaluates to false.\" | pred=\"A 304 Not Modified response is returned for a conditional GET or HEAD when the condition evaluates to false, confirming the cached resource is still valid.\" | reasoning=\"Partial coverage=0.56 with number/negation mismatch vs best sentence.\"",
+    "- **conf_008** (extrinsic_hallucination): MISSED gold=SUPPORTED \"A 304 response confirms the cached resource is still valid.\"",
+    "- **conf_009** (multi_passage): gold=SUPPORTED pred=UNSUPPORTED | gold=\"In SQLite WAL mode only one writer can run at a time.\" | pred=\"In SQLite WAL mode only one writer can run at a time, but writers and readers can run concurrently.\" | reasoning=\"Coverage=0.42 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **conf_009** (multi_passage): gold=SUPPORTED pred=UNSUPPORTED | gold=\"Checkpoints can run concurrently with readers.\" | pred=\"Checkpoints can run concurrently with readers, yet a long-running read transaction can prevent a checkpointer from making progress.\" | reasoning=\"Coverage=0.62 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **conf_009** (multi_passage): MISSED gold=SUPPORTED \"In SQLite WAL mode writers and readers can run concurrently.\"",
+    "- **conf_009** (multi_passage): MISSED gold=SUPPORTED \"A long-running read transaction can prevent a checkpointer from making progress.\"",
+    "- **conf_010** (multi_passage): gold=SUPPORTED pred=UNSUPPORTED | gold=\"PostgreSQL streaming replication is asynchronous by default.\" | pred=\"PostgreSQL streaming replication is asynchronous by default, which can cause data loss if the primary crashes before changes reach the standby.\" | reasoning=\"Coverage=0.33 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **conf_010** (multi_passage): gold=SUPPORTED pred=CONTRADICTED | gold=\"With synchronous replication, write commits wait until the commit is on disk on both primary and standby.\" | pred=\"With synchronous replication, write commits wait until the commit is on disk on both primary and standby, but read-only transactions need not wait.\" | reasoning=\"Partial coverage=0.69 with number/negation mismatch vs best sentence.\"",
+    "- **conf_010** (multi_passage): MISSED gold=SUPPORTED \"Asynchronous streaming replication can cause data loss if the primary crashes before changes reach the standby.\"",
+    "- **conf_010** (multi_passage): MISSED gold=SUPPORTED \"Read-only transactions need not wait for standby replies under synchronous replication.\"",
+    "- **conf_011** (multi_passage): gold=SUPPORTED pred=UNSUPPORTED | gold=\"allkeys-lru is recommended when a subset of keys is accessed far more often than the rest.\" | pred=\"allkeys-lru is recommended when a subset of keys is accessed far more often than the rest and is a good default.\" | reasoning=\"Coverage=0.69 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **conf_011** (multi_passage): MISSED gold=SUPPORTED \"allkeys-lru is a good default option.\"",
+    "- **conf_012** (multi_passage): gold=SUPPORTED pred=UNSUPPORTED | gold=\"git rebase --onto master topicA topicB is useful when topicB does not depend on topicA.\" | pred=\"git rebase --onto master topicA topicB is useful when topicB does not depend on topicA.\" | reasoning=\"Coverage=0.64 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **conf_013** (subtle_distortion): MISSED gold=CONTRADICTED \"In WAL mode, reading and writing cannot proceed concurrently.\"",
+    "- **conf_014** (subtle_distortion): gold=CONTRADICTED pred=UNSUPPORTED | gold=\"git rebase first updates the branch tip, then replays commits one by one.\" | pred=\"git rebase first updates the branch tip, then replays commits one by one in order, similar to cherry-pick.\" | reasoning=\"Coverage=0.29 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **conf_014** (subtle_distortion): gold=SUPPORTED pred=UNSUPPORTED | gold=\"If a conflict occurs, rebase stops at the first problematic commit.\" | pred=\"If a conflict occurs, rebase stops at the first problematic commit; git rebase --skip skips that commit.\" | reasoning=\"Coverage=0.58 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **conf_014** (subtle_distortion): MISSED gold=SUPPORTED \"Replaying commits in rebase is similar to running git cherry-pick for each commit.\"",
+    "- **conf_014** (subtle_distortion): MISSED gold=SUPPORTED \"git rebase --skip skips the commit that caused the conflict.\"",
+    "- **conf_015** (mixed): gold=SUPPORTED pred=CONTRADICTED | gold=\"Cascading replication is asynchronous.\" | pred=\"Cascading replication is asynchronous, and synchronous replication settings also apply to cascading standbys.\" | reasoning=\"Partial coverage=0.60 with number/negation mismatch vs best sentence.\"",
+    "- **conf_015** (mixed): MISSED gold=CONTRADICTED \"Synchronous replication settings also apply to cascading standbys.\"",
+    "- **conf_016** (mixed): gold=CONTRADICTED pred=UNSUPPORTED | gold=\"Detached containers keep running after the root process exits unless --rm is set.\" | pred=\"Detached containers keep running after the root process exits unless --rm is set.\" | reasoning=\"Coverage=0.64 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **conf_016** (mixed): gold=CONTRADICTED pred=UNSUPPORTED | gold=\"--restart can be combined freely with --rm.\" | pred=\"--restart can be combined freely with --rm.\" | reasoning=\"Coverage=0.50 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **conf_017** (mixed): gold=CONTRADICTED pred=UNSUPPORTED | gold=\"max-age measures freshness from when the browser received the response.\" | pred=\"max-age measures freshness from when the browser received the response.\" | reasoning=\"Coverage=0.50 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **conf_017** (mixed): MISSED gold=SUPPORTED \"s-maxage overrides max-age for shared caches.\"",
+    "- **conf_018** (mixed): gold=CONTRADICTED pred=UNSUPPORTED | gold=\"By default the LFU counter decays every one second.\" | pred=\"By default the LFU counter decays every one second.\" | reasoning=\"Coverage=0.43 below thresholds (hand-picked constants; not tuned on test set).\"",
+    "- **conf_018** (mixed): EXTRA pred=UNSUPPORTED \"0 or newer.\"",
+    "- **conf_019** (mixed): gold=CONTRADICTED pred=SUPPORTED | gold=\"You can change page_size with VACUUM after entering WAL mode.\" | pred=\"You can change page_size with VACUUM after entering WAL mode.\" | reasoning=\"BM25 best sentence coverage=0.89 ≥ 0.7.\"",
+    "- **conf_019** (mixed): gold=SUPPORTED pred=CONTRADICTED | gold=\"Older SQLite builds could not open read-only WAL databases.\" | pred=\"Older SQLite builds could not open read-only WAL databases, but beginning with version 3.\" | reasoning=\"Partial coverage=0.45 with number/negation mismatch vs best sentence.\"",
+    "- **conf_019** (mixed): EXTRA pred=SUPPORTED \"22.\"",
+    "- **conf_020** (supported): MISSED gold=SUPPORTED \"Earlier names in the FIRST list have higher priority.\"",
+    "- **conf_020** (supported): MISSED gold=SUPPORTED \"With FIRST 2 (s1, s2, s3), s1 and s2 are synchronous standbys.\""
+  ],
+  "perCase": [
+    {
+      "id": "conf_001",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "SQLite automatically checkpoints when the WAL file reaches 100 pages.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "a threshold size of 1000 pages"
+            }
+          ]
+        },
+        {
+          "claim_text": "In WAL mode, readers do not block writers.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "readers do not block writers"
+            }
+          ]
+        },
+        {
+          "claim_text": "In WAL mode, writing can proceed concurrently with reading.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Reading and writing can proceed concurrently."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "SQLite automatically checkpoints when the WAL file reaches 100 pages.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.78 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "By default, SQLite does a checkpoint automatically when the WAL file reaches a threshold size of 1000 pages.",
+              "start_char": 0,
+              "end_char": 108
+            }
+          ]
+        },
+        {
+          "claim_text": "In WAL mode, readers do not block writers and writing can proceed concurrently with reading.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Partial coverage=0.44 with number/negation mismatch vs best sentence.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Reading and writing can proceed concurrently.",
+              "start_char": 99,
+              "end_char": 144
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [
+          2
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 4
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_002",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Setting maxmemory to zero disables the memory limit for the dataset.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Set maxmemory to zero to specify that you don't want to limit the memory for the dataset."
+            }
+          ]
+        },
+        {
+          "claim_text": "With allkeys-lru, Redis evicts the least recently used keys.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "allkeys-lru: Evict the least recently used (LRU) keys."
+            }
+          ]
+        },
+        {
+          "claim_text": "volatile-ttl evicts keys that have the longest remaining TTL.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "volatile-ttl: Evict keys with an associated expiration (TTL) that have the shortest remaining TTL value."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Setting maxmemory to zero disables the memory limit for the dataset.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.71 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Set maxmemory to zero to specify that you don't want to limit the memory for the dataset.",
+              "start_char": 235,
+              "end_char": 324
+            }
+          ]
+        },
+        {
+          "claim_text": "With allkeys-lru, Redis evicts the least recently used keys.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.75 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "allkeys-lru: Evict the least recently used (LRU) keys.",
+              "start_char": 80,
+              "end_char": 134
+            }
+          ]
+        },
+        {
+          "claim_text": "volatile-ttl evicts keys that have the longest remaining TTL.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.71 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "volatile-ttl: Evict keys with an associated expiration (TTL) that have the shortest remaining TTL value.",
+              "start_char": 135,
+              "end_char": 239
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_003",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "PostgreSQL WAL segment files are 64MB each.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "WAL files (16MB)"
+            }
+          ]
+        },
+        {
+          "claim_text": "PostgreSQL WAL segment files are shipped one file at a time.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "transferring WAL records one file (WAL segment) at a time"
+            }
+          ]
+        },
+        {
+          "claim_text": "File-based log shipping is asynchronous.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "log shipping is asynchronous"
+            }
+          ]
+        },
+        {
+          "claim_text": "There is a window for data loss if the primary fails under file-based log shipping.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "there is a window for data loss should the primary server suffer a catastrophic failure"
+            }
+          ]
+        },
+        {
+          "claim_text": "archive_timeout can limit that window to as low as a few seconds.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "archive_timeout parameter, which can be set as low as a few seconds"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "PostgreSQL WAL segment files are 64MB each and are shipped one file at a time.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Partial coverage=0.60 with number/negation mismatch vs best sentence.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "PostgreSQL implements file-based log shipping by transferring WAL records one file (WAL segment) at a time.",
+              "start_char": 0,
+              "end_char": 107
+            }
+          ]
+        },
+        {
+          "claim_text": "File-based log shipping is asynchronous, so there is a window for data loss if the primary fails.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Partial coverage=0.45 with number/negation mismatch vs best sentence.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "As a result, there is a window for data loss should the primary server suffer a catastrophic failure; transactions not yet shipped will be lost.",
+              "start_char": 292,
+              "end_char": 436
+            }
+          ]
+        },
+        {
+          "claim_text": "archive_timeout can limit that window to as low as a few seconds.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.86 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The size of the data loss window in file-based log shipping can be limited by use of the archive_timeout parameter, which can be set as low as a few seconds.",
+              "start_char": 0,
+              "end_char": 157
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 4,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [
+          1,
+          3
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_004",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "The Cache-Control no-cache directive means caches must not store the response at all.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "no-cache does not mean \"don't cache\""
+            },
+            {
+              "index": 0,
+              "quote": "no-cache allows caches to store a response but requires them to revalidate it before reuse"
+            }
+          ]
+        },
+        {
+          "claim_text": "no-store forbids storing the response in any cache.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "any caches of any kind (private or shared) should not store this response"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The Cache-Control no-cache directive means caches must not store the response at all.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Partial coverage=0.60 with number/negation mismatch vs best sentence.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The no-cache response directive indicates that the response can be stored in caches, but the response must be validated with the origin server before each reuse, even when the cache is disconnected from the origin server.",
+              "start_char": 0,
+              "end_char": 221
+            }
+          ]
+        },
+        {
+          "claim_text": "no-store also forbids storing the response in any cache.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Partial coverage=0.43 with number/negation mismatch vs best sentence.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The no-store response directive indicates that any caches of any kind (private or shared) should not store this response.",
+              "start_char": 0,
+              "end_char": 121
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 0.8571428571428571,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 0
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_005",
+      "category": "extrinsic_hallucination",
+      "gold": [
+        {
+          "claim_text": "SQLite WAL mode does not work over a network filesystem.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "WAL does not work over a network filesystem"
+            }
+          ]
+        },
+        {
+          "claim_text": "WAL requires processes to share memory on the same host.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "WAL requires all processes to share a small amount of memory"
+            }
+          ]
+        },
+        {
+          "claim_text": "WAL has been available since version 3.7.0.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Beginning with version 3.7.0 (2010-07-21)"
+            }
+          ]
+        },
+        {
+          "claim_text": "WAL is significantly faster in most scenarios.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "WAL is significantly faster in most scenarios."
+            }
+          ]
+        },
+        {
+          "claim_text": "WAL encrypts the -wal file with AES-256 by default.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "SQLite WAL mode does not work over a network filesystem because processes must share memory on the same host.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.64 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        },
+        {
+          "claim_text": "WAL has been available since version 3.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.40 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        },
+        {
+          "claim_text": "7.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=1.00 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "7.",
+              "start_char": 25,
+              "end_char": 27
+            }
+          ]
+        },
+        {
+          "claim_text": "0 and is significantly faster in most scenarios.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.80 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "WAL is significantly faster in most scenarios.",
+              "start_char": 121,
+              "end_char": 167
+            }
+          ]
+        },
+        {
+          "claim_text": "WAL also encrypts the -wal file with AES-256 by default.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.25 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 4,
+            "predIndex": 4,
+            "score": 0.8571428571428571,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 3,
+            "score": 0.6666666666666666,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [
+          1
+        ],
+        "extraPred": [
+          2
+        ],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 0
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_006",
+      "category": "extrinsic_hallucination",
+      "gold": [
+        {
+          "claim_text": "Docker's default restart policy is no.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "no — Don't automatically restart the container. (Default)"
+            }
+          ]
+        },
+        {
+          "claim_text": "The restart backoff starts at 100 milliseconds and doubles each time.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "double the previous delay, starting at 100 milliseconds"
+            }
+          ]
+        },
+        {
+          "claim_text": "The maximum restart delay is 1 minute.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "the maximum delay of 1 minute"
+            }
+          ]
+        },
+        {
+          "claim_text": "Docker Swarm mode is required to use the unless-stopped policy.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Docker's default restart policy is no, meaning the container is not restarted automatically.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Partial coverage=0.50 with number/negation mismatch vs best sentence.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "(Default); on-failure[:max-retries] — Restart the container if it exits due to an error, which manifests as a non-zero exit code; always — Always restart the container if it stops; unless-stopped — Similar to always, except that when the container is stopped (manually or otherwise), it isn't restarted even after Docker daemon restarts.",
+              "start_char": 160,
+              "end_char": 497
+            }
+          ]
+        },
+        {
+          "claim_text": "The restart backoff starts at 100 milliseconds and doubles each time up to a maximum delay of 1 minute.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.38 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        },
+        {
+          "claim_text": "Docker Swarm mode is required to use the unless-stopped policy.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.25 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [
+          2
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_007",
+      "category": "extrinsic_hallucination",
+      "gold": [
+        {
+          "claim_text": "When a rebase hits a merge conflict, git rebase stops at the first problematic commit.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "git rebase will stop at the first problematic commit"
+            }
+          ]
+        },
+        {
+          "claim_text": "After resolving conflicts with git add, continue with git rebase --continue.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "You can mark the conflict as resolved with git add."
+            },
+            {
+              "index": 0,
+              "quote": "continue the rebasing process with git rebase --continue"
+            }
+          ]
+        },
+        {
+          "claim_text": "git rebase --abort returns the branch to its original state.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "return your branch to its original state with git rebase --abort"
+            }
+          ]
+        },
+        {
+          "claim_text": "Interactive rebase requires Git LFS to be installed.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "When a rebase hits a merge conflict, git rebase stops at the first problematic commit.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.73 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "If there is a merge conflict during this process, git rebase will stop at the first problematic commit and leave conflict markers.",
+              "start_char": 0,
+              "end_char": 130
+            }
+          ]
+        },
+        {
+          "claim_text": "After resolving conflicts with git add, continue with git rebase --continue.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.89 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "After resolving all of the conflicts, you can continue the rebasing process with git rebase --continue.",
+              "start_char": 183,
+              "end_char": 286
+            }
+          ]
+        },
+        {
+          "claim_text": "git rebase --abort returns the branch to its original state.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.86 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Stop the git rebase and return your branch to its original state with git rebase --abort.",
+              "start_char": 287,
+              "end_char": 376
+            }
+          ]
+        },
+        {
+          "claim_text": "Interactive rebase requires Git LFS to be installed.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.50 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 3,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1
+      },
+      "caseExact": true
+    },
+    {
+      "id": "conf_008",
+      "category": "extrinsic_hallucination",
+      "gold": [
+        {
+          "claim_text": "A 304 Not Modified response is returned for a conditional GET or HEAD when the condition evaluates to false.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "when the request is a conditional GET or HEAD request with an If-None-Match or an If-Modified-Since header and the condition evaluates to 'false'"
+            }
+          ]
+        },
+        {
+          "claim_text": "A 304 response confirms the cached resource is still valid.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "the resource cached by the client is still valid"
+            }
+          ]
+        },
+        {
+          "claim_text": "The 304 response must not contain a body.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The response must not contain a body"
+            }
+          ]
+        },
+        {
+          "claim_text": "HTTP/2 servers must convert every 304 into a 204 No Content for browser compatibility.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "A 304 Not Modified response is returned for a conditional GET or HEAD when the condition evaluates to false, confirming the cached resource is still valid.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Partial coverage=0.56 with number/negation mismatch vs best sentence.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "This response code is sent when the request is a conditional GET or HEAD request with an If-None-Match or an If-Modified-Since header and the condition evaluates to 'false'.",
+              "start_char": 130,
+              "end_char": 303
+            }
+          ]
+        },
+        {
+          "claim_text": "The 304 response must not contain a body.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.80 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The response must not contain a body and must include the headers that would have been sent in an equivalent 200 response, such as Cache-Control, Content-Location, Date, ETag, Expires, and Vary.",
+              "start_char": 304,
+              "end_char": 498
+            }
+          ]
+        },
+        {
+          "claim_text": "HTTP/2 servers must convert every 304 into a 204 No Content for browser compatibility.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.17 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [
+          1
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_009",
+      "category": "multi_passage",
+      "gold": [
+        {
+          "claim_text": "In SQLite WAL mode only one writer can run at a time.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "there can only be one writer at a time"
+            }
+          ]
+        },
+        {
+          "claim_text": "In SQLite WAL mode writers and readers can run concurrently.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "writers and readers can run at the same time"
+            }
+          ]
+        },
+        {
+          "claim_text": "Checkpoints can run concurrently with readers.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "A checkpoint can run concurrently with readers"
+            }
+          ]
+        },
+        {
+          "claim_text": "A long-running read transaction can prevent a checkpointer from making progress.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "a long-running read transaction can prevent a checkpointer from making progress"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "In SQLite WAL mode only one writer can run at a time, but writers and readers can run concurrently.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.42 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        },
+        {
+          "claim_text": "Checkpoints can run concurrently with readers, yet a long-running read transaction can prevent a checkpointer from making progress.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.62 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [
+          1,
+          3
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_010",
+      "category": "multi_passage",
+      "gold": [
+        {
+          "claim_text": "PostgreSQL streaming replication is asynchronous by default.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "PostgreSQL streaming replication is asynchronous by default."
+            }
+          ]
+        },
+        {
+          "claim_text": "Asynchronous streaming replication can cause data loss if the primary crashes before changes reach the standby.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "some transactions that were committed may not have been replicated to the standby server, causing data loss"
+            }
+          ]
+        },
+        {
+          "claim_text": "With synchronous replication, write commits wait until the commit is on disk on both primary and standby.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "written to the write-ahead log on disk of both the primary and standby server"
+            }
+          ]
+        },
+        {
+          "claim_text": "Read-only transactions need not wait for standby replies under synchronous replication.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Read-only transactions and transaction rollbacks need not wait for replies from standby servers."
+            }
+          ]
+        },
+        {
+          "claim_text": "With synchronous_commit=remote_apply, commits wait until standbys have replayed the transaction.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "wait until the current synchronous standbys report that they have replayed the transaction"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "PostgreSQL streaming replication is asynchronous by default, which can cause data loss if the primary crashes before changes reach the standby.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.33 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        },
+        {
+          "claim_text": "With synchronous replication, write commits wait until the commit is on disk on both primary and standby, but read-only transactions need not wait.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Partial coverage=0.69 with number/negation mismatch vs best sentence.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "When requesting synchronous replication, each commit of a write transaction will wait until confirmation is received that the commit has been written to the write-ahead log on disk of both the primary and standby server.",
+              "start_char": 0,
+              "end_char": 220
+            }
+          ]
+        },
+        {
+          "claim_text": "With synchronous_commit=remote_apply, commits wait until standbys have replayed the transaction.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.90 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "Setting synchronous_commit to remote_apply will cause each commit to wait until the current synchronous standbys report that they have replayed the transaction, making it visible to user queries.",
+              "start_char": 0,
+              "end_char": 195
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 4,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [
+          1,
+          3
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_011",
+      "category": "multi_passage",
+      "gold": [
+        {
+          "claim_text": "allkeys-lru is recommended when a subset of keys is accessed far more often than the rest.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Use allkeys-lru when you expect that a subset of elements will be accessed far more often than the rest"
+            }
+          ]
+        },
+        {
+          "claim_text": "allkeys-lru is a good default option.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "allkeys-lru is a good default option"
+            }
+          ]
+        },
+        {
+          "claim_text": "allkeys-random fits roughly equal access frequency.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Use allkeys-random when you expect all keys to be accessed with roughly equal frequency"
+            }
+          ]
+        },
+        {
+          "claim_text": "volatile-lru is mainly useful when one instance holds both cache and persistent keys.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "mainly useful when you want to use a single Redis instance for both caching and for a set of persistent keys"
+            }
+          ]
+        },
+        {
+          "claim_text": "Redis Cluster forces allkeys-lru on every shard.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "allkeys-lru is recommended when a subset of keys is accessed far more often than the rest and is a good default.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.69 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        },
+        {
+          "claim_text": "allkeys-random fits roughly equal access frequency.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.71 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Use allkeys-random when you expect all keys to be accessed with roughly equal frequency.",
+              "start_char": 0,
+              "end_char": 88
+            }
+          ]
+        },
+        {
+          "claim_text": "volatile-lru is mainly useful when one instance holds both cache and persistent keys.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.75 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "The volatile-lru, volatile-lrm, and volatile-random policies are mainly useful when you want to use a single Redis instance for both caching and for a set of persistent keys.",
+              "start_char": 0,
+              "end_char": 174
+            }
+          ]
+        },
+        {
+          "claim_text": "Redis Cluster forces allkeys-lru on every shard.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.29 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 4,
+            "predIndex": 3,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [
+          1
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_012",
+      "category": "multi_passage",
+      "gold": [
+        {
+          "claim_text": "git rebase --onto master next topic transplants topic as if it forked from master instead of next.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "git rebase --onto master next topic"
+            }
+          ]
+        },
+        {
+          "claim_text": "git rebase --onto master topicA topicB is useful when topicB does not depend on topicA.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "git rebase --onto master topicA topicB"
+            },
+            {
+              "index": 1,
+              "quote": "This is useful when topicB does not depend on topicA."
+            }
+          ]
+        },
+        {
+          "claim_text": "Using --onto with topicA~5 and topicA~3 can remove commits F and G from topicA.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "git rebase --onto topicA~5 topicA~3 topicA"
+            },
+            {
+              "index": 2,
+              "quote": "removal of commits F and G"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "git rebase --onto master next topic transplants topic as if it forked from master instead of next.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.75 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "We can get this using the following command: git rebase --onto master next topic.",
+              "start_char": 0,
+              "end_char": 81
+            }
+          ]
+        },
+        {
+          "claim_text": "git rebase --onto master topicA topicB is useful when topicB does not depend on topicA.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.64 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        },
+        {
+          "claim_text": "Using --onto with topicA~5 and topicA~3 can remove commits F and G from topicA.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.82 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "If we have the following situation with commits E---F---G---H---I---J on topicA, then the command git rebase --onto topicA~5 topicA~3 topicA would result in the removal of commits F and G.",
+              "start_char": 54,
+              "end_char": 242
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 0
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_013",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "In WAL mode, readers block writers.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "readers do not block writers"
+            }
+          ]
+        },
+        {
+          "claim_text": "In WAL mode, reading and writing cannot proceed concurrently.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Reading and writing can proceed concurrently."
+            }
+          ]
+        },
+        {
+          "claim_text": "After a checkpoint finishes and no readers use the WAL, the writer may rewind the WAL to the beginning.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "the writer will rewind the WAL back to the beginning"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "In WAL mode, readers block writers, so reading and writing cannot proceed concurrently.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Partial coverage=0.40 with number/negation mismatch vs best sentence.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Reading and writing can proceed concurrently.",
+              "start_char": 99,
+              "end_char": 144
+            }
+          ]
+        },
+        {
+          "claim_text": "After a checkpoint finishes and no readers use the WAL, the writer may rewind the WAL to the beginning.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.70 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Whenever a write operation occurs, the writer checks how much progress the checkpointer has made, and if the entire WAL has been transferred into the database and synced and if no readers are making use of the WAL, then the writer will rewind the WAL back to the beginning and start putting new transactions at the beginning of the WAL.",
+              "start_char": 0,
+              "end_char": 336
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [
+          1
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 0
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_014",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "git rebase first updates the branch tip, then replays commits one by one.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Replay the commits, one by one, in order."
+            },
+            {
+              "index": 0,
+              "quote": "Update your branch to point to the final commit."
+            }
+          ]
+        },
+        {
+          "claim_text": "Replaying commits in rebase is similar to running git cherry-pick for each commit.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "This is similar to running git cherry-pick for each commit."
+            }
+          ]
+        },
+        {
+          "claim_text": "If a conflict occurs, rebase stops at the first problematic commit.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "git rebase will stop at the first problematic commit"
+            }
+          ]
+        },
+        {
+          "claim_text": "git rebase --skip skips the commit that caused the conflict.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Skip the commit that caused the merge conflict with git rebase --skip."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "git rebase first updates the branch tip, then replays commits one by one in order, similar to cherry-pick.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.29 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        },
+        {
+          "claim_text": "If a conflict occurs, rebase stops at the first problematic commit; git rebase --skip skips that commit.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.58 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [
+          1,
+          3
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 0
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_015",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "Cascading replication lets a standby relay WAL to other standbys.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "allows a standby server to accept replication connections and stream WAL records to other standbys, acting as a relay"
+            }
+          ]
+        },
+        {
+          "claim_text": "Cascading replication is asynchronous.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Cascading replication is currently asynchronous."
+            }
+          ]
+        },
+        {
+          "claim_text": "Synchronous replication settings also apply to cascading standbys.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Synchronous replication settings have no effect on cascading replication at present."
+            }
+          ]
+        },
+        {
+          "claim_text": "After an upstream standby is promoted, downstream servers continue streaming if recovery_target_timeline is 'latest'.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "downstream servers will continue to stream from the new primary if recovery_target_timeline is set to 'latest'"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Cascading replication lets a standby relay WAL to other standbys.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.88 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The cascading replication feature allows a standby server to accept replication connections and stream WAL records to other standbys, acting as a relay.",
+              "start_char": 0,
+              "end_char": 152
+            }
+          ]
+        },
+        {
+          "claim_text": "Cascading replication is asynchronous, and synchronous replication settings also apply to cascading standbys.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Partial coverage=0.60 with number/negation mismatch vs best sentence.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Synchronous replication settings have no effect on cascading replication at present.",
+              "start_char": 202,
+              "end_char": 286
+            }
+          ]
+        },
+        {
+          "claim_text": "After an upstream standby is promoted, downstream servers continue streaming if recovery_target_timeline is 'latest'.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.83 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "If an upstream standby server is promoted to become the new primary, downstream servers will continue to stream from the new primary if recovery_target_timeline is set to 'latest' (the default).",
+              "start_char": 0,
+              "end_char": 194
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [
+          2
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 0
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_016",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "Detached containers keep running after the root process exits unless --rm is set.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "containers started in detached mode exit when the root process used to run the container exits, unless you also specify the --rm option"
+            }
+          ]
+        },
+        {
+          "claim_text": "Using -d with --rm removes the container when it exits or when the daemon exits, whichever happens first.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "the container is removed when it exits or when the daemon exits, whichever happens first"
+            }
+          ]
+        },
+        {
+          "claim_text": "--restart can be combined freely with --rm.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Combining --restart (restart policy) with the --rm (clean up) flag results in an error"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Detached containers keep running after the root process exits unless --rm is set.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.64 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        },
+        {
+          "claim_text": "Using -d with --rm removes the container when it exits or when the daemon exits, whichever happens first.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.85 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "If you use -d with --rm, the container is removed when it exits or when the daemon exits, whichever happens first.",
+              "start_char": 259,
+              "end_char": 373
+            }
+          ]
+        },
+        {
+          "claim_text": "--restart can be combined freely with --rm.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.50 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 0
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_017",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "max-age measures freshness from when the browser received the response.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "max-age is not the elapsed time since the response was received; it is the elapsed time since the response was generated on the origin server"
+            }
+          ]
+        },
+        {
+          "claim_text": "If Age is 100, the browser deducts 100 seconds from the freshness lifetime.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "the browser cache would deduct 100 seconds from its freshness lifetime"
+            }
+          ]
+        },
+        {
+          "claim_text": "s-maxage is ignored by private caches.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The s-maxage directive is ignored by private caches"
+            }
+          ]
+        },
+        {
+          "claim_text": "s-maxage overrides max-age for shared caches.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "overrides the value specified by the max-age directive or the Expires header for shared caches"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "max-age measures freshness from when the browser received the response.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.50 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        },
+        {
+          "claim_text": "If Age is 100, the browser deducts 100 seconds from the freshness lifetime.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.88 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "So if the other cache(s) — on the network route taken by the response — store the response for 100 seconds (indicated using the Age response header field), the browser cache would deduct 100 seconds from its freshness lifetime.",
+              "start_char": 277,
+              "end_char": 504
+            }
+          ]
+        },
+        {
+          "claim_text": "s-maxage is ignored by private caches and overrides max-age for shared caches.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=1.00 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The s-maxage directive is ignored by private caches, and overrides the value specified by the max-age directive or the Expires header for shared caches, if they are present.",
+              "start_char": 97,
+              "end_char": 270
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [
+          3
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 0
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_018",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "volatile-* policies behave like noeviction when no keys have an expiration.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The volatile-xxx policies behave like noeviction if no keys have an associated expiration."
+            }
+          ]
+        },
+        {
+          "claim_text": "allkeys-lru is more memory efficient because it does not need expire values.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "allkeys-lru is more memory efficient since it doesn't need an expire value to operate"
+            }
+          ]
+        },
+        {
+          "claim_text": "LFU mode requires Redis 5.0 or newer.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Starting with Redis 4.0, the Least Frequently Used eviction mode is available."
+            }
+          ]
+        },
+        {
+          "claim_text": "By default the LFU counter decays every one second.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "Decay the counter every one minute."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "volatile-* policies behave like noeviction when no keys have an expiration.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.88 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The volatile-xxx policies behave like noeviction if no keys have an associated expiration.",
+              "start_char": 0,
+              "end_char": 90
+            }
+          ]
+        },
+        {
+          "claim_text": "allkeys-lru is more memory efficient because it does not need expire values.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.78 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Also note that setting an expire value for a key costs memory, so a policy like allkeys-lru is more memory efficient since it doesn't need an expire value to operate.",
+              "start_char": 91,
+              "end_char": 257
+            }
+          ]
+        },
+        {
+          "claim_text": "LFU mode requires Redis 5.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Partial coverage=0.40 with number/negation mismatch vs best sentence.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "To configure the LFU mode, the following policies are available: volatile-lfu — Evict using approximated LFU among the keys with an expire set; allkeys-lfu — Evict any key using approximated LFU.",
+              "start_char": 79,
+              "end_char": 274
+            }
+          ]
+        },
+        {
+          "claim_text": "0 or newer.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.50 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        },
+        {
+          "claim_text": "By default the LFU counter decays every one second.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Coverage=0.43 below thresholds (hand-picked constants; not tuned on test set).",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 4,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [
+          3
+        ],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_019",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "You can change page_size with VACUUM after entering WAL mode.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "It is not possible to change the page_size after entering WAL mode, either on an empty database or by using VACUUM"
+            }
+          ]
+        },
+        {
+          "claim_text": "Older SQLite builds could not open read-only WAL databases.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "It is not possible to open read-only WAL databases."
+            }
+          ]
+        },
+        {
+          "claim_text": "Beginning with version 3.22.0 a read-only WAL-mode database can be opened if the -shm and -wal files already exist or the database is immutable.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Beginning with version 3.22.0 (2018-01-22), a read-only WAL-mode database file can be opened if the -shm and -wal files already exist or those files can be created or the database is immutable."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "You can change page_size with VACUUM after entering WAL mode.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.89 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "It is not possible to change the page_size after entering WAL mode, either on an empty database or by using VACUUM or by restoring from a backup using the backup API.",
+              "start_char": 0,
+              "end_char": 166
+            }
+          ]
+        },
+        {
+          "claim_text": "Older SQLite builds could not open read-only WAL databases, but beginning with version 3.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Partial coverage=0.45 with number/negation mismatch vs best sentence.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "It is not possible to open read-only WAL databases.",
+              "start_char": 0,
+              "end_char": 51
+            }
+          ]
+        },
+        {
+          "claim_text": "22.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=1.00 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "22.",
+              "start_char": 321,
+              "end_char": 324
+            }
+          ]
+        },
+        {
+          "claim_text": "0 a read-only WAL-mode database can be opened if the -shm and -wal files already exist or the database is immutable.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=1.00 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "0 (2018-01-22), a read-only WAL-mode database file can be opened if the -shm and -wal files already exist or those files can be created or the database is immutable.",
+              "start_char": 324,
+              "end_char": 489
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 3,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [
+          2
+        ],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 0
+      },
+      "caseExact": false
+    },
+    {
+      "id": "conf_020",
+      "category": "supported",
+      "gold": [
+        {
+          "claim_text": "FIRST picks synchronous standbys by priority from the listed names.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "FIRST specifies a priority-based synchronous replication"
+            }
+          ]
+        },
+        {
+          "claim_text": "Earlier names in the FIRST list have higher priority.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The standbys whose names appear earlier in the list are given higher priority"
+            }
+          ]
+        },
+        {
+          "claim_text": "With FIRST 2 (s1, s2, s3), s1 and s2 are synchronous standbys.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "the two standbys s1 and s2 will be chosen as synchronous standbys"
+            }
+          ]
+        },
+        {
+          "claim_text": "With FIRST 2 (s1, s2, s3), s4 is an asynchronous standby because it is not in the list.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "s4 is an asynchronous standby since its name is not in the list."
+            }
+          ]
+        },
+        {
+          "claim_text": "ANY is quorum-based and waits for at least the requested number of listed standbys.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "ANY specifies a quorum-based synchronous replication and makes transaction commits wait until their WAL records are replicated to at least the requested number of synchronous standbys in the list."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "FIRST picks synchronous standbys by priority from the listed names; earlier names have higher priority.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.73 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The standbys whose names appear earlier in the list are given higher priority and will be considered as synchronous.",
+              "start_char": 224,
+              "end_char": 340
+            }
+          ]
+        },
+        {
+          "claim_text": "With FIRST 2 (s1, s2, s3), s1 and s2 are synchronous and s4 is asynchronous because it is not in the list.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.75 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "In this example, if four standby servers s1, s2, s3 and s4 are running, the two standbys s1 and s2 will be chosen as synchronous standbys because their names appear early in the list of standby names.",
+              "start_char": 147,
+              "end_char": 347
+            }
+          ]
+        },
+        {
+          "claim_text": "ANY is quorum-based and waits for at least the requested number of listed standbys.",
+          "verdict": "SUPPORTED",
+          "reasoning": "BM25 best sentence coverage=0.78 ≥ 0.7.",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "The method ANY specifies a quorum-based synchronous replication and makes transaction commits wait until their WAL records are replicated to at least the requested number of synchronous standbys in the list.",
+              "start_char": 0,
+              "end_char": 207
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 4,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 1,
+            "score": 0.8181818181818182,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [
+          1,
+          2
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 0,
+        "validationRetries": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 0
+      },
+      "caseExact": false
+    }
+  ]
+}

@@ -398,3 +398,16 @@ Full write-up: `docs/8-conclusion.md`.
 **Change:** `src/verifiers/llmOptimized.ts` now delegates to `llmPrompt8Verifier` (name remains `optimized`). README rewritten as the assignment evaluation report: baseline / minimal / optimized quality tables, latency/cost, key failures, and hill-climbing summary (minimal → M6a → hard set → prompt5–8 → ship prompt8). Ablation approaches (`wording`, `prompt5`…`prompt8`) stay registered for reproduction.
 
 **Decision:** stop climbing; no prompt9 (best hard-set mean so far; variance at n=20).
+
+## Confirmation blind set (`eval/3-confirmation.jsonl`)
+
+Frozen after prompt8 ship. SHA256 `1fa1ea8c976265df8c4687e3664c14d75d399af5ac948f0628b77b9d605efb2c`. **No SYSTEM / prompt9 / repair changes from this split.**
+
+| Approach | macro-F1 | end-to-end | Protocol |
+| --- | ---: | ---: | --- |
+| baseline | 0.425 | 0.442 | ×1 |
+| minimal | 0.943 (0.939–0.945) | 0.896 (0.883–0.909) | ×3 |
+| optimized (=prompt8) | 0.932 (0.922–0.950) | 0.978 (0.974–0.987) | ×3 |
+| prompt6 (appendix) | 0.948 | 0.987 | ×1 |
+
+Bootstrap (B=10000, seed 42): optimized vs minimal — macro-F1 **↓** n.s.; e2e **↑** significant. Appendix optimized vs prompt6 — both metrics **↓** directionally, n.s. Full write-up: `docs/confirmation-report.md`.
