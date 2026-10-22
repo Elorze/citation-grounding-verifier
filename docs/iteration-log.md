@@ -105,3 +105,15 @@ Targeted failures from minimal:
 **Decision:** **keep.** All headline metrics improved or stayed perfect; the fused/missed cases from the error analysis are gone and there are no new failure rows. Input tokens rose (229 → 386) from the longer system prompt—acceptable for this step.
 
 **Caveat:** ~55 gold claims; improvements under ~2 percentage points on claim-level rates are not treated as significant. Here the gains (e.g. end-to-end 0.909 → 1.000) are larger than that noise floor, but the set is still small and a single run can overfit prompts—treat perfect scores cautiously.
+
+## Hard test split v1 (frozen)
+
+Purpose: held-out test split to check whether the M6a prompt rules (atomic definition; split compound incl. by/in/for/with; keep qualifiers; causal as separate claim; full subject, no pronouns) generalize beyond the 24 dev cases they were tuned on.
+
+- File: `eval/cases_test.jsonl` — 20 cases (hard_001..hard_020), 78 gold claims: SUPPORTED 36 / CONTRADICTED 25 / UNSUPPORTED 17.
+- sha256: `c83ab8c18eb70e1b8943ef8430294078ffe614d5543b7d32673cb66631463a58`
+- Frozen at commit: `576ece8` (the commit that added the file).
+- Taxonomy: each case carries `taxonomy` labels from RAGTruth (Niu et al., 2024) and FRANK (Pagnoni et al., 2021), plus `targets_rule` (which M6a rule it stresses) and `intent`.
+- Annotation rules: same as dev (no world knowledge; CONTRADICTED only if passages state something incompatible; atomic claims with full subject and qualifiers; causal/temporal relations as their own claim).
+- Provenance: cases were drafted with AI assistance and reviewed/edited by the author (single annotator). All entities are fictional and do not overlap with the dev set.
+- Rules: no prompt/verifier/scoring change is evaluated on this file; the file is not edited after this commit; each approach is run once.
