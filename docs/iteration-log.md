@@ -348,3 +348,47 @@ Source: `results/7-byGroup.md`. Descriptive only; n per group too small for sign
 | general | 1.000 | 0.955 | 0.985 | 1.000 | 1.000 |
 
 Full write-up: `docs/7-conclusion.md`.
+
+## prompt8 (leaner example on prompt7 rules)
+
+**Change:** New approach `prompt8` (`src/verifiers/llmPrompt8.ts`). Same Step-2 patches as prompt7 (from–to one detail; no condition-only duplicate; relation-only without repeating numbers/times; coref), but **shorter example** (no east-wing / led-to causal story).
+
+**Disclosure:** Example patterns informed by `2-4` failures; fictional entities; neutral vocab (no `best-selling` / `the site` / `the counts`).
+
+**Dev `1-1.jsonl` (1 run):** macro-F1 **1.000**, e2e 1.000, case exact 100% → `results/8-prompt8-1-1.*`. Failures: none (no drop).
+
+**Hard `2-4.jsonl` (3 runs):** macro-F1 mean **0.967** (0.963–0.972), e2e mean **0.940** (0.936–0.949) → `results/8-prompt8.*`. Reused prompt2/3/5/6/7.
+
+### Statistical check (prompt8 vs prompt2 / 3 / 5 / 6 / 7)
+
+Case-level paired bootstrap, 10000 resamples, seed 42, averaged over 3 runs.
+
+| Pair | Metric | A | B=prompt8 | diff | 95% CI |
+| --- | --- | ---: | ---: | ---: | --- |
+| vs prompt2 | macro-F1 | 0.950 | 0.967 | +0.017 | [0.002, 0.038] |
+| vs prompt2 | end-to-end | 0.906 | 0.940 | +0.034 | [0.008, 0.068] |
+| vs prompt3 | macro-F1 | 0.950 | 0.967 | +0.017 | [−0.001, 0.042] |
+| vs prompt3 | end-to-end | 0.910 | 0.940 | +0.030 | [0.000, 0.070] |
+| vs prompt5 | macro-F1 | 0.941 | 0.967 | +0.026 | [0.004, 0.058] |
+| vs prompt5 | end-to-end | 0.915 | 0.940 | +0.026 | [−0.000, 0.061] |
+| vs prompt6 | macro-F1 | 0.956 | 0.967 | +0.011 | [−0.009, 0.032] |
+| vs prompt6 | end-to-end | 0.936 | 0.940 | +0.004 | [−0.033, 0.043] |
+| vs prompt7 | macro-F1 | 0.953 | 0.967 | +0.015 | [−0.008, 0.040] |
+| vs prompt7 | end-to-end | 0.944 | 0.940 | −0.004 | [−0.028, 0.017] |
+
+**Conclusion:** macro-F1 **significant vs prompt2 and prompt5** (CI excludes 0); **not significant vs prompt3 / 6 / 7** at n=20. Best point estimate so far.
+
+**Unstable cases (case exact differs across 3 runs):** prompt8 — hard_004, hard_014, hard_020.
+
+### Per-group (with prompt8)
+
+Source: `results/8-byGroup.md`. Descriptive only; n per group too small for significance.
+
+| Group | p2 | p3 | p5 | p6 | p7 | p8 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| T1 | 0.854 | 0.875 | 0.854 | 0.917 | 0.958 | 0.958 |
+| T2 | 0.900 | 0.900 | 0.900 | 0.950 | 0.900 | 0.917 |
+| T3 | 0.850 | 0.900 | 0.900 | 0.867 | 0.917 | 0.883 |
+| general | 1.000 | 0.955 | 0.985 | 1.000 | 1.000 | 1.000 |
+
+Full write-up: `docs/8-conclusion.md`.

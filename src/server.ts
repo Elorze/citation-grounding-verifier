@@ -22,7 +22,8 @@ function ensureLlmVerifiers(): Promise<void> {
     verifiers.optimized &&
     verifiers.prompt5 &&
     verifiers.prompt6 &&
-    verifiers.prompt7
+    verifiers.prompt7 &&
+    verifiers.prompt8
   ) {
     return Promise.resolve();
   }
@@ -45,12 +46,14 @@ function ensureLlmVerifiers(): Promise<void> {
       const { llmPrompt5Verifier } = await import('./verifiers/llmPrompt5.js');
       const { llmPrompt6Verifier } = await import('./verifiers/llmPrompt6.js');
       const { llmPrompt7Verifier } = await import('./verifiers/llmPrompt7.js');
+      const { llmPrompt8Verifier } = await import('./verifiers/llmPrompt8.js');
       verifiers.minimal = llmMinimalVerifier;
       verifiers.optimized = llmOptimizedVerifier;
       verifiers.wording = llmWordingVerifier;
       verifiers.prompt5 = llmPrompt5Verifier;
       verifiers.prompt6 = llmPrompt6Verifier;
       verifiers.prompt7 = llmPrompt7Verifier;
+      verifiers.prompt8 = llmPrompt8Verifier;
     })();
   }
   return llmReady;
@@ -73,7 +76,8 @@ async function resolveApproach(raw: string | undefined): Promise<Verifier> {
     name === 'wording' ||
     name === 'prompt5' ||
     name === 'prompt6' ||
-    name === 'prompt7'
+    name === 'prompt7' ||
+    name === 'prompt8'
   ) {
     await ensureLlmVerifiers();
   }
@@ -98,7 +102,15 @@ app.get('/health', (c) =>
     verifiers: [
       ...Object.keys(verifiers),
       ...(hasLlmKey()
-        ? ['minimal', 'optimized', 'wording', 'prompt5', 'prompt6', 'prompt7']
+        ? [
+            'minimal',
+            'optimized',
+            'wording',
+            'prompt5',
+            'prompt6',
+            'prompt7',
+            'prompt8',
+          ]
         : []),
     ].filter((v, i, a) => a.indexOf(v) === i),
   }),

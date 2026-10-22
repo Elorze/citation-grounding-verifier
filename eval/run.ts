@@ -116,6 +116,10 @@ async function getVerifier(name: string): Promise<Verifier> {
     const { llmPrompt7Verifier } = await import('../src/verifiers/llmPrompt7.js');
     return llmPrompt7Verifier;
   }
+  if (name === 'prompt8') {
+    const { llmPrompt8Verifier } = await import('../src/verifiers/llmPrompt8.js');
+    return llmPrompt8Verifier;
+  }
   throw new Error(`Unknown approach: ${name}`);
 }
 
