@@ -117,3 +117,46 @@ Purpose: held-out test split to check whether the M6a prompt rules (atomic defin
 - Annotation rules: same as dev (no world knowledge; CONTRADICTED only if passages state something incompatible; atomic claims with full subject and qualifiers; causal/temporal relations as their own claim).
 - Provenance: cases were drafted with AI assistance and reviewed/edited by the author (single annotator). All entities are fictional and do not overlap with the dev set.
 - Rules: no prompt/verifier/scoring change is evaluated on this file; the file is not edited after this commit; each approach is run once.
+
+## Test results on hard split v1
+
+One run each (`--repeat 1`), DeepSeek `deepseek-chat`, thinking disabled, temperature 0.1. Numbers copied from the result files below (not hand-edited).
+
+| Metric | baseline | minimal | optimized (M6a) |
+| --- | ---: | ---: | ---: |
+| macro-F1 | 0.253 | 0.913 | 0.942 |
+| matched verdict acc | 0.500 | 1.000 | 0.986 |
+| e2e acc | 0.192 | 0.872 | 0.897 |
+| case exact | 0.0% | 65.0% | 60.0% |
+| claim-count exact | 5.0% | 70.0% | 65.0% |
+| SUPPORTED F1 | 0.311 | 0.879 | 0.866 |
+| CONTRADICTED F1 | 0.176 | 0.920 | 0.960 |
+| UNSUPPORTED F1 | 0.270 | 0.941 | 1.000 |
+| latency p50 / p95 (ms) | 1 / 28 | 1459 / 3120 | 1859 / 3239 |
+| tokens in / out per case | 0 / 0 | 268 / 290 | 425 / 306 |
+| results file | `baseline-20261022-144630.json` | `minimal-20261022-144812.json` | `optimized-20261022-144923.json` |
+
+**vs dev v1.1 macro-F1** (same model/config): baseline 0.192 → hard 0.253; minimal 0.922 → hard 0.913; optimized 1.000 → hard 0.942.
+
+### Failures (case not exact)
+
+**optimized (M6a)** — 8 / 20 cases not exact:
+
+| Case | taxonomy | targets_rule | Failure shape |
+| --- | --- | --- | --- |
+| hard_002 | FRANK:CorefE, FRANK:EntE, RAGTruth:evident_baseless | R5_coref_subject, R2_prepositional_split | 漏拆 (MISSED signed-by claim) |
+| hard_003 | FRANK:LinkE, FRANK:CorefE, RAGTruth:subtle_conflict, RAGTruth:evident_baseless | R2_prepositional_split, R4_causal, R5_coref_subject | 融合+漏拆 (temporal “after” fused with send-off; MISSED separate CONTRADICTED) |
+| hard_004 | FRANK:LinkE, RAGTruth:subtle_conflict, RAGTruth:evident_baseless, FRANK:CorefE | R4_causal, R5_coref_subject | 漏拆 (MISSED doubling fact; causal covered but year claim missed) |
+| hard_014 | FRANK:PredE, FRANK:CircE, RAGTruth:evident_conflict | R1_atomic, R3_qualifier | 漏拆 (MISSED 23:40 leave time) |
+| hard_016 | FRANK:OutE, RAGTruth:subtle_baseless, RAGTruth:evident_baseless, FRANK:CorefE, RAGTruth:evident_conflict | R2_prepositional_split, R5_coref_subject, R1_atomic | 漏拆 (MISSED best-selling jacket fact in modifier) |
+| hard_017 | control:supported_paraphrase | R3_qualifier, R5_coref_subject | 多拆 (EXTRA paraphrase of public-night claim) |
+| hard_018 | RAGTruth:subtle_conflict, FRANK:CircE, RAGTruth:evident_baseless | R2_prepositional_split, R3_qualifier | 对齐错 (MISSED day-pass gold + EXTRA near-paraphrase) |
+| hard_020 | FRANK:CircE, RAGTruth:subtle_conflict | R2_prepositional_split, R3_qualifier, R1_atomic | 漏拆 (MISSED book-via-app fact when year wrong) |
+
+**minimal** — 7 / 20 cases not exact: hard_002 (漏拆), hard_003 (漏拆), hard_004 (漏拆+对齐/措辞), hard_014 (漏拆), hard_016 (漏拆), hard_019 (对齐错：代词 They 未换成全名 → missed+extra), hard_020 (漏拆).
+
+**Counts on optimized non-exact cases — by taxonomy label (case can contribute to multiple):** FRANK:CorefE 4; FRANK:CircE 3; RAGTruth:subtle_conflict 3; RAGTruth:evident_baseless 4; FRANK:LinkE 2; RAGTruth:evident_conflict 2; FRANK:EntE 1; FRANK:PredE 1; FRANK:OutE 1; RAGTruth:subtle_baseless 1; control:supported_paraphrase 1.
+
+**By targets_rule (optimized non-exact):** R2_prepositional_split 6; R5_coref_subject 5; R3_qualifier 4; R1_atomic 3; R4_causal 2.
+
+Disclosure: test cases drafted with AI assistance, reviewed by the author; results not hand-edited.

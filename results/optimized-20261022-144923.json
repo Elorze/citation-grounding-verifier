@@ -1,0 +1,2691 @@
+{
+  "config": {
+    "approach": "optimized",
+    "label": "hard-v1 optimized (M6a)",
+    "model": "deepseek-chat",
+    "thinking": "disabled",
+    "temperature": 0.1,
+    "matchThreshold": 0.5,
+    "gitCommit": "a113c8f",
+    "caseCount": 20,
+    "dataset": "eval/cases_test.jsonl",
+    "datasetSha256": "c83ab8c18eb70e1b8943ef8430294078ffe614d5543b7d32673cb66631463a58"
+  },
+  "metrics": {
+    "confusion": {
+      "labels": [
+        "row=gold S/C/U/(extra)",
+        "col=pred S/C/U/(missed)"
+      ],
+      "matrix": [
+        [
+          29,
+          1,
+          0,
+          6
+        ],
+        [
+          0,
+          24,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          17,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "perClass": {
+      "SUPPORTED": {
+        "precision": 0.9354838709677419,
+        "recall": 0.8055555555555556,
+        "f1": 0.8656716417910448,
+        "support": 36
+      },
+      "CONTRADICTED": {
+        "precision": 0.96,
+        "recall": 0.96,
+        "f1": 0.96,
+        "support": 25
+      },
+      "UNSUPPORTED": {
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "support": 17
+      }
+    },
+    "macroF1": 0.9418905472636817,
+    "verdictAccuracy": 0.9859154929577465,
+    "endToEndAccuracy": 0.8974358974358975,
+    "citationValidityRaw": 1,
+    "citationValidityFinal": 1,
+    "citationAgreement": 1,
+    "claimCountExactPct": 0.65,
+    "claimCountAbsDiffMean": 0.35,
+    "caseExactMatchPct": 0.6,
+    "borderlineMatchCount": 4,
+    "matchedPairs": 71,
+    "totalGoldClaims": 78,
+    "totalPredClaims": 73,
+    "latencyMs": {
+      "p50": 1859,
+      "p95": 3239,
+      "mean": 2146.3
+    },
+    "tokens": {
+      "inputTotal": 8491,
+      "outputTotal": 6118,
+      "perCaseInput": 424.55,
+      "perCaseOutput": 305.9
+    },
+    "llmCallsTotal": 20,
+    "validationRetriesTotal": 0,
+    "llmCallsPerCase": 1
+  },
+  "failures": [
+    "- **hard_002** (mixed): MISSED gold=SUPPORTED \"The Saltmarsh Charter was signed by Abbot Edric Vane.\"",
+    "- **hard_003** (mixed): gold=SUPPORTED pred=CONTRADICTED | gold=\"Midfielder Rafe Okonjo was sent off in the 70th minute.\" | pred=\"Both of Tomas Ilves's goals came after midfielder Rafe Okonjo was sent off in the 70th minute.\" | reasoning=\"Ilves scored in the 12th and 38th minutes, both before Okonjo's 70th-minute sending off.\"",
+    "- **hard_003** (mixed): MISSED gold=CONTRADICTED \"Both of Tomas Ilves's goals came after Rafe Okonjo was sent off.\"",
+    "- **hard_004** (subtle_distortion): MISSED gold=SUPPORTED \"Brightfold Paper Co.'s delivery times doubled from 2 to 4 days.\"",
+    "- **hard_014** (subtle_distortion): MISSED gold=SUPPORTED \"The Kelby–Arnsford night bus leaves at 23:40.\"",
+    "- **hard_016** (extrinsic_hallucination): MISSED gold=SUPPORTED \"Marrowby Outfitters' best-selling product is a waxed canvas jacket.\"",
+    "- **hard_017** (supported): EXTRA pred=SUPPORTED \"The Ombra Ridge observatory opens to the public on the first Friday of each month when the weather allows.\"",
+    "- **hard_018** (multi_passage): MISSED gold=SUPPORTED \"A Tesk Valley Folk Festival day pass costs 35 euros.\"",
+    "- **hard_018** (multi_passage): EXTRA pred=SUPPORTED \"According to the final program, a day pass costs 35 euros.\"",
+    "- **hard_020** (mixed): MISSED gold=SUPPORTED \"Dunleigh General Hospital patients can book appointments via the CareLink app.\""
+  ],
+  "perCase": [
+    {
+      "id": "hard_001",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "Quillmark Systems' Porto team built Tarnwell 4.2.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Tarnwell 4.2 was built entirely by engineers working out of the company's Lisbon office."
+            }
+          ]
+        },
+        {
+          "claim_text": "Quillmark Systems released Tarnwell 4.2 in March 2025.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Quillmark Systems released version 4.2 of its Tarnwell database engine on 14 March 2025."
+            }
+          ]
+        },
+        {
+          "claim_text": "Tarnwell 4.2 was released with native vector index support.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The release added native support for vector indexes."
+            }
+          ]
+        },
+        {
+          "claim_text": "Tarnwell 4.2's native vector index support is aimed at faster semantic search.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Quillmark Systems' Porto team built Tarnwell 4.2.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 states Tarnwell 4.2 was built entirely by engineers in the Lisbon office, not a Porto team.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Tarnwell 4.2 was built entirely by engineers working out of the company's Lisbon office.",
+              "start_char": 0,
+              "end_char": 88
+            }
+          ]
+        },
+        {
+          "claim_text": "Quillmark Systems released Tarnwell 4.2 in March 2025.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states version 4.2 of the Tarnwell database engine was released on 14 March 2025.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Quillmark Systems released version 4.2 of its Tarnwell database engine on 14 March 2025.",
+              "start_char": 0,
+              "end_char": 88
+            }
+          ]
+        },
+        {
+          "claim_text": "Tarnwell 4.2 was released with native vector index support.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states the release added native support for vector indexes.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The release added native support for vector indexes.",
+              "start_char": 89,
+              "end_char": 141
+            }
+          ]
+        },
+        {
+          "claim_text": "Tarnwell 4.2's native vector index support was aimed at faster semantic search.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage mentions semantic search or the purpose of the vector index support.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 3,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 420,
+        "outputTokens": 314,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 6140
+      },
+      "caseExact": true
+    },
+    {
+      "id": "hard_002",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "The Saltmarsh Charter was signed in 1611.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Saltmarsh Charter was signed in 1611"
+            }
+          ]
+        },
+        {
+          "claim_text": "The Saltmarsh Charter was signed by Abbot Edric Vane.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "signed in 1611 by Abbot Edric Vane"
+            }
+          ]
+        },
+        {
+          "claim_text": "Abbot Edric Vane later founded the Greywater Almshouse.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Lady Isolde Varga later founded the Greywater Almshouse in 1620."
+            },
+            {
+              "index": 1,
+              "quote": "Abbot Edric Vane died in 1615."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Greywater Almshouse still houses twelve residents today.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The Saltmarsh Charter was signed in 1611 by Abbot Edric Vane.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states the charter was signed in 1611 by Abbot Edric Vane and Lady Isolde Varga, which supports that Abbot Edric Vane signed it in 1611.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Saltmarsh Charter was signed in 1611 by Abbot Edric Vane and Lady Isolde Varga.",
+              "start_char": 0,
+              "end_char": 83
+            }
+          ]
+        },
+        {
+          "claim_text": "Abbot Edric Vane later founded the Greywater Almshouse.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 states that Lady Isolde Varga founded the Greywater Almshouse, not Abbot Edric Vane.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Lady Isolde Varga later founded the Greywater Almshouse in 1620.",
+              "start_char": 0,
+              "end_char": 64
+            }
+          ]
+        },
+        {
+          "claim_text": "The Greywater Almshouse still houses twelve residents today.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage mentions current residents or the number twelve.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [
+          1
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 422,
+        "outputTokens": 317,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 2570
+      },
+      "caseExact": false
+    },
+    {
+      "id": "hard_003",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "The Dunmore Kites won the 2024 Harrowfield Cup final 3–1.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Dunmore Kites won the 2024 Harrowfield Cup final 3–1"
+            }
+          ]
+        },
+        {
+          "claim_text": "The 2024 Harrowfield Cup final was played in front of a record crowd.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        },
+        {
+          "claim_text": "Striker Tomas Ilves scored twice in the 2024 Harrowfield Cup final.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Striker Tomas Ilves scored in the 12th and 38th minutes of the final."
+            }
+          ]
+        },
+        {
+          "claim_text": "Both of Tomas Ilves's goals came after Rafe Okonjo was sent off.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Striker Tomas Ilves scored in the 12th and 38th minutes of the final."
+            },
+            {
+              "index": 1,
+              "quote": "Midfielder Rafe Okonjo was sent off in the 70th minute."
+            }
+          ]
+        },
+        {
+          "claim_text": "Midfielder Rafe Okonjo was sent off in the 70th minute.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Midfielder Rafe Okonjo was sent off in the 70th minute."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The Dunmore Kites won the 2024 Harrowfield Cup final 3–1.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states the Dunmore Kites won the 2024 Harrowfield Cup final 3–1.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Dunmore Kites won the 2024 Harrowfield Cup final 3–1 on 9 June.",
+              "start_char": 0,
+              "end_char": 67
+            }
+          ]
+        },
+        {
+          "claim_text": "The 2024 Harrowfield Cup final was played in front of a record crowd.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage mentions attendance or a record crowd.",
+          "citations": []
+        },
+        {
+          "claim_text": "Striker Tomas Ilves scored twice in the 2024 Harrowfield Cup final.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 states Ilves scored in the 12th and 38th minutes, i.e., twice.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Striker Tomas Ilves scored in the 12th and 38th minutes of the final.",
+              "start_char": 0,
+              "end_char": 69
+            }
+          ]
+        },
+        {
+          "claim_text": "Both of Tomas Ilves's goals came after midfielder Rafe Okonjo was sent off in the 70th minute.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Ilves scored in the 12th and 38th minutes, both before Okonjo's 70th-minute sending off.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Striker Tomas Ilves scored in the 12th and 38th minutes of the final. Midfielder Rafe Okonjo was sent off in the 70th minute.",
+              "start_char": 0,
+              "end_char": 125
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 4,
+            "predIndex": 3,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [
+          3
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 446,
+        "outputTokens": 444,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 3239
+      },
+      "caseExact": false
+    },
+    {
+      "id": "hard_004",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Brightfold Paper Co. closed its Ashby warehouse in August 2023.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Brightfold Paper Co. closed its Ashby warehouse in August 2023."
+            }
+          ]
+        },
+        {
+          "claim_text": "Brightfold Paper Co.'s delivery times doubled from 2 to 4 days.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Brightfold Paper Co.'s delivery times rose from 2 days to 4 days"
+            }
+          ]
+        },
+        {
+          "claim_text": "The closure of the Ashby warehouse led to Brightfold Paper Co.'s delivery times doubling.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The slower deliveries were caused by a trucking strike, not by the warehouse closure."
+            }
+          ]
+        },
+        {
+          "claim_text": "Brightfold Paper Co. plans to reopen the Ashby warehouse in 2024.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Brightfold Paper Co. closed its Ashby warehouse in August 2023.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 directly states this fact.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Brightfold Paper Co. closed its Ashby warehouse in August 2023.",
+              "start_char": 0,
+              "end_char": 63
+            }
+          ]
+        },
+        {
+          "claim_text": "The closure of the Ashby warehouse led to delivery times doubling from 2 to 4 days.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 states the slower deliveries were caused by a trucking strike, not by the warehouse closure.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The slower deliveries were caused by a trucking strike, not by the warehouse closure.",
+              "start_char": 95,
+              "end_char": 180
+            }
+          ]
+        },
+        {
+          "claim_text": "Brightfold Paper Co. plans to reopen the Ashby warehouse in 2024.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage mentions any plan to reopen the warehouse.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 0.5,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [
+          1
+        ],
+        "extraPred": [],
+        "borderlineCount": 1
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 432,
+        "outputTokens": 271,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 2234
+      },
+      "caseExact": false
+    },
+    {
+      "id": "hard_005",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Flu shots at the Calloway Health clinic are free for residents aged 65 and over.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Calloway Health clinic offers free flu shots to all residents aged 65 and over."
+            }
+          ]
+        },
+        {
+          "claim_text": "Every resident under 65 pays $18 for a flu shot at the Calloway Health clinic.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Residents under 65 pay $18 per shot, except pregnant residents, who are vaccinated for free."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Calloway Health clinic gives flu shots between 9 a.m. and 3 p.m.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "between 9 a.m. and 1 p.m."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "At the Calloway Health clinic, flu shots are free for residents aged 65 and over.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states free flu shots are offered to all residents aged 65 and over.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Calloway Health clinic offers free flu shots to all residents aged 65 and over.",
+              "start_char": 0,
+              "end_char": 83
+            }
+          ]
+        },
+        {
+          "claim_text": "Every resident under 65 pays $18 for a flu shot.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 0 says residents under 65 pay $18 except pregnant residents, who are vaccinated for free, so not every resident under 65 pays.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Residents under 65 pay $18 per shot, except pregnant residents, who are vaccinated for free.",
+              "start_char": 84,
+              "end_char": 176
+            }
+          ]
+        },
+        {
+          "claim_text": "The clinic gives flu shots between 9 a.m. and 3 p.m.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 states flu shots are given between 9 a.m. and 1 p.m., not 3 p.m.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Flu shots are given on Tuesdays and Thursdays between 9 a.m. and 1 p.m.",
+              "start_char": 0,
+              "end_char": 71
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 0.8181818181818182,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 442,
+        "outputTokens": 279,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1859
+      },
+      "caseExact": true
+    },
+    {
+      "id": "hard_006",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Lake Morvane lies about 1.35 kilometers above sea level.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The lake sits at an elevation of 1,350 meters above sea level"
+            }
+          ]
+        },
+        {
+          "claim_text": "Lake Morvane covers 42 square miles.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Lake Morvane covers an area of 42 square kilometers"
+            }
+          ]
+        },
+        {
+          "claim_text": "Lake Morvane is fed by glacial meltwater.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Lake Morvane lies about 1.35 kilometers above sea level.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage [1] states the lake sits at 1,350 meters above sea level, which equals 1.35 kilometers.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The lake sits at an elevation of 1,350 meters above sea level in the Arvenne Highlands.",
+              "start_char": 0,
+              "end_char": 87
+            }
+          ]
+        },
+        {
+          "claim_text": "Lake Morvane covers 42 square miles.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage [0] says the lake covers 42 square kilometers, not square miles.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Lake Morvane covers an area of 42 square kilometers and reaches a maximum depth of 118 meters.",
+              "start_char": 0,
+              "end_char": 94
+            }
+          ]
+        },
+        {
+          "claim_text": "Lake Morvane is fed by glacial meltwater.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage mentions glacial meltwater or the lake's water source.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 403,
+        "outputTokens": 220,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1422
+      },
+      "caseExact": true
+    },
+    {
+      "id": "hard_007",
+      "category": "multi_passage",
+      "gold": [
+        {
+          "claim_text": "Selwick Route 7 trams run every 10 minutes on weekdays.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "every 10 minutes on weekdays"
+            }
+          ]
+        },
+        {
+          "claim_text": "In June 2026, Selwick Route 7 trams run all the way to Linden Cross.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Route 7 trams terminate at Mercer Square instead of Linden Cross until the end of June 2026"
+            }
+          ]
+        },
+        {
+          "claim_text": "A single Selwick tram ticket costs 2.40 euros.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "A single Selwick tram ticket costs 2.40 euros"
+            }
+          ]
+        },
+        {
+          "claim_text": "A single Selwick tram ticket can be bought on board.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        },
+        {
+          "claim_text": "A single Selwick tram ticket is valid for two hours.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "is valid for 90 minutes"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Selwick Route 7 trams run every 10 minutes on weekdays.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states Route 7 runs between Harbour Gate and Linden Cross every 10 minutes on weekdays.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Route 7 of the Selwick tram network runs between Harbour Gate and Linden Cross every 10 minutes on weekdays.",
+              "start_char": 0,
+              "end_char": 108
+            }
+          ]
+        },
+        {
+          "claim_text": "In June 2026, Selwick Route 7 trams run all the way to Linden Cross.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 says Route 7 trams terminate at Mercer Square instead of Linden Cross until the end of June 2026.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Route 7 trams terminate at Mercer Square instead of Linden Cross until the end of June 2026 because of track work.",
+              "start_char": 28,
+              "end_char": 142
+            }
+          ]
+        },
+        {
+          "claim_text": "A single Selwick tram ticket costs 2.40 euros.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 2 states a single Selwick tram ticket costs 2.40 euros.",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "A single Selwick tram ticket costs 2.40 euros and is valid for 90 minutes.",
+              "start_char": 0,
+              "end_char": 74
+            }
+          ]
+        },
+        {
+          "claim_text": "A single Selwick tram ticket can be bought on board.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage mentions where tickets can be purchased.",
+          "citations": []
+        },
+        {
+          "claim_text": "A single Selwick tram ticket is valid for two hours.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 2 says the ticket is valid for 90 minutes, not two hours.",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "A single Selwick tram ticket costs 2.40 euros and is valid for 90 minutes.",
+              "start_char": 0,
+              "end_char": 74
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 3,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 4,
+            "predIndex": 4,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 466,
+        "outputTokens": 397,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 2341
+      },
+      "caseExact": true
+    },
+    {
+      "id": "hard_008",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "The Ostrander Marine Institute has already completed field trials of the KelpGuard coating.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "plan to begin field trials of the KelpGuard coating in spring 2027"
+            }
+          ]
+        },
+        {
+          "claim_text": "The KelpGuard coating cut barnacle growth on steel plates by 60% over 12 weeks in laboratory tests.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "In laboratory tests, the KelpGuard coating reduced barnacle growth on steel plates by 60% over 12 weeks."
+            }
+          ]
+        },
+        {
+          "claim_text": "The KelpGuard coating is now sold to commercial shipping companies.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The Ostrander Marine Institute has already completed field trials of the KelpGuard coating.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 0 states researchers plan to begin field trials in spring 2027, meaning they have not been completed.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Researchers at the Ostrander Marine Institute plan to begin field trials of the KelpGuard coating in spring 2027.",
+              "start_char": 0,
+              "end_char": 113
+            }
+          ]
+        },
+        {
+          "claim_text": "The KelpGuard coating cut barnacle growth on steel plates by 60% over 12 weeks in laboratory tests.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 directly states this result from laboratory tests.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "In laboratory tests, the KelpGuard coating reduced barnacle growth on steel plates by 60% over 12 weeks.",
+              "start_char": 0,
+              "end_char": 104
+            }
+          ]
+        },
+        {
+          "claim_text": "The KelpGuard coating is now sold to commercial shipping companies.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage mentions sales to commercial shipping companies.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 425,
+        "outputTokens": 232,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1830
+      },
+      "caseExact": true
+    },
+    {
+      "id": "hard_009",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Pellora's Cedar bar has 12 grams of protein.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "the Cedar bar has 9 grams of protein"
+            }
+          ]
+        },
+        {
+          "claim_text": "Pellora's Cedar bar is certified gluten-free.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Only the Summit bar is certified gluten-free."
+            }
+          ]
+        },
+        {
+          "claim_text": "Pellora's Meadow bar has 6 grams of protein.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "the Meadow bar has 6 grams"
+            }
+          ]
+        },
+        {
+          "claim_text": "Pellora's Meadow bar contains almonds.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The Meadow bar contains almonds."
+            }
+          ]
+        },
+        {
+          "claim_text": "Pellora's Meadow bar is vegan.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Pellora's Cedar bar packs 12 grams of protein.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage [0] states the Cedar bar has 9 grams of protein, not 12.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "the Cedar bar has 9 grams of protein",
+              "start_char": 40,
+              "end_char": 76
+            }
+          ]
+        },
+        {
+          "claim_text": "Pellora's Cedar bar is certified gluten-free.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage [1] states only the Summit bar is certified gluten-free.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Only the Summit bar is certified gluten-free.",
+              "start_char": 0,
+              "end_char": 45
+            }
+          ]
+        },
+        {
+          "claim_text": "The Meadow bar has 6 grams of protein.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage [0] states the Meadow bar has 6 grams of protein.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "the Meadow bar has 6 grams",
+              "start_char": 111,
+              "end_char": 137
+            }
+          ]
+        },
+        {
+          "claim_text": "The Meadow bar contains almonds.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage [1] states the Meadow bar contains almonds.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The Meadow bar contains almonds.",
+              "start_char": 46,
+              "end_char": 78
+            }
+          ]
+        },
+        {
+          "claim_text": "The Meadow bar is vegan.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage states whether the Meadow bar is vegan.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 0.8571428571428571,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 0.8333333333333334,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 3,
+            "score": 0.8,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 4,
+            "predIndex": 4,
+            "score": 0.75,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 416,
+        "outputTokens": 290,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 2428
+      },
+      "caseExact": true
+    },
+    {
+      "id": "hard_010",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Construction of the Varrow Canal began before Halima Strand finished surveying the Varrow Canal route.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Engineer Halima Strand completed the survey of the Varrow Canal route in 1832."
+            },
+            {
+              "index": 1,
+              "quote": "Construction of the Varrow Canal began in 1835"
+            }
+          ]
+        },
+        {
+          "claim_text": "The Varrow Canal opened to barges in 1841.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "the canal opened to barge traffic in 1841"
+            }
+          ]
+        },
+        {
+          "claim_text": "The Varrow Canal opened six years after construction started.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Construction of the Varrow Canal began in 1835, and the canal opened to barge traffic in 1841."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Varrow Canal cost £40,000 to build.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Construction of the Varrow Canal began before engineer Halima Strand had finished surveying its route.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 0 says Strand completed the survey in 1832, and passage 1 says construction began in 1835, so construction began after the survey was finished, not before.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Engineer Halima Strand completed the survey of the Varrow Canal route in 1832.",
+              "start_char": 0,
+              "end_char": 78
+            },
+            {
+              "index": 1,
+              "quote": "Construction of the Varrow Canal began in 1835, and the canal opened to barge traffic in 1841.",
+              "start_char": 0,
+              "end_char": 94
+            }
+          ]
+        },
+        {
+          "claim_text": "The Varrow Canal opened to barges in 1841.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 states the canal opened to barge traffic in 1841.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "the canal opened to barge traffic in 1841",
+              "start_char": 52,
+              "end_char": 93
+            }
+          ]
+        },
+        {
+          "claim_text": "The Varrow Canal opened six years after work started.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Construction began in 1835 and the canal opened in 1841, which is six years later.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Construction of the Varrow Canal began in 1835, and the canal opened to barge traffic in 1841.",
+              "start_char": 0,
+              "end_char": 94
+            }
+          ]
+        },
+        {
+          "claim_text": "The Varrow Canal cost £40,000 to build.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage mentions the cost of building the canal.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 3,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 0.9090909090909091,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 0.7777777777777778,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 416,
+        "outputTokens": 337,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 2263
+      },
+      "caseExact": true
+    },
+    {
+      "id": "hard_011",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "Elsby added new protected bike lanes on five main streets.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "In 2025, the town of Elsby added protected bike lanes on four main streets."
+            }
+          ]
+        },
+        {
+          "claim_text": "Cycling injuries in Elsby fell from 47 in 2024 to 31 in 2025.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Elsby recorded 31 cycling injuries in 2025, down from 47 in 2024."
+            }
+          ]
+        },
+        {
+          "claim_text": "The drop in cycling injuries in Elsby was caused by the new protected bike lanes.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Elsby added new protected bike lanes on five main streets.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "The passage says protected bike lanes were added on four main streets, not five.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "In 2025, the town of Elsby added protected bike lanes on four main streets.",
+              "start_char": 0,
+              "end_char": 75
+            }
+          ]
+        },
+        {
+          "claim_text": "Cycling injuries in Elsby fell from 47 in 2024 to 31 in 2025.",
+          "verdict": "SUPPORTED",
+          "reasoning": "The passage states exactly this figure.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Elsby recorded 31 cycling injuries in 2025, down from 47 in 2024.",
+              "start_char": 0,
+              "end_char": 65
+            }
+          ]
+        },
+        {
+          "claim_text": "The fall in cycling injuries in Elsby was thanks to the new protected bike lanes.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "The transport office says it has not yet studied what caused the drop, so the causal attribution is not stated in the passages.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 0.6363636363636364,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 417,
+        "outputTokens": 223,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1444
+      },
+      "caseExact": true
+    },
+    {
+      "id": "hard_012",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "The Vantry Echo supports Wi-Fi 7.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Vantry Echo supports Wi-Fi 7"
+            }
+          ]
+        },
+        {
+          "claim_text": "The Vantry Echo costs $249.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "costs $249"
+            }
+          ]
+        },
+        {
+          "claim_text": "The Vantry Echo comes with a built-in VPN client.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The Pulse includes a built-in VPN client; the Echo does not."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Vantry Echo comes with a three-year warranty.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Vantry Labs' Echo router supports Wi-Fi 7.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 explicitly states the Vantry Echo supports Wi-Fi 7.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Vantry Echo supports Wi-Fi 7 and costs $249.",
+              "start_char": 31,
+              "end_char": 79
+            }
+          ]
+        },
+        {
+          "claim_text": "Vantry Labs' Echo router costs $249.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 explicitly states the Echo costs $249.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Vantry Echo supports Wi-Fi 7 and costs $249.",
+              "start_char": 31,
+              "end_char": 79
+            }
+          ]
+        },
+        {
+          "claim_text": "The Vantry Echo comes with a built-in VPN client.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 states the Pulse includes a built-in VPN client and the Echo does not.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The Pulse includes a built-in VPN client; the Echo does not.",
+              "start_char": 50,
+              "end_char": 110
+            }
+          ]
+        },
+        {
+          "claim_text": "The Vantry Echo comes with a three-year warranty.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage mentions a warranty for the Echo or any router.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 3,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 0.75,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 0.6666666666666666,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 409,
+        "outputTokens": 255,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 2142
+      },
+      "caseExact": true
+    },
+    {
+      "id": "hard_013",
+      "category": "multi_passage",
+      "gold": [
+        {
+          "claim_text": "The Brask Valley Marathon ends in Vessmark.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Brask Valley Marathon finishes at Corlan Stadium."
+            },
+            {
+              "index": 1,
+              "quote": "Corlan Stadium is located in the city of Vessmark"
+            }
+          ]
+        },
+        {
+          "claim_text": "The Brask Valley Marathon ends at a stadium with 25,000 seats.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Brask Valley Marathon finishes at Corlan Stadium."
+            },
+            {
+              "index": 1,
+              "quote": "seats 22,000 spectators"
+            }
+          ]
+        },
+        {
+          "claim_text": "The 2026 Brask Valley Marathon is set for 18 October.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "The 2026 Brask Valley Marathon is scheduled for 18 October 2026."
+            }
+          ]
+        },
+        {
+          "claim_text": "The 2026 Brask Valley Marathon is expected to draw about 5,000 runners.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The Brask Valley Marathon ends in Vessmark.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 says the marathon finishes at Corlan Stadium, and passage 1 says Corlan Stadium is located in Vessmark, so the marathon ends in Vessmark.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Brask Valley Marathon finishes at Corlan Stadium.",
+              "start_char": 0,
+              "end_char": 53
+            },
+            {
+              "index": 1,
+              "quote": "Corlan Stadium is located in the city of Vessmark and seats 22,000 spectators.",
+              "start_char": 0,
+              "end_char": 78
+            }
+          ]
+        },
+        {
+          "claim_text": "The Brask Valley Marathon ends at a stadium with 25,000 seats.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 states Corlan Stadium, where the marathon finishes, seats 22,000 spectators, not 25,000.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Corlan Stadium is located in the city of Vessmark and seats 22,000 spectators.",
+              "start_char": 0,
+              "end_char": 78
+            }
+          ]
+        },
+        {
+          "claim_text": "The 2026 race is set for 18 October.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 2 states the 2026 Brask Valley Marathon is scheduled for 18 October 2026.",
+          "citations": [
+            {
+              "index": 2,
+              "quote": "The 2026 Brask Valley Marathon is scheduled for 18 October 2026.",
+              "start_char": 0,
+              "end_char": 64
+            }
+          ]
+        },
+        {
+          "claim_text": "The 2026 race is expected to draw about 5,000 runners.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage mentions the expected number of runners for the 2026 race.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 3,
+            "score": 0.6363636363636364,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 0.5,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 1
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 424,
+        "outputTokens": 342,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 2266
+      },
+      "caseExact": true
+    },
+    {
+      "id": "hard_014",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "The Kelby–Arnsford night bus runs every night.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Kelby–Arnsford night bus does not run on Sundays."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Kelby–Arnsford night bus leaves at 23:40.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "On all other nights it leaves Kelby at 23:40."
+            }
+          ]
+        },
+        {
+          "claim_text": "Riders can bring bikes on the Kelby–Arnsford night bus.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Bikes are not allowed on the night bus"
+            }
+          ]
+        },
+        {
+          "claim_text": "Riders cannot bring folded scooters on the Kelby–Arnsford night bus.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "folded scooters are permitted"
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The Kelby–Arnsford night bus runs every night at 23:40.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 0 states the bus does not run on Sundays, so it does not run every night.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Kelby–Arnsford night bus does not run on Sundays.",
+              "start_char": 0,
+              "end_char": 53
+            }
+          ]
+        },
+        {
+          "claim_text": "Riders can bring bikes on the Kelby–Arnsford night bus.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 explicitly says bikes are not allowed on the night bus.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Bikes are not allowed on the night bus",
+              "start_char": 0,
+              "end_char": 38
+            }
+          ]
+        },
+        {
+          "claim_text": "Riders cannot bring folded scooters on the Kelby–Arnsford night bus.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 states folded scooters are permitted.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "folded scooters are permitted",
+              "start_char": 44,
+              "end_char": 73
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [
+          1
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 404,
+        "outputTokens": 223,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1194
+      },
+      "caseExact": false
+    },
+    {
+      "id": "hard_015",
+      "category": "subtle_distortion",
+      "gold": [
+        {
+          "claim_text": "Most of the Fenlow test plots showed higher nitrogen after the cover crop was planted.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "14 of the 20 test plots showed higher nitrogen levels after the cover crop was planted"
+            }
+          ]
+        },
+        {
+          "claim_text": "The cover crop raised soil nitrogen in the Fenlow test plots.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        },
+        {
+          "claim_text": "None of the Fenlow test plots showed a drop in nitrogen.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "14 of the 20 test plots showed higher nitrogen levels after the cover crop was planted; the other 6 showed no change."
+            }
+          ]
+        },
+        {
+          "claim_text": "All of the Fenlow test plots were irrigated.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Some plots in the Fenlow soil study were irrigated; the rest relied on rainfall only."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Most of the Fenlow test plots showed higher nitrogen after the cover crop was planted.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage [0] states that 14 of the 20 test plots showed higher nitrogen levels after the cover crop was planted, which is most (14/20).",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "14 of the 20 test plots showed higher nitrogen levels after the cover crop was planted",
+              "start_char": 26,
+              "end_char": 112
+            }
+          ]
+        },
+        {
+          "claim_text": "The cover crop raised soil nitrogen.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "The passages only report observed nitrogen levels; they do not establish causation that the cover crop raised soil nitrogen.",
+          "citations": []
+        },
+        {
+          "claim_text": "None of the plots showed a drop in nitrogen.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage [0] says the other 6 plots showed no change, and 14 showed higher levels, so no plot showed a drop.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "the other 6 showed no change",
+              "start_char": 114,
+              "end_char": 142
+            }
+          ]
+        },
+        {
+          "claim_text": "All of the plots were irrigated.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage [1] states that some plots were irrigated and the rest relied on rainfall only, so not all were irrigated.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Some plots in the Fenlow soil study were irrigated; the rest relied on rainfall only.",
+              "start_char": 0,
+              "end_char": 85
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 0.7142857142857143,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 3,
+            "score": 0.6,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 1
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 425,
+        "outputTokens": 393,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1721
+      },
+      "caseExact": true
+    },
+    {
+      "id": "hard_016",
+      "category": "extrinsic_hallucination",
+      "gold": [
+        {
+          "claim_text": "Marrowby Outfitters opened its first shop in 2009.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Marrowby Outfitters opened its first shop in the harbor town of Tolvik in 2009."
+            }
+          ]
+        },
+        {
+          "claim_text": "Marrowby Outfitters now runs 12 shops.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The company now runs 11 shops"
+            }
+          ]
+        },
+        {
+          "claim_text": "Marrowby Outfitters' best-selling product is a waxed canvas jacket.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Its best-selling product is a waxed canvas jacket."
+            }
+          ]
+        },
+        {
+          "claim_text": "Marrowby Outfitters' waxed canvas jacket is made from organic cotton.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        },
+        {
+          "claim_text": "Marrowby Outfitters was named Retailer of the Year in 2022.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Marrowby Outfitters opened its first shop in 2009.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage [0] states that Marrowby Outfitters opened its first shop in the harbor town of Tolvik in 2009.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Marrowby Outfitters opened its first shop in the harbor town of Tolvik in 2009.",
+              "start_char": 0,
+              "end_char": 79
+            }
+          ]
+        },
+        {
+          "claim_text": "Marrowby Outfitters now runs 12 shops.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage [1] states the company now runs 11 shops, not 12.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The company now runs 11 shops and employs about 140 people.",
+              "start_char": 0,
+              "end_char": 59
+            }
+          ]
+        },
+        {
+          "claim_text": "Marrowby Outfitters' best-selling waxed canvas jacket is made from organic cotton.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Passage [1] says the best-selling product is a waxed canvas jacket but does not mention organic cotton or the material.",
+          "citations": []
+        },
+        {
+          "claim_text": "Marrowby Outfitters was named Retailer of the Year in 2022.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage mentions any Retailer of the Year award or the year 2022.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 4,
+            "predIndex": 3,
+            "score": 1,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 2,
+            "score": 0.8,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [
+          2
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 424,
+        "outputTokens": 367,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1653
+      },
+      "caseExact": false
+    },
+    {
+      "id": "hard_017",
+      "category": "supported",
+      "gold": [
+        {
+          "claim_text": "The main telescope at the Ombra Ridge observatory uses a 2.1-meter-wide mirror.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Ombra Ridge observatory's main telescope has a mirror 2.1 meters across."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Ombra Ridge observatory opens to the public on the first Friday of each month when the weather allows.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Public viewing nights at the observatory are held on the first Friday of every month, weather permitting."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "The main telescope at the Ombra Ridge observatory uses a 2.1-meter-wide mirror.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states the main telescope's mirror is 2.1 meters across, which matches the claim.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Ombra Ridge observatory's main telescope has a mirror 2.1 meters across.",
+              "start_char": 0,
+              "end_char": 76
+            }
+          ]
+        },
+        {
+          "claim_text": "The Ombra Ridge observatory opens to the public on the first Friday of each month.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 states public viewing nights are held on the first Friday of every month.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Public viewing nights at the observatory are held on the first Friday of every month, weather permitting.",
+              "start_char": 0,
+              "end_char": 105
+            }
+          ]
+        },
+        {
+          "claim_text": "The Ombra Ridge observatory opens to the public on the first Friday of each month when the weather allows.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 states public viewing nights occur on the first Friday of every month, weather permitting.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Public viewing nights at the observatory are held on the first Friday of every month, weather permitting.",
+              "start_char": 0,
+              "end_char": 105
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [
+          2
+        ],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 408,
+        "outputTokens": 266,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1935
+      },
+      "caseExact": false
+    },
+    {
+      "id": "hard_018",
+      "category": "multi_passage",
+      "gold": [
+        {
+          "claim_text": "According to the final program, the Tesk Valley Folk Festival runs for three days.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The Tesk Valley Folk Festival will run for two days, 11–12 July 2026"
+            }
+          ]
+        },
+        {
+          "claim_text": "The Tesk Valley Folk Festival has 40 performers.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "11–12 July 2026, with 40 performers"
+            }
+          ]
+        },
+        {
+          "claim_text": "The Tesk Valley Folk Festival is held in an open-air amphitheater.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        },
+        {
+          "claim_text": "A Tesk Valley Folk Festival day pass costs 35 euros.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Day passes cost 35 euros."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "According to the final program, the Tesk Valley Folk Festival runs for three days.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "The final program states the festival will run for two days, not three.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The Tesk Valley Folk Festival will run for two days, 11–12 July 2026, with 40 performers.",
+              "start_char": 56,
+              "end_char": 145
+            }
+          ]
+        },
+        {
+          "claim_text": "According to the final program, the Tesk Valley Folk Festival has 40 performers.",
+          "verdict": "SUPPORTED",
+          "reasoning": "The final program explicitly states 40 performers.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The Tesk Valley Folk Festival will run for two days, 11–12 July 2026, with 40 performers.",
+              "start_char": 56,
+              "end_char": 145
+            }
+          ]
+        },
+        {
+          "claim_text": "According to the final program, the Tesk Valley Folk Festival takes place in an open-air amphitheater.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "Neither passage mentions an open-air amphitheater.",
+          "citations": []
+        },
+        {
+          "claim_text": "According to the final program, a day pass costs 35 euros.",
+          "verdict": "SUPPORTED",
+          "reasoning": "The final program states day passes cost 35 euros.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Day passes cost 35 euros.",
+              "start_char": 146,
+              "end_char": 171
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 0.5384615384615384,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [
+          3
+        ],
+        "extraPred": [
+          3
+        ],
+        "borderlineCount": 1
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 447,
+        "outputTokens": 283,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1322
+      },
+      "caseExact": false
+    },
+    {
+      "id": "hard_019",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "Volunteers from the Pennick Shore Trust surveyed the Arlo Tidepool in May 2026.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Arlo Tidepool survey was carried out by volunteers from the Pennick Shore Trust in May 2026."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Pennick Shore Trust volunteers counted 312 sea stars at the Arlo Tidepool.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The volunteers counted only sea stars, recording 312 of them."
+            }
+          ]
+        },
+        {
+          "claim_text": "The Pennick Shore Trust volunteers counted 87 sea anemones at the Arlo Tidepool.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The volunteers counted only sea stars"
+            },
+            {
+              "index": 1,
+              "quote": "A separate team from Daley College counted 87 sea anemones at the same site in June 2026."
+            }
+          ]
+        },
+        {
+          "claim_text": "The counts of 312 sea stars and 87 sea anemones were the highest totals ever recorded at the Arlo Tidepool.",
+          "verdict": "UNSUPPORTED",
+          "citations": []
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "In May 2026, volunteers from the Pennick Shore Trust surveyed the Arlo Tidepool.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states the survey was carried out by volunteers from the Pennick Shore Trust in May 2026.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The Arlo Tidepool survey was carried out by volunteers from the Pennick Shore Trust in May 2026.",
+              "start_char": 0,
+              "end_char": 96
+            }
+          ]
+        },
+        {
+          "claim_text": "Volunteers from the Pennick Shore Trust counted 312 sea stars.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 0 states the volunteers counted 312 sea stars.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The volunteers counted only sea stars, recording 312 of them.",
+              "start_char": 97,
+              "end_char": 158
+            }
+          ]
+        },
+        {
+          "claim_text": "Volunteers from the Pennick Shore Trust counted 87 sea anemones.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 0 says the volunteers counted only sea stars, and passage 1 attributes the 87 sea anemones to a separate team from Daley College.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "The volunteers counted only sea stars, recording 312 of them.",
+              "start_char": 97,
+              "end_char": 158
+            },
+            {
+              "index": 1,
+              "quote": "A separate team from Daley College counted 87 sea anemones at the same site in June 2026.",
+              "start_char": 0,
+              "end_char": 89
+            }
+          ]
+        },
+        {
+          "claim_text": "The totals of 312 sea stars and 87 sea anemones were the highest ever recorded at the site.",
+          "verdict": "UNSUPPORTED",
+          "reasoning": "No passage states that these totals were the highest ever recorded.",
+          "citations": []
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 0,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 1,
+            "predIndex": 1,
+            "score": 0.8,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 2,
+            "score": 0.8,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 3,
+            "score": 0.6923076923076923,
+            "goldVerdict": "UNSUPPORTED",
+            "predVerdict": "UNSUPPORTED"
+          }
+        ],
+        "missedGold": [],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 430,
+        "outputTokens": 436,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1573
+      },
+      "caseExact": true
+    },
+    {
+      "id": "hard_020",
+      "category": "mixed",
+      "gold": [
+        {
+          "claim_text": "Dunleigh General Hospital patients can book appointments via the CareLink app.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "patients of Dunleigh General Hospital can book appointments via the CareLink app"
+            }
+          ]
+        },
+        {
+          "claim_text": "Dunleigh General Hospital patients have been able to book appointments via the CareLink app since 2024.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Since March 2025, patients of Dunleigh General Hospital can book appointments via the CareLink app."
+            }
+          ]
+        },
+        {
+          "claim_text": "The CareLink app is available in English and Welsh.",
+          "verdict": "SUPPORTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The CareLink app is available in English and Welsh."
+            }
+          ]
+        },
+        {
+          "claim_text": "The CareLink app offers video consultations for first appointments.",
+          "verdict": "CONTRADICTED",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Video consultations through CareLink are offered only for follow-up visits, not first appointments."
+            }
+          ]
+        }
+      ],
+      "pred": [
+        {
+          "claim_text": "Since 2024, Dunleigh General Hospital patients have been able to book appointments via the CareLink app.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 0 states the booking capability began in March 2025, not 2024.",
+          "citations": [
+            {
+              "index": 0,
+              "quote": "Since March 2025, patients of Dunleigh General Hospital can book appointments via the CareLink app.",
+              "start_char": 0,
+              "end_char": 99
+            }
+          ]
+        },
+        {
+          "claim_text": "The CareLink app is available in English and Welsh.",
+          "verdict": "SUPPORTED",
+          "reasoning": "Passage 1 directly states this.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "The CareLink app is available in English and Welsh.",
+              "start_char": 0,
+              "end_char": 51
+            }
+          ]
+        },
+        {
+          "claim_text": "The CareLink app offers video consultations for first appointments.",
+          "verdict": "CONTRADICTED",
+          "reasoning": "Passage 1 states video consultations are only for follow-up visits, not first appointments.",
+          "citations": [
+            {
+              "index": 1,
+              "quote": "Video consultations through CareLink are offered only for follow-up visits, not first appointments.",
+              "start_char": 52,
+              "end_char": 151
+            }
+          ]
+        }
+      ],
+      "match": {
+        "matches": [
+          {
+            "goldIndex": 1,
+            "predIndex": 0,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          },
+          {
+            "goldIndex": 2,
+            "predIndex": 1,
+            "score": 1,
+            "goldVerdict": "SUPPORTED",
+            "predVerdict": "SUPPORTED"
+          },
+          {
+            "goldIndex": 3,
+            "predIndex": 2,
+            "score": 1,
+            "goldVerdict": "CONTRADICTED",
+            "predVerdict": "CONTRADICTED"
+          }
+        ],
+        "missedGold": [
+          0
+        ],
+        "extraPred": [],
+        "borderlineCount": 0
+      },
+      "stats": {
+        "llmCalls": 1,
+        "validationRetries": 0,
+        "inputTokens": 415,
+        "outputTokens": 229,
+        "rawInvalidCitations": 0,
+        "repairedClaims": 0,
+        "latencyMs": 1350
+      },
+      "caseExact": false
+    }
+  ]
+}
