@@ -18,7 +18,8 @@ export interface Verifier {
     | 'optimized'
     | 'wording'
     | 'prompt5'
-    | 'prompt6';
+    | 'prompt6'
+    | 'prompt7';
   verify(
     req: VerifyRequest,
   ): Promise<{ response: VerifyResponse; stats: VerifyStats }>;

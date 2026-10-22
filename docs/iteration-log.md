@@ -306,3 +306,45 @@ Source: `results/6-byGroup.md`. Descriptive only; n per group too small for sign
 | general | 1.000 | 0.955 | 0.985 | 1.000 |
 
 Full write-up: `docs/6-conclusion.md`.
+
+## prompt7 (short patches on prompt6)
+
+**Change:** New approach `prompt7` (`src/verifiers/llmPrompt7.ts`). Keeps prompt6 scaffold + neutral vocab. Patches: (1) from–to is one detail; (2) no duplicate condition-only claim; (3) side facts then relation-only claim; (4) example adds causal from–to + coref demo.
+
+**Disclosure:** Example patterns informed by `2-4` failures; fictional entities; no hard-set surface tokens (`best-selling` / `the site` / `the counts` already avoided in prompt6 refresh).
+
+**Dev `1-1.jsonl` (1 run):** macro-F1 **1.000**, e2e 1.000, case exact 100% → `results/7-prompt7-1-1.*`. Failures: none (no drop).
+
+**Hard `2-4.jsonl` (3 runs):** macro-F1 mean **0.953** (0.936–0.972), e2e mean **0.944** (0.923–0.974) → `results/7-prompt7.*`. Reused prompt2/3/5/6 result files.
+
+### Statistical check (prompt7 vs prompt2 / prompt3 / prompt5 / prompt6)
+
+Case-level paired bootstrap, 10000 resamples, seed 42, averaged over 3 runs.
+
+| Pair | Metric | A | B=prompt7 | diff | 95% CI |
+| --- | --- | ---: | ---: | ---: | --- |
+| vs prompt2 | macro-F1 | 0.950 | 0.953 | +0.003 | [−0.028, 0.034] |
+| vs prompt2 | end-to-end | 0.906 | 0.944 | +0.038 | [0.000, 0.080] |
+| vs prompt3 | macro-F1 | 0.950 | 0.953 | +0.002 | [−0.030, 0.035] |
+| vs prompt3 | end-to-end | 0.910 | 0.944 | +0.034 | [−0.004, 0.076] |
+| vs prompt5 | macro-F1 | 0.941 | 0.953 | +0.011 | [−0.025, 0.053] |
+| vs prompt5 | end-to-end | 0.915 | 0.944 | +0.030 | [−0.004, 0.068] |
+| vs prompt6 | macro-F1 | 0.956 | 0.953 | −0.004 | [−0.036, 0.029] |
+| vs prompt6 | end-to-end | 0.936 | 0.944 | +0.009 | [−0.036, 0.053] |
+
+**Conclusion:** directionally flat vs prompt6; small positive vs earlier prompts on e2e; **not significant at n=20** (macro-F1 CIs include 0).
+
+**Unstable cases (case exact differs across 3 runs):** prompt2 — hard_019; prompt3 — hard_017; prompt5 — hard_014, hard_017, hard_018, hard_019; prompt6 — hard_004, hard_019; prompt7 — hard_003, hard_011, hard_013, hard_014, hard_017, hard_020.
+
+### Per-group (with prompt7)
+
+Source: `results/7-byGroup.md`. Descriptive only; n per group too small for significance.
+
+| Group | prompt2 | prompt3 | prompt5 | prompt6 | prompt7 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| T1 | 0.854 | 0.875 | 0.854 | 0.917 | 0.958 |
+| T2 | 0.900 | 0.900 | 0.900 | 0.950 | 0.900 |
+| T3 | 0.850 | 0.900 | 0.900 | 0.867 | 0.917 |
+| general | 1.000 | 0.955 | 0.985 | 1.000 | 1.000 |
+
+Full write-up: `docs/7-conclusion.md`.
