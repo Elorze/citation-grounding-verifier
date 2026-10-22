@@ -6,7 +6,7 @@
 
 1. **不要修改任何 prompt 或 verifier 代码**（`src/verifiers/*`、`src/llm.ts`、prompt 字符串、M6a optimized 的 5 条 rules 全部不动）。
 2. **不要修改 scoring 逻辑**（`eval/match.ts`、`eval/metrics.ts` 不动；`MATCH_THRESHOLD` 不动）。
-3. `eval/cases.jsonl`（dev set，24 cases）**保持原样，一个字节都不改**。
+3. `eval/1-1.jsonl`（dev set，24 cases；原名 `cases.jsonl`）**保持原样，一个字节都不改**。
 4. `eval/cases_test.jsonl` 在第 3 步冻结之后**禁止任何编辑**（包括格式化、换行符、key 顺序）。如果发现题目有问题，只在 iteration-log 里记录，不改文件。
 5. **不要手动编辑任何 `results/` 文件**，结果表里的数字必须从 run 输出的 json/md 原样抄。
 6. 每次 commit 前先 `git diff --stat` + `git diff` 给我看，我确认后再 commit。
@@ -26,14 +26,14 @@ c83ab8c18eb70e1b8943ef8430294078ffe614d5543b7d32673cb66631463a58
 
 ## 2. 给 `eval/run.ts` 加 `--dataset` 选项（如果还没有）
 
-- 新增 CLI 参数 `--dataset <path>`（同时接受别名 `--cases`），相对路径以 repo root 为基准；**默认值仍是 `eval/cases.jsonl`**，不传参数时行为与现在完全一致。
+- 新增 CLI 参数 `--dataset <path>`（同时接受别名 `--cases`），相对路径以 repo root 为基准；**默认值是 `eval/1-1.jsonl`**（原 `cases.jsonl`），不传参数时行为与现在完全一致。
 - 只改 `parseArgs` 和 `loadCases(path)` 这两处：`loadCases` 改为接收路径参数。不要碰 `runOnce`、matching、metrics。
 - 在输出的 json payload 和 md 头部**额外记录** dataset 路径和它的 sha256（只是记录元数据，不影响评分）。
 - 在 `package.json` 的 scripts 里可以加一个便捷命令（可选）：`"eval:test": "tsx eval/run.ts --dataset eval/cases_test.jsonl"`（按现有 `eval` script 的 runner 写法保持一致）。
 
 ## 3. 加 verbatim quote 校验
 
-在 `test/` 下新增 `test/cases-test-quotes.test.ts`（vitest），对 `eval/cases_test.jsonl`（顺便也可以跑 `eval/cases.jsonl`）检查：
+在 `test/` 下新增 `test/cases-test-quotes.test.ts`（vitest），对 `eval/cases_test.jsonl`（顺便也可以跑 `eval/1-1.jsonl`）检查：
 - 每行能 `JSON.parse`，且通过 `EvalCase` schema；
 - `id` 唯一；
 - 每个 citation 的 `index` 在 `[0, context_passages.length)` 内，`quote` 是 `context_passages[index]` 的**逐字子串**（`includes`，不做 trim / normalize）；
@@ -97,7 +97,7 @@ pnpm eval --approach optimized --dataset eval/cases_test.jsonl --label "hard-v1 
 ## 7. 不要做的事（再强调一次）
 
 - 不要根据 test 结果改 prompt / verifier / matcher 然后再跑 test。
-- 不要编辑 `eval/cases_test.jsonl`、`eval/cases.jsonl`、`results/*`。
+- 不要编辑 `eval/cases_test.jsonl`、`eval/1-1.jsonl`、`results/*`。
 - 不要删除或覆盖已有的 dev results。
 
 ## 附：`eval/cases_test.jsonl`（逐字保存，sha256 = `c83ab8c18eb70e1b8943ef8430294078ffe614d5543b7d32673cb66631463a58`）

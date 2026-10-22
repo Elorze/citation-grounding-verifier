@@ -41,7 +41,7 @@ curl -s -X POST "http://localhost:3100/verify?approach=baseline" \
 
 ## Dataset
 
-`eval/cases.jsonl` — 24 labeled cases (categories: supported, subtle_distortion, extrinsic_hallucination, multi_passage, edge_case, mixed), **dataset v1.1**. Gold quotes are verbatim substrings. See `示范用例库.md` for labeling rules.
+`eval/1-1.jsonl` — 24 labeled **dev** cases (formerly `cases.jsonl`; categories: supported, subtle_distortion, extrinsic_hallucination, multi_passage, edge_case, mixed), **dataset v1.1**. Held-out hard split: `eval/cases_test.jsonl`. Gold quotes are verbatim substrings. See `示范用例库.md` for labeling rules.
 
 ## Metrics
 

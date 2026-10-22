@@ -104,7 +104,7 @@ export const model = zhipu(process.env.LLM_MODEL ?? 'glm-4.7-flash');
 │       ├── llmMinimal.ts    # approach 2
 │       └── llmOptimized.ts  # approach 3
 ├── eval/
-│   ├── cases.jsonl          # 24 labeled cases (copy as-is)
+│   ├── 1-1.jsonl            # 24 labeled dev cases (copy as-is; was cases.jsonl)
 │   ├── run.ts               # benchmark runner
 │   ├── match.ts             # predicted ↔ gold claim matching
 │   └── metrics.ts

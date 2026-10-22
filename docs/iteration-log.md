@@ -160,3 +160,29 @@ One run each (`--repeat 1`), DeepSeek `deepseek-chat`, thinking disabled, temper
 **By targets_rule (optimized non-exact):** R2_prepositional_split 6; R5_coref_subject 5; R3_qualifier 4; R1_atomic 3; R4_causal 2.
 
 Disclosure: test cases drafted with AI assistance, reviewed by the author; results not hand-edited.
+
+## Dev set rename: `cases.jsonl` → `1-1.jsonl`
+
+The 24-case v1.1 **dev** file was renamed to `eval/1-1.jsonl`. Default `--dataset`, quote tests, README, and docs references were updated. Held-out hard split remains `eval/cases_test.jsonl`. Content of the 24 cases is unchanged (sha256 `0fb59a7e9172adc421c0e75365e785492ba5e4066a0703df46a90fc82007cf46`).
+
+## Ablation on `1-1.jsonl`: wording-rule only (`--approach wording`)
+
+**Hypothesis:** Add only the claim-wording / pronoun rule on top of the minimal prompt (no M6a atomic-split rules 1–4), to see effect on the original three failure modes vs full M6a.
+
+**Change:** New verifier `src/verifiers/llmWording.ts` (approach `wording`) with the user-specified system prompt (minimal + wording rule). Minimal and optimized prompts unchanged.
+
+**Result:** `results/wording-20261022-152047.md` on `eval/1-1.jsonl` (DeepSeek `deepseek-chat`):
+
+| Metric | minimal v1.1 (same set) | wording-rule only | M6a optimized (same set) |
+| --- | ---: | ---: | ---: |
+| macro-F1 | 0.922 | 0.944 | 1.000 |
+| matched verdict acc | 0.980 | 0.980 | 1.000 |
+| e2e acc | 0.909 | 0.909 | 1.000 |
+| case exact | 83.3% | 83.3% | 100.0% |
+| claim-count exact | 87.5% | 83.3% | 100.0% |
+| latency p50 / p95 | 1227 / 1600 ms | 1136 / 1820 ms | 1038 / 1706 ms |
+| tokens in / out per case | 229 / 165 | 259 / 161 | 386 / 168 |
+
+Failures (wording): case_003 MISSED six lanes; case_006 fused founder+year (same shape as minimal); case_012 MISSED World's Fair; case_021 MISSED dog park. case_011 (matcher alignment) not listed — wording/coref may have helped that row relative to minimal’s earlier log, but fused/missed from atomic-split still remain.
+
+**Decision:** keep as an ablation artifact (`wording` approach + results file). Does not replace M6a.

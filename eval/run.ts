@@ -17,7 +17,7 @@ import {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
-const DEFAULT_DATASET = join('eval', 'cases.jsonl');
+const DEFAULT_DATASET = join('eval', '1-1.jsonl');
 
 function parseArgs(argv: string[]) {
   const out: {
@@ -96,6 +96,10 @@ async function getVerifier(name: string): Promise<Verifier> {
       '../src/verifiers/llmOptimized.js'
     );
     return llmOptimizedVerifier;
+  }
+  if (name === 'wording') {
+    const { llmWordingVerifier } = await import('../src/verifiers/llmWording.js');
+    return llmWordingVerifier;
   }
   throw new Error(`Unknown approach: ${name}`);
 }

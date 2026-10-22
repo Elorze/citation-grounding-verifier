@@ -11,7 +11,7 @@ export interface VerifyStats {
 }
 
 export interface Verifier {
-  name: 'stub' | 'baseline' | 'minimal' | 'optimized';
+  name: 'stub' | 'baseline' | 'minimal' | 'optimized' | 'wording';
   verify(
     req: VerifyRequest,
   ): Promise<{ response: VerifyResponse; stats: VerifyStats }>;

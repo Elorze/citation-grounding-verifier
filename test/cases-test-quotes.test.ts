@@ -44,8 +44,8 @@ function checkDataset(rel: string): void {
 }
 
 describe('eval case gold quotes (verbatim)', () => {
-  it('validates eval/cases.jsonl', () => {
-    checkDataset('eval/cases.jsonl');
+  it('validates eval/1-1.jsonl (dev set)', () => {
+    checkDataset('eval/1-1.jsonl');
   });
 
   it('validates eval/cases_test.jsonl', () => {
