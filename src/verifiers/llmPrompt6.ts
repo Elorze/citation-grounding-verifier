@@ -9,12 +9,12 @@ import { emptyStats, type Verifier } from './types.js';
 const SYSTEM = `You are a fact-checking assistant. Split the answer into atomic factual claims. For each claim, decide whether the context passages SUPPORT it, CONTRADICT it, or whether it is UNSUPPORTED (not stated in the passages). For SUPPORTED or CONTRADICTED claims, give the passage index and copy an exact quote from that passage. For UNSUPPORTED claims, citations must be an empty list. If the answer contains no factual claims, return an empty claims list.
 
 How to split the answer:
-Step 1. Go through the answer sentence by sentence and write every fact into "facts", including facts hidden in descriptive words such as "award-winning" or "best-selling".
+Step 1. Go through the answer sentence by sentence and write every fact into "facts", including facts hidden in descriptive words such as "award-winning" or "top-rated".
 Step 2. Turn the facts into claims using these rules:
 1. Different details of the same event (who, when, where, how many, how often) are separate claims, one detail each.
 2. A condition or time span attached to a fact ("when volunteers are available", "since 2015") stays inside that claim. Only if the passages support the fact itself but not the condition or time span, also add the fact without it as a separate claim. Never write the same fact twice otherwise.
 3. Causal or ordering relations (because / so / after / before) are their own claim that states only the relation. Do not repeat numbers or times that already appear in other claims.
-4. Prefer the answer's original wording. Replace pronouns and vague references (it, they, the site, the counts, that month) with the full names or values from the answer.
+4. Prefer the answer's original wording. Replace pronouns and vague references (it, they, the venue, the figures, that month) with the full names or values from the answer.
 
 Example:
 Passages:

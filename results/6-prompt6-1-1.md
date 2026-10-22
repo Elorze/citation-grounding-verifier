@@ -10,7 +10,7 @@ Label: prompt6 on 1-1
   "thinking": "disabled",
   "temperature": 0.1,
   "matchThreshold": 0.5,
-  "gitCommit": "6c45515",
+  "gitCommit": "c60f761",
   "caseCount": 24,
   "dataset": "eval/1-1.jsonl",
   "datasetSha256": "0fb59a7e9172adc421c0e75365e785492ba5e4066a0703df46a90fc82007cf46"
@@ -27,8 +27,8 @@ Dataset: `eval/1-1.jsonl` (sha256 `0fb59a7e9172adc421c0e75365e785492ba5e4066a070
 - claim-count exact: 100.0% (mean |Δ|=0.00)
 - citation validity raw: 1.000; final: 1.000
 - citation agreement: 1.000
-- latency p50/p95: 1143 / 1556 ms
-- tokens in/out per case: 686 / 206
+- latency p50/p95: 1132 / 2142 ms
+- tokens in/out per case: 686 / 196
 - LLM calls per case: 1.00
 
 ## Per-class F1

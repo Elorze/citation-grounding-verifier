@@ -6,7 +6,7 @@
     "thinking": "disabled",
     "temperature": 0.1,
     "matchThreshold": 0.5,
-    "gitCommit": "6c45515",
+    "gitCommit": "c60f761",
     "caseCount": 24,
     "dataset": "eval/1-1.jsonl",
     "datasetSha256": "0fb59a7e9172adc421c0e75365e785492ba5e4066a0703df46a90fc82007cf46"
@@ -78,15 +78,15 @@
     "totalGoldClaims": 55,
     "totalPredClaims": 55,
     "latencyMs": {
-      "p50": 1143,
-      "p95": 1556,
-      "mean": 1191.5416666666667
+      "p50": 1132,
+      "p95": 2142,
+      "mean": 1225.2916666666667
     },
     "tokens": {
       "inputTotal": 16459,
-      "outputTotal": 4944,
+      "outputTotal": 4695,
       "perCaseInput": 685.7916666666666,
-      "perCaseOutput": 206
+      "perCaseOutput": 195.625
     },
     "llmCallsTotal": 24,
     "validationRetriesTotal": 0,
@@ -141,7 +141,7 @@
         {
           "claim_text": "Standard tier team workspaces can have up to 100 members.",
           "verdict": "CONTRADICTED",
-          "reasoning": "Passage 1 says the Standard tier supports up to 50 members, not 100.",
+          "reasoning": "Passage 1 says Standard tier supports up to 50 members, not 100.",
           "citations": [
             {
               "index": 1,
@@ -154,7 +154,7 @@
         {
           "claim_text": "The Enterprise tier includes 24/7 phone support.",
           "verdict": "UNSUPPORTED",
-          "reasoning": "Passage 1 mentions SSO and no member limit for Enterprise, but never mentions 24/7 phone support.",
+          "reasoning": "Passage 1 mentions SSO and no member limit for Enterprise, but nothing about phone support.",
           "citations": []
         }
       ],
@@ -190,10 +190,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 759,
-        "outputTokens": 250,
+        "outputTokens": 245,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1556
+        "latencyMs": 2142
       },
       "caseExact": true
     },
@@ -214,7 +214,7 @@
       ],
       "pred": [
         {
-          "claim_text": "On weekdays, Harbor Lane Bakery starts serving customers at 6:30 a.m.",
+          "claim_text": "Harbor Lane Bakery starts serving customers at 6:30 a.m. on weekdays.",
           "verdict": "SUPPORTED",
           "reasoning": "Passage 0 states the bakery opens at 6:30 a.m. on weekdays, which matches the claim.",
           "citations": [
@@ -245,10 +245,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 690,
-        "outputTokens": 118,
+        "outputTokens": 122,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1094
+        "latencyMs": 1039
       },
       "caseExact": true
     },
@@ -295,9 +295,9 @@
           "citations": [
             {
               "index": 0,
-              "quote": "The Maple Street Community Pool is 25 meters long",
+              "quote": "The Maple Street Community Pool is 25 meters long and has six lanes.",
               "start_char": 0,
-              "end_char": 49
+              "end_char": 68
             }
           ]
         },
@@ -308,9 +308,9 @@
           "citations": [
             {
               "index": 0,
-              "quote": "has six lanes",
-              "start_char": 54,
-              "end_char": 67
+              "quote": "The Maple Street Community Pool is 25 meters long and has six lanes.",
+              "start_char": 0,
+              "end_char": 68
             }
           ]
         },
@@ -360,10 +360,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 694,
-        "outputTokens": 251,
+        "outputTokens": 266,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1315
+        "latencyMs": 1208
       },
       "caseExact": true
     },
@@ -400,7 +400,7 @@
         {
           "claim_text": "A student who enrolls at Tidewell High School gets a free library card.",
           "verdict": "SUPPORTED",
-          "reasoning": "Passage [1] states that students at Tidewell High School receive a free Tidewell Library card when they enroll.",
+          "reasoning": "Passage 1 states students at Tidewell High School receive a free Tidewell Library card when they enroll.",
           "citations": [
             {
               "index": 1,
@@ -413,7 +413,7 @@
         {
           "claim_text": "A student who enrolls at Tidewell High School can borrow up to 10 books at a time.",
           "verdict": "SUPPORTED",
-          "reasoning": "Passage [0] states every Tidewell Library card holder may borrow up to 10 books at a time, and passage [1] states enrolling students receive a card.",
+          "reasoning": "Passage 0 says every Tidewell Library card holder may borrow up to 10 books at a time, and passage 1 says enrolling students receive a card.",
           "citations": [
             {
               "index": 0,
@@ -455,10 +455,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 690,
-        "outputTokens": 255,
+        "outputTokens": 251,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1430
+        "latencyMs": 1096
       },
       "caseExact": true
     },
@@ -504,7 +504,7 @@
         {
           "claim_text": "Registration for the Glenrock 5K costs $15 for children under 13.",
           "verdict": "CONTRADICTED",
-          "reasoning": "Passage 1 says the $15 rate applies to children under 12, not under 13.",
+          "reasoning": "Passage 1 says $15 applies to children under 12, not under 13.",
           "citations": [
             {
               "index": 1,
@@ -540,10 +540,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 696,
-        "outputTokens": 191,
+        "outputTokens": 188,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 956
+        "latencyMs": 1436
       },
       "caseExact": true
     },
@@ -635,10 +635,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 682,
-        "outputTokens": 224,
+        "outputTokens": 225,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1182
+        "latencyMs": 1084
       },
       "caseExact": true
     },
@@ -666,7 +666,7 @@
         {
           "claim_text": "Bluefin Snacks acquired Northgate Foods in 2021.",
           "verdict": "CONTRADICTED",
-          "reasoning": "Passage [0] states the reverse: Northgate Foods acquired Bluefin Snacks in 2021.",
+          "reasoning": "Passage 0 states the reverse: Northgate Foods acquired Bluefin Snacks in 2021.",
           "citations": [
             {
               "index": 0,
@@ -679,7 +679,7 @@
         {
           "claim_text": "Bluefin Snacks has doubled its annual revenue since acquiring Northgate Foods.",
           "verdict": "UNSUPPORTED",
-          "reasoning": "No passage mentions revenue or any financial results.",
+          "reasoning": "No passage mentions revenue or any financial figures.",
           "citations": []
         }
       ],
@@ -708,10 +708,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 680,
-        "outputTokens": 164,
+        "outputTokens": 163,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1046
+        "latencyMs": 1200
       },
       "caseExact": true
     },
@@ -781,10 +781,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 675,
-        "outputTokens": 155,
+        "outputTokens": 156,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 854
+        "latencyMs": 841
       },
       "caseExact": true
     },
@@ -821,7 +821,7 @@
         {
           "claim_text": "Every Corwin County library is open on Sundays.",
           "verdict": "CONTRADICTED",
-          "reasoning": "Passage [0] states that nine of the ten libraries are open on Sundays and that the Eastgate branch is closed on Sundays, so not every library is open on Sundays.",
+          "reasoning": "Passage 0 states nine of the ten libraries are open on Sundays and the Eastgate branch is closed on Sundays, so not every library is open.",
           "citations": [
             {
               "index": 0,
@@ -834,7 +834,7 @@
         {
           "claim_text": "All Corwin County libraries offer free Wi-Fi.",
           "verdict": "SUPPORTED",
-          "reasoning": "Passage [1] states that all branches offer free Wi-Fi.",
+          "reasoning": "Passage 1 states all branches offer free Wi-Fi.",
           "citations": [
             {
               "index": 1,
@@ -870,10 +870,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 679,
-        "outputTokens": 187,
+        "outputTokens": 180,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 926
+        "latencyMs": 1258
       },
       "caseExact": true
     },
@@ -932,7 +932,7 @@
         "outputTokens": 138,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1143
+        "latencyMs": 890
       },
       "caseExact": true
     },
@@ -1035,7 +1035,7 @@
         "outputTokens": 252,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1262
+        "latencyMs": 1557
       },
       "caseExact": true
     },
@@ -1126,7 +1126,7 @@
         "outputTokens": 209,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1280
+        "latencyMs": 1306
       },
       "caseExact": true
     },
@@ -1167,7 +1167,7 @@
         {
           "claim_text": "Riverside Café serves the best coffee in town.",
           "verdict": "UNSUPPORTED",
-          "reasoning": "No passage makes any claim about the quality of the coffee or compares it to other cafés.",
+          "reasoning": "No passage makes any claim about the quality or ranking of the coffee.",
           "citations": []
         }
       ],
@@ -1196,10 +1196,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 674,
-        "outputTokens": 147,
+        "outputTokens": 142,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1087
+        "latencyMs": 1110
       },
       "caseExact": true
     },
@@ -1232,7 +1232,7 @@
         {
           "claim_text": "Lumen's PowerSaver mode eliminates battery drain on supported devices.",
           "verdict": "CONTRADICTED",
-          "reasoning": "Passage [0] says PowerSaver may reduce battery drain by up to 15%, not eliminate it.",
+          "reasoning": "Passage 0 says PowerSaver may reduce battery drain by up to 15%, not eliminate it.",
           "citations": [
             {
               "index": 0,
@@ -1245,7 +1245,7 @@
         {
           "claim_text": "Lumen's PowerSaver mode is available on Android 12 and later.",
           "verdict": "SUPPORTED",
-          "reasoning": "Passage [1] states exactly this.",
+          "reasoning": "Passage 1 states this directly.",
           "citations": [
             {
               "index": 1,
@@ -1281,10 +1281,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 691,
-        "outputTokens": 195,
+        "outputTokens": 192,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1194
+        "latencyMs": 1132
       },
       "caseExact": true
     },
@@ -1317,7 +1317,7 @@
         {
           "claim_text": "The Ridgeback Trail is about 8 kilometers long.",
           "verdict": "SUPPORTED",
-          "reasoning": "Passage 0 states the trail is 8.4 kilometers long, which is about 8 kilometers.",
+          "reasoning": "Passage 0 states the trail is 8.4 kilometers long, which matches 'about 8 kilometers.'",
           "citations": [
             {
               "index": 0,
@@ -1330,7 +1330,7 @@
         {
           "claim_text": "The Ridgeback Trail climbs 610 feet to the summit.",
           "verdict": "CONTRADICTED",
-          "reasoning": "Passage 1 says the climb is 610 meters, not 610 feet.",
+          "reasoning": "Passage 1 says the climb is 610 meters, not feet.",
           "citations": [
             {
               "index": 1,
@@ -1366,10 +1366,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 674,
-        "outputTokens": 177,
+        "outputTokens": 176,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1219
+        "latencyMs": 935
       },
       "caseExact": true
     },
@@ -1454,7 +1454,7 @@
         "outputTokens": 209,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1370
+        "latencyMs": 1005
       },
       "caseExact": true
     },
@@ -1527,7 +1527,7 @@
         "outputTokens": 159,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1070
+        "latencyMs": 1265
       },
       "caseExact": true
     },
@@ -1550,7 +1550,7 @@
         {
           "claim_text": "Registration for the Oakridge coding camp closes on May 3.",
           "verdict": "CONTRADICTED",
-          "reasoning": "Passage [1] is an update that replaces the earlier schedule and states registration now closes on May 10, contradicting the May 3 date.",
+          "reasoning": "Passage 0 states May 3, but passage 1 is an update that replaces the earlier schedule and says registration now closes on May 10.",
           "citations": [
             {
               "index": 1,
@@ -1582,7 +1582,7 @@
         "outputTokens": 109,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 678
+        "latencyMs": 1289
       },
       "caseExact": true
     },
@@ -1600,7 +1600,7 @@
         {
           "claim_text": "The Westfield Museum is free to visit on Mondays.",
           "verdict": "UNSUPPORTED",
-          "reasoning": "No passages were provided, so this claim cannot be verified. [forced: empty context]",
+          "reasoning": "No context passages were provided, so this claim cannot be verified. [forced: empty context]",
           "citations": []
         }
       ],
@@ -1622,10 +1622,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 635,
-        "outputTokens": 66,
+        "outputTokens": 67,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 846
+        "latencyMs": 1081
       },
       "caseExact": true
     },
@@ -1647,7 +1647,7 @@
         "outputTokens": 9,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 390
+        "latencyMs": 630
       },
       "caseExact": true
     },
@@ -1750,13 +1750,13 @@
         {
           "claim_text": "Lakeview Park is the largest park in the city.",
           "verdict": "UNSUPPORTED",
-          "reasoning": "The passages do not state that Lakeview Park is the largest park in the city.",
+          "reasoning": "No passage states that Lakeview Park is the largest park in the city.",
           "citations": []
         },
         {
           "claim_text": "Lakeview Park covers 120 hectares.",
           "verdict": "SUPPORTED",
-          "reasoning": "Passage 0 explicitly states the park covers 120 hectares.",
+          "reasoning": "Passage 0 states the park covers 120 hectares.",
           "citations": [
             {
               "index": 0,
@@ -1808,7 +1808,7 @@
         {
           "claim_text": "Dogs may run off-leash anywhere in Lakeview Park.",
           "verdict": "CONTRADICTED",
-          "reasoning": "Passage 1 says dogs must be kept on a leash outside the dog park, so they may not run off-leash anywhere.",
+          "reasoning": "Passage 1 requires dogs to be leashed outside the dog park.",
           "citations": [
             {
               "index": 1,
@@ -1860,7 +1860,7 @@
         {
           "claim_text": "Lakeview Park hosts a farmers market every Sunday.",
           "verdict": "UNSUPPORTED",
-          "reasoning": "The passages do not mention a farmers market.",
+          "reasoning": "No passage mentions a farmers market.",
           "citations": []
         }
       ],
@@ -1945,10 +1945,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 778,
-        "outputTokens": 941,
+        "outputTokens": 690,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 3071
+        "latencyMs": 2243
       },
       "caseExact": true
     },
@@ -1991,7 +1991,7 @@
         {
           "claim_text": "Hillcrest 健身房工作日早上 5 点开门",
           "verdict": "SUPPORTED",
-          "reasoning": "Passage [0] states the gym opens at 5 a.m. on weekdays.",
+          "reasoning": "Passage 0 states the gym opens at 5 a.m. on weekdays.",
           "citations": [
             {
               "index": 0,
@@ -2004,26 +2004,26 @@
         {
           "claim_text": "Hillcrest 健身房月卡 50 美元",
           "verdict": "CONTRADICTED",
-          "reasoning": "Passage [1] says the monthly membership costs $40, not $50.",
+          "reasoning": "Passage 1 says the monthly membership costs $40, not $50.",
           "citations": [
             {
               "index": 1,
-              "quote": "Monthly membership costs $40",
+              "quote": "Monthly membership costs $40 and includes access to all group classes.",
               "start_char": 0,
-              "end_char": 28
+              "end_char": 70
             }
           ]
         },
         {
           "claim_text": "Hillcrest 健身房月卡包含所有团课",
           "verdict": "SUPPORTED",
-          "reasoning": "Passage [1] says the membership includes access to all group classes.",
+          "reasoning": "Passage 1 states the membership includes access to all group classes.",
           "citations": [
             {
               "index": 1,
-              "quote": "includes access to all group classes",
-              "start_char": 33,
-              "end_char": 69
+              "quote": "Monthly membership costs $40 and includes access to all group classes.",
+              "start_char": 0,
+              "end_char": 70
             }
           ]
         }
@@ -2060,10 +2060,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 683,
-        "outputTokens": 243,
+        "outputTokens": 253,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1323
+        "latencyMs": 1211
       },
       "caseExact": true
     },
@@ -2166,7 +2166,7 @@
         "outputTokens": 206,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1281
+        "latencyMs": 1427
       },
       "caseExact": true
     },
@@ -2189,7 +2189,7 @@
         {
           "claim_text": "The Fernwood Clinic is open six days a week.",
           "verdict": "SUPPORTED",
-          "reasoning": "Passage [0] states the clinic is open Monday through Saturday, which is six days a week.",
+          "reasoning": "Passage 0 states the clinic is open Monday through Saturday, which is six days a week.",
           "citations": [
             {
               "index": 0,
@@ -2218,10 +2218,10 @@
         "llmCalls": 1,
         "validationRetries": 0,
         "inputTokens": 657,
-        "outputTokens": 89,
+        "outputTokens": 88,
         "rawInvalidCitations": 0,
         "repairedClaims": 0,
-        "latencyMs": 1024
+        "latencyMs": 1022
       },
       "caseExact": true
     }
