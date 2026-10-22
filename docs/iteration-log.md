@@ -186,3 +186,45 @@ The 24-case v1.1 **dev** file was renamed to `eval/1-1.jsonl`. Default `--datase
 Failures (wording): case_003 MISSED six lanes; case_006 fused founder+year (same shape as minimal); case_012 MISSED World's Fair; case_021 MISSED dog park. case_011 (matcher alignment) not listed — wording/coref may have helped that row relative to minimal’s earlier log, but fused/missed from atomic-split still remain.
 
 **Decision:** keep as an ablation artifact (`wording` approach + results file). Does not replace M6a.
+
+## Hard split v2 (`eval/2-4.jsonl`) — prompt2 vs prompt3
+
+**Purpose:** Check whether the M6a atomic-decomposition prompt (prompt3 / `optimized`) generalizes beyond the 24-case dev set, versus wording-only (prompt2 / `wording`), on 20 new cases with targeted groups T1–T3 and a `general` group.
+
+**Protocol:** `pnpm eval --dataset eval/2-4.jsonl`; baseline ×1 → `results/4-baseline.*`; prompt2 `--repeat 3` → `results/4-prompt2.*`; prompt3 `--repeat 3` → `results/4-prompt3.*`. Model/config unchanged (DeepSeek `deepseek-chat`, thinking disabled, T=0.1). Dataset sha256 `4d799be6929a03b6a03b21944afefd24210612be36fc76d23f0db4484410a684`.
+
+| Approach | macro-F1 | end-to-end |
+| --- | ---: | ---: |
+| baseline | 0.253 | 0.192 |
+| prompt2 (mean / min–max over 3) | 0.950 / 0.937–0.956 | 0.906 / 0.897–0.910 |
+| prompt3 (mean / min–max over 3) | 0.950 / 0.947–0.952 | 0.910 / 0.910–0.910 |
+
+Summary write-up: `docs/4-conclusion.md`.
+
+## Statistical check (paired bootstrap)
+
+Method: case-level paired bootstrap, 10000 resamples, seed 42, metrics averaged over 3 runs (prompt2 vs prompt3). Source: `results/bootstrap-prompt2-vs-prompt3-20261022-160418.md`.
+
+| Metric | prompt2 | prompt3 | diff (B−A) | 95% CI |
+| --- | ---: | ---: | ---: | --- |
+| macro-F1 | 0.950 | 0.950 | 0.001 | [−0.026, 0.025] |
+| end-to-end | 0.906 | 0.910 | 0.004 | [−0.034, 0.041] |
+
+P(diff ≤ 0): macro-F1 0.464; end-to-end 0.453.
+
+**Conclusion:** directionally positive but not significant at n=20 (CI includes 0).
+
+**Unstable cases:** prompt2 — hard_019 (1); prompt3 — none (0).
+
+## Per-group breakdown (hard test v1)
+
+Source: `results/4-byGroup.md` (`eval/cases_test_grouped.jsonl`). Group × approach (correct/gold mean; failed case ids union across runs). Descriptive only; n per group too small for significance.
+
+| Group | baseline | prompt2 | prompt3 | Failure shape (one line) |
+| --- | ---: | ---: | ---: | --- |
+| T1 | 0.313 | 0.854 | 0.875 | Coref / signed-by and night-bus style misses (hard_002, hard_014); prompt2 also unstable on hard_019 |
+| T2 | 0.200 | 0.900 | 0.900 | Modifier / with-phrase misses (hard_016, hard_020) on both prompts |
+| T3 | 0.150 | 0.850 | 0.900 | Temporal/causal fused claims; prompt3 fixes hard_004, hard_003 remains |
+| general | 0.136 | 1.000 | 0.955 | prompt3 over-splits / paraphrase extras on hard_017–018; prompt2 perfect on this group |
+
+Descriptive only; n per group too small for significance.

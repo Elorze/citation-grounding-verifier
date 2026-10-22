@@ -1,0 +1,118 @@
+# Eval: baseline
+Label: baseline
+
+## Config
+```json
+{
+  "approach": "baseline",
+  "label": "baseline",
+  "model": "deepseek-chat",
+  "thinking": "disabled",
+  "temperature": 0.1,
+  "matchThreshold": 0.5,
+  "gitCommit": "f30638f",
+  "caseCount": 20,
+  "dataset": "eval/2-4.jsonl",
+  "datasetSha256": "4d799be6929a03b6a03b21944afefd24210612be36fc76d23f0db4484410a684"
+}
+```
+
+Dataset: `eval/2-4.jsonl` (sha256 `4d799be6929a03b6a03b21944afefd24210612be36fc76d23f0db4484410a684`)
+
+## Headline
+- macro-F1: **0.253**
+- verdict accuracy (matched): 0.500
+- end-to-end accuracy: 0.192
+- case exact-match: 0.0%
+- claim-count exact: 5.0% (mean |Δ|=2.00)
+- citation validity raw: 1.000; final: 1.000
+- citation agreement: 0.882
+- latency p50/p95: 1 / 14 ms
+- tokens in/out per case: 0 / 0
+- LLM calls per case: 0.00
+
+## Per-class F1
+- SUPPORTED: P=0.778 R=0.194 F1=0.311 (support=36)
+- CONTRADICTED: P=0.333 R=0.120 F1=0.176 (support=25)
+- UNSUPPORTED: P=0.250 R=0.294 F1=0.270 (support=17)
+
+## Confusion matrix
+| gold \ pred | SUPPORTED | CONTRADICTED | UNSUPPORTED | (missed) |
+| --- | ---: | ---: | ---: | ---: |
+| SUPPORTED | 7 | 5 | 4 | 20 |
+| CONTRADICTED | 2 | 3 | 3 | 17 |
+| UNSUPPORTED | 0 | 1 | 5 | 11 |
+| (extra) | 0 | 0 | 8 | 0 |
+
+## Failures
+- **hard_001** (mixed): gold=CONTRADICTED pred=UNSUPPORTED | gold="Quillmark Systems' Porto team built Tarnwell 4.2." | pred="Quillmark Systems' Porto team built Tarnwell 4." | reasoning="Coverage=0.43 below thresholds (hand-picked constants; not tuned on test set)."
+- **hard_001** (mixed): MISSED gold=SUPPORTED "Quillmark Systems released Tarnwell 4.2 in March 2025."
+- **hard_001** (mixed): MISSED gold=SUPPORTED "Tarnwell 4.2 was released with native vector index support."
+- **hard_001** (mixed): MISSED gold=UNSUPPORTED "Tarnwell 4.2's native vector index support is aimed at faster semantic search."
+- **hard_001** (mixed): EXTRA pred=UNSUPPORTED "2, which the company released in March 2025 with native vector index support aimed at faster semantic search."
+- **hard_002** (mixed): gold=CONTRADICTED pred=SUPPORTED | gold="Abbot Edric Vane later founded the Greywater Almshouse." | pred="He later founded the Greywater Almshouse." | reasoning="BM25 best sentence coverage=0.80 ≥ 0.7."
+- **hard_002** (mixed): MISSED gold=SUPPORTED "The Saltmarsh Charter was signed by Abbot Edric Vane."
+- **hard_003** (mixed): gold=SUPPORTED pred=UNSUPPORTED | gold="The Dunmore Kites won the 2024 Harrowfield Cup final 3–1." | pred="The Dunmore Kites won the 2024 Harrowfield Cup final 3–1 in front of a record crowd, with striker Tomas Ilves scoring twice." | reasoning="Coverage=0.53 below thresholds (hand-picked constants; not tuned on test set)."
+- **hard_003** (mixed): gold=SUPPORTED pred=UNSUPPORTED | gold="Midfielder Rafe Okonjo was sent off in the 70th minute." | pred="Both of his goals came after midfielder Rafe Okonjo was sent off in the 70th minute." | reasoning="Coverage=0.58 below thresholds (hand-picked constants; not tuned on test set)."
+- **hard_003** (mixed): MISSED gold=UNSUPPORTED "The 2024 Harrowfield Cup final was played in front of a record crowd."
+- **hard_003** (mixed): MISSED gold=SUPPORTED "Striker Tomas Ilves scored twice in the 2024 Harrowfield Cup final."
+- **hard_003** (mixed): MISSED gold=CONTRADICTED "Both of Tomas Ilves's goals came after Rafe Okonjo was sent off."
+- **hard_004** (subtle_distortion): MISSED gold=SUPPORTED "Brightfold Paper Co.'s delivery times doubled from 2 to 4 days."
+- **hard_004** (subtle_distortion): MISSED gold=CONTRADICTED "The closure of the Ashby warehouse led to Brightfold Paper Co.'s delivery times doubling."
+- **hard_004** (subtle_distortion): EXTRA pred=UNSUPPORTED "closed its Ashby warehouse in August 2023, which led to delivery times doubling from 2 to 4 days."
+- **hard_005** (subtle_distortion): gold=CONTRADICTED pred=SUPPORTED | gold="The Calloway Health clinic gives flu shots between 9 a.m. and 3 p.m." | pred="The clinic gives flu shots between 9 a.m. and 3 p.m." | reasoning="BM25 best sentence coverage=0.70 ≥ 0.7."
+- **hard_005** (subtle_distortion): gold=SUPPORTED pred=CONTRADICTED | gold="Flu shots at the Calloway Health clinic are free for residents aged 65 and over." | pred="At the Calloway Health clinic, flu shots are free for residents aged 65 and over, and every resident under 65 pays $18." | reasoning="Partial coverage=0.69 with number/negation mismatch vs best sentence."
+- **hard_005** (subtle_distortion): MISSED gold=CONTRADICTED "Every resident under 65 pays $18 for a flu shot at the Calloway Health clinic."
+- **hard_006** (subtle_distortion): MISSED gold=SUPPORTED "Lake Morvane lies about 1.35 kilometers above sea level."
+- **hard_006** (subtle_distortion): MISSED gold=CONTRADICTED "Lake Morvane covers 42 square miles."
+- **hard_006** (subtle_distortion): MISSED gold=UNSUPPORTED "Lake Morvane is fed by glacial meltwater."
+- **hard_006** (subtle_distortion): EXTRA pred=UNSUPPORTED "Lake Morvane, which lies about 1."
+- **hard_006** (subtle_distortion): EXTRA pred=UNSUPPORTED "35 kilometers above sea level, covers 42 square miles and is fed by glacial meltwater."
+- **hard_007** (multi_passage): gold=SUPPORTED pred=CONTRADICTED | gold="Selwick Route 7 trams run every 10 minutes on weekdays." | pred="Selwick Route 7 trams run every 10 minutes on weekdays, and in June 2026 they run all the way to Linden Cross." | reasoning="Partial coverage=0.53 with number/negation mismatch vs best sentence."
+- **hard_007** (multi_passage): MISSED gold=CONTRADICTED "In June 2026, Selwick Route 7 trams run all the way to Linden Cross."
+- **hard_007** (multi_passage): MISSED gold=UNSUPPORTED "A single Selwick tram ticket can be bought on board."
+- **hard_007** (multi_passage): MISSED gold=CONTRADICTED "A single Selwick tram ticket is valid for two hours."
+- **hard_007** (multi_passage): EXTRA pred=UNSUPPORTED "40 euros, can be bought on board, and is valid for two hours."
+- **hard_008** (mixed): gold=CONTRADICTED pred=UNSUPPORTED | gold="The Ostrander Marine Institute has already completed field trials of the KelpGuard coating." | pred="The Ostrander Marine Institute has already completed field trials of the KelpGuard coating, which cut barnacle growth on steel plates by 60% over 12 weeks in laboratory tests and is now sold to commercial shipping companies." | reasoning="Coverage=0.46 below thresholds (hand-picked constants; not tuned on test set)."
+- **hard_008** (mixed): MISSED gold=SUPPORTED "The KelpGuard coating cut barnacle growth on steel plates by 60% over 12 weeks in laboratory tests."
+- **hard_008** (mixed): MISSED gold=UNSUPPORTED "The KelpGuard coating is now sold to commercial shipping companies."
+- **hard_009** (subtle_distortion): MISSED gold=CONTRADICTED "Pellora's Cedar bar has 12 grams of protein."
+- **hard_009** (subtle_distortion): MISSED gold=CONTRADICTED "Pellora's Cedar bar is certified gluten-free."
+- **hard_009** (subtle_distortion): MISSED gold=SUPPORTED "Pellora's Meadow bar has 6 grams of protein."
+- **hard_009** (subtle_distortion): MISSED gold=SUPPORTED "Pellora's Meadow bar contains almonds."
+- **hard_009** (subtle_distortion): MISSED gold=UNSUPPORTED "Pellora's Meadow bar is vegan."
+- **hard_009** (subtle_distortion): EXTRA pred=UNSUPPORTED "Pellora's Cedar bar packs 12 grams of protein and is certified gluten-free, while the Meadow bar has 6 grams of protein, contains almonds, and is vegan."
+- **hard_010** (subtle_distortion): gold=CONTRADICTED pred=UNSUPPORTED | gold="Construction of the Varrow Canal began before Halima Strand finished surveying the Varrow Canal route." | pred="Construction of the Varrow Canal began before engineer Halima Strand had finished surveying its route." | reasoning="Coverage=0.55 below thresholds (hand-picked constants; not tuned on test set)."
+- **hard_010** (subtle_distortion): MISSED gold=SUPPORTED "The Varrow Canal opened to barges in 1841."
+- **hard_010** (subtle_distortion): MISSED gold=SUPPORTED "The Varrow Canal opened six years after construction started."
+- **hard_010** (subtle_distortion): MISSED gold=UNSUPPORTED "The Varrow Canal cost £40,000 to build."
+- **hard_010** (subtle_distortion): EXTRA pred=UNSUPPORTED "The canal opened to barges in 1841, six years after work started, and cost £40,000 to build."
+- **hard_011** (mixed): gold=SUPPORTED pred=UNSUPPORTED | gold="Cycling injuries in Elsby fell from 47 in 2024 to 31 in 2025." | pred="Thanks to new protected bike lanes on five main streets, cycling injuries in Elsby fell from 47 in 2024 to 31 in 2025." | reasoning="Coverage=0.44 below thresholds (hand-picked constants; not tuned on test set)."
+- **hard_011** (mixed): MISSED gold=CONTRADICTED "Elsby added new protected bike lanes on five main streets."
+- **hard_011** (mixed): MISSED gold=UNSUPPORTED "The drop in cycling injuries in Elsby was caused by the new protected bike lanes."
+- **hard_012** (mixed): MISSED gold=SUPPORTED "The Vantry Echo costs $249."
+- **hard_012** (mixed): MISSED gold=CONTRADICTED "The Vantry Echo comes with a built-in VPN client."
+- **hard_012** (mixed): MISSED gold=UNSUPPORTED "The Vantry Echo comes with a three-year warranty."
+- **hard_012** (mixed): EXTRA pred=UNSUPPORTED "It also comes with a built-in VPN client and a three-year warranty."
+- **hard_013** (multi_passage): gold=SUPPORTED pred=CONTRADICTED | gold="The Brask Valley Marathon ends in Vessmark." | pred="The Brask Valley Marathon ends in Vessmark at a stadium with 25,000 seats." | reasoning="Partial coverage=0.44 with number/negation mismatch vs best sentence."
+- **hard_013** (multi_passage): MISSED gold=CONTRADICTED "The Brask Valley Marathon ends at a stadium with 25,000 seats."
+- **hard_013** (multi_passage): MISSED gold=SUPPORTED "The 2026 Brask Valley Marathon is set for 18 October."
+- **hard_014** (subtle_distortion): MISSED gold=SUPPORTED "The Kelby–Arnsford night bus leaves at 23:40."
+- **hard_014** (subtle_distortion): MISSED gold=CONTRADICTED "Riders can bring bikes on the Kelby–Arnsford night bus."
+- **hard_014** (subtle_distortion): MISSED gold=CONTRADICTED "Riders cannot bring folded scooters on the Kelby–Arnsford night bus."
+- **hard_015** (subtle_distortion): gold=SUPPORTED pred=UNSUPPORTED | gold="None of the Fenlow test plots showed a drop in nitrogen." | pred="None of the plots showed a drop in nitrogen, and all of them were irrigated." | reasoning="Coverage=0.38 below thresholds (hand-picked constants; not tuned on test set)."
+- **hard_015** (subtle_distortion): MISSED gold=UNSUPPORTED "The cover crop raised soil nitrogen in the Fenlow test plots."
+- **hard_015** (subtle_distortion): MISSED gold=CONTRADICTED "All of the Fenlow test plots were irrigated."
+- **hard_016** (extrinsic_hallucination): gold=SUPPORTED pred=CONTRADICTED | gold="Marrowby Outfitters opened its first shop in 2009." | pred="Marrowby Outfitters opened its first shop in 2009 and now runs 12 shops." | reasoning="Partial coverage=0.60 with number/negation mismatch vs best sentence."
+- **hard_016** (extrinsic_hallucination): MISSED gold=CONTRADICTED "Marrowby Outfitters now runs 12 shops."
+- **hard_016** (extrinsic_hallucination): MISSED gold=SUPPORTED "Marrowby Outfitters' best-selling product is a waxed canvas jacket."
+- **hard_017** (supported): gold=SUPPORTED pred=CONTRADICTED | gold="The Ombra Ridge observatory opens to the public on the first Friday of each month when the weather allows." | pred="1-meter-wide mirror, and the observatory opens to the public on the first Friday of each month when the weather allows." | reasoning="Partial coverage=0.43 with number/negation mismatch vs best sentence."
+- **hard_018** (multi_passage): MISSED gold=SUPPORTED "The Tesk Valley Folk Festival has 40 performers."
+- **hard_018** (multi_passage): MISSED gold=UNSUPPORTED "The Tesk Valley Folk Festival is held in an open-air amphitheater."
+- **hard_018** (multi_passage): MISSED gold=SUPPORTED "A Tesk Valley Folk Festival day pass costs 35 euros."
+- **hard_019** (mixed): gold=UNSUPPORTED pred=CONTRADICTED | gold="The counts of 312 sea stars and 87 sea anemones were the highest totals ever recorded at the Arlo Tidepool." | pred="They counted 312 sea stars and 87 sea anemones, the highest totals ever recorded at the site." | reasoning="Partial coverage=0.46 with number/negation mismatch vs best sentence."
+- **hard_019** (mixed): MISSED gold=SUPPORTED "The Pennick Shore Trust volunteers counted 312 sea stars at the Arlo Tidepool."
+- **hard_019** (mixed): MISSED gold=CONTRADICTED "The Pennick Shore Trust volunteers counted 87 sea anemones at the Arlo Tidepool."
+- **hard_020** (mixed): MISSED gold=SUPPORTED "Dunleigh General Hospital patients can book appointments via the CareLink app."
+- **hard_020** (mixed): MISSED gold=SUPPORTED "The CareLink app is available in English and Welsh."
+- **hard_020** (mixed): MISSED gold=CONTRADICTED "The CareLink app offers video consultations for first appointments."

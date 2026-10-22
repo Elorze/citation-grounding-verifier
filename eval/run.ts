@@ -27,6 +27,8 @@ function parseArgs(argv: string[]) {
     limit?: number;
     repeat: number;
     dataset: string;
+    /** If set, write results/<outBase>.json|.md instead of approach-timestamp. */
+    outBase?: string;
   } = { approach: 'stub', repeat: 1, dataset: DEFAULT_DATASET };
 
   for (let i = 0; i < argv.length; i++) {
@@ -37,6 +39,7 @@ function parseArgs(argv: string[]) {
     else if (a === '--limit') out.limit = Number(argv[++i]);
     else if (a === '--repeat') out.repeat = Number(argv[++i]);
     else if (a === '--dataset' || a === '--cases') out.dataset = argv[++i]!;
+    else if (a === '--out-base' || a === '--out') out.outBase = argv[++i]!;
   }
   return out;
 }
@@ -256,7 +259,20 @@ async function runOnce(
   };
 }
 
-function toMarkdown(report: Awaited<ReturnType<typeof runOnce>>): string {
+type RunReport = Awaited<ReturnType<typeof runOnce>>;
+
+function toMarkdown(
+  report: RunReport,
+  multi?: {
+    repeats: number[];
+    macroF1Mean: number;
+    macroF1Min: number;
+    macroF1Max: number;
+    endToEndMean: number;
+    endToEndMin: number;
+    endToEndMax: number;
+  },
+): string {
   const m = report.metrics;
   const lines: string[] = [];
   lines.push(`# Eval: ${report.config.approach}`);
@@ -271,7 +287,22 @@ function toMarkdown(report: Awaited<ReturnType<typeof runOnce>>): string {
     `Dataset: \`${report.config.dataset}\` (sha256 \`${report.config.datasetSha256}\`)`,
   );
   lines.push('');
-  lines.push('## Headline');
+  if (multi) {
+    lines.push('## Repeat summary');
+    lines.push(
+      `- runs: ${multi.repeats.length} (macro-F1 per run: ${multi.repeats.map((x) => x.toFixed(3)).join(', ')})`,
+    );
+    lines.push(
+      `- macro-F1 mean / min–max: **${multi.macroF1Mean.toFixed(3)}** / ${multi.macroF1Min.toFixed(3)}–${multi.macroF1Max.toFixed(3)}`,
+    );
+    lines.push(
+      `- end-to-end mean / min–max: ${multi.endToEndMean.toFixed(3)} / ${multi.endToEndMin.toFixed(3)}–${multi.endToEndMax.toFixed(3)}`,
+    );
+    lines.push('');
+    lines.push('## Headline (run 1)');
+  } else {
+    lines.push('## Headline');
+  }
   lines.push(`- macro-F1: **${m.macroF1.toFixed(3)}**`);
   lines.push(`- verdict accuracy (matched): ${m.verdictAccuracy.toFixed(3)}`);
   lines.push(`- end-to-end accuracy: ${m.endToEndAccuracy.toFixed(3)}`);
@@ -333,27 +364,55 @@ async function main() {
   const primary = runs[0]!;
   const outDir = join(ROOT, 'results');
   mkdirSync(outDir, { recursive: true });
-  const base = `${args.approach}-${stamp()}`;
+  const base = args.outBase ?? `${args.approach}-${stamp()}`;
   const jsonPath = join(outDir, `${base}.json`);
   const mdPath = join(outDir, `${base}.md`);
+
+  const multi =
+    args.repeat === 1
+      ? undefined
+      : {
+          repeats: runs.map((r) => r.metrics.macroF1),
+          macroF1Mean:
+            runs.reduce((a, r) => a + r.metrics.macroF1, 0) / runs.length,
+          macroF1Min: Math.min(...runs.map((r) => r.metrics.macroF1)),
+          macroF1Max: Math.max(...runs.map((r) => r.metrics.macroF1)),
+          endToEndMean:
+            runs.reduce((a, r) => a + r.metrics.endToEndAccuracy, 0) /
+            runs.length,
+          endToEndMin: Math.min(
+            ...runs.map((r) => r.metrics.endToEndAccuracy),
+          ),
+          endToEndMax: Math.max(
+            ...runs.map((r) => r.metrics.endToEndAccuracy),
+          ),
+        };
 
   const payload =
     args.repeat === 1
       ? primary
       : {
           ...primary,
-          repeats: runs.map((r) => r.metrics.macroF1),
-          macroF1Mean:
-            runs.reduce((a, r) => a + r.metrics.macroF1, 0) / runs.length,
-          macroF1Min: Math.min(...runs.map((r) => r.metrics.macroF1)),
-          macroF1Max: Math.max(...runs.map((r) => r.metrics.macroF1)),
+          ...multi,
+          /** Full per-run payloads for bootstrap / byGroup (do not re-call LLM). */
+          runDetails: runs.map((r) => ({
+            metrics: r.metrics,
+            failures: r.failures,
+            perCase: r.perCase,
+          })),
         };
 
   writeFileSync(jsonPath, JSON.stringify(payload, null, 2), 'utf8');
-  writeFileSync(mdPath, toMarkdown(primary), 'utf8');
+  writeFileSync(mdPath, toMarkdown(primary, multi), 'utf8');
   console.log(`Wrote ${jsonPath}`);
   console.log(`Wrote ${mdPath}`);
-  console.log(`macro-F1=${primary.metrics.macroF1.toFixed(3)}`);
+  if (multi) {
+    console.log(
+      `macro-F1 mean=${multi.macroF1Mean.toFixed(3)} (min=${multi.macroF1Min.toFixed(3)} max=${multi.macroF1Max.toFixed(3)})`,
+    );
+  } else {
+    console.log(`macro-F1=${primary.metrics.macroF1.toFixed(3)}`);
+  }
 }
 
 main().catch((err) => {
