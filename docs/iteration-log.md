@@ -408,6 +408,6 @@ Frozen after prompt8 ship. SHA256 `1fa1ea8c976265df8c4687e3664c14d75d399af5ac948
 | baseline | 0.425 | 0.442 | ×1 |
 | minimal | 0.943 (0.939–0.945) | 0.896 (0.883–0.909) | ×3 |
 | optimized (=prompt8) | 0.932 (0.922–0.950) | 0.978 (0.974–0.987) | ×3 |
-| prompt6 (appendix) | 0.948 | 0.987 | ×1 |
+| prompt6 (appendix) | 0.942 (0.940–0.943) | 0.983 (0.974–0.987) | ×3 |
 
-Bootstrap (B=10000, seed 42): optimized vs minimal — macro-F1 **↓** n.s.; e2e **↑** significant. Appendix optimized vs prompt6 — both metrics **↓** directionally, n.s. Full write-up: `docs/confirmation-report.md`.
+Bootstrap (B=10000, seed 42): optimized vs minimal — macro-F1 **↓** n.s.; e2e **↑** significant. Appendix optimized vs prompt6 (×3/×3) — both **↓** directionally, n.s.; minimal vs prompt6 — macro ≈ flat, e2e **↑** significant. Full write-up: `docs/confirmation-report.md`.

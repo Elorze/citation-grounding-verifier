@@ -9,7 +9,7 @@
 | SHA256 | `1fa1ea8c976265df8c4687e3664c14d75d399af5ac948f0628b77b9d605efb2c` |
 | Freeze note | [`confirmation-freeze.md`](confirmation-freeze.md) |
 | Config | DeepSeek `deepseek-chat`, thinking off, T=0.1 (same as `2-4`) |
-| Protocol | baseline ×1; `minimal` / `optimized` ×3 + paired bootstrap (B=10000, seed 42); `prompt6` ×1 appendix only |
+| Protocol | baseline ×1; `minimal` / `optimized` / `prompt6` ×3 + paired bootstrap (B=10000, seed 42); prompt6 is appendix-only |
 
 `optimized` = prompt8 (alias). Gold was not edited after hashing.
 
@@ -49,21 +49,36 @@ Unstable (gold-claim outcomes differ across 3 runs): minimal — `conf_005`, `co
 
 ## 2. Appendix: prompt6 vs optimized (freeze vs mid-climb)
 
-Single-run prompt6 vs optimized (3-run mean). Diff = optimized − prompt6. Arrows: **↑** better for optimized, **↓** worse.
+prompt6 re-run with **`--repeat 3`** (same protocol as minimal / optimized). Diff = optimized − prompt6. Arrows: **↑** better for optimized (=prompt8), **↓** worse.
 
-| Metric | prompt6 (×1) | optimized (=prompt8, ×3 mean) | Δ | |
+| Metric | prompt6 (×3) | optimized (=prompt8, ×3) | Δ | |
 | --- | ---: | ---: | ---: | --- |
-| macro-F1 | **0.948** | 0.932 | **−0.016** | **↓** |
-| end-to-end | **0.987** | 0.978 | **−0.009** | **↓** |
+| macro-F1 | **0.942** mean (0.940–0.943) | 0.932 mean (0.922–0.950) | **−0.010** | **↓** |
+| end-to-end | **0.983** mean (0.974–0.987) | 0.978 mean (0.974–0.987) | **−0.004** | **↓** |
 
-Artifact: [`c-prompt6.md`](../results/c-prompt6.md). Bootstrap: [`c-bootstrap-prompt6-vs-optimized.md`](../results/c-bootstrap-prompt6-vs-optimized.md).
+Per-run macro-F1 (prompt6): 0.943, 0.943, 0.940. Artifact: [`c-prompt6.md`](../results/c-prompt6.md).
 
-| Metric | diff (opt − p6) | 95% CI | note |
-| --- | ---: | --- | --- |
-| macro-F1 | −0.016 ↓ | [−0.068, 0.007] | includes 0 (n.s.); prompt6 single-run |
-| end-to-end | −0.009 ↓ | [−0.028, 0.000] | touches 0 |
+### Paired bootstrap: prompt6 vs optimized
 
-**Readout:** Relative to mid-climb prompt6, frozen prompt8 is **directionally slightly lower** on both headline metrics on this blind set (↓ / ↓). Drop is **not** significant at n=20 (and prompt6 was only one run). Treat as a **variance / generalization caveat**, not a reason to reopen the climb or ship prompt6 instead.
+Source: [`c-bootstrap-prompt6-vs-optimized.md`](../results/c-bootstrap-prompt6-vs-optimized.md). B=10000, seed 42, 3/3 runs.
+
+| Metric | prompt6 | optimized | diff (opt − p6) | 95% CI | note |
+| --- | ---: | ---: | ---: | --- | --- |
+| macro-F1 | 0.942 | 0.932 | **−0.010** ↓ | [−0.063, 0.018] | CI includes 0 (n.s.) |
+| end-to-end | 0.983 | 0.978 | **−0.004** ↓ | [−0.027, 0.012] | CI includes 0 (n.s.) |
+
+Unstable: prompt6 — `conf_005`; optimized — `conf_019`.
+
+### Paired bootstrap: minimal vs prompt6 (optional)
+
+Source: [`c-bootstrap-minimal-vs-prompt6.md`](../results/c-bootstrap-minimal-vs-prompt6.md). Diff = prompt6 − minimal.
+
+| Metric | minimal | prompt6 | diff | 95% CI | note |
+| --- | ---: | ---: | ---: | --- | --- |
+| macro-F1 | 0.943 | 0.942 | **−0.001** | [−0.018, 0.013] | n.s. (≈ flat) |
+| end-to-end | 0.896 | 0.983 | **+0.087** ↑ | **[0.029, 0.148]** | CI excludes 0 |
+
+**Readout:** With matched ×3 protocol, frozen prompt8 remains **directionally slightly below** mid-climb prompt6 on confirmation (macro **↓**, e2e **↓**); both gaps **not significant**. prompt6 ≈ minimal on macro-F1, but **significantly better** e2e (same pattern as optimized vs minimal). Still **analysis-only** — do not reopen climb or swap `optimized` to prompt6.
 
 ---
 
@@ -74,7 +89,7 @@ Artifact: [`c-prompt6.md`](../results/c-prompt6.md). Bootstrap: [`c-bootstrap-pr
 | baseline | 0 / 1 ms | 0 / 0 | 0 |
 | minimal | 1728 / 2067 ms | 366 / 381 | 1.00 |
 | optimized | 1878 / 2295 ms | 1096 / 486 | 1.00 |
-| prompt6 | 1689 / 2141 ms | 823 / 436 | 1.00 |
+| prompt6 (×3 run 1) | 1777 / 2197 ms | 823 / 449 | 1.00 |
 
 ---
 
