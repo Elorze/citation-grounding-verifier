@@ -228,3 +228,39 @@ Source: `results/4-byGroup.md` (`eval/cases_test_grouped.jsonl`). Group × appro
 | general | 0.136 | 1.000 | 0.955 | prompt3 over-splits / paraphrase extras on hard_017–018; prompt2 perfect on this group |
 
 Descriptive only; n per group too small for significance.
+
+## prompt5 (facts → claims + split-test)
+
+**Change:** New approach `prompt5` (`src/verifiers/llmPrompt5.ts`): two-step split instructions + Brookside Library example; JSON may include `facts` (accepted on `LlmOutput`, discarded; Claim unchanged). Registered in eval CLI and HTTP server.
+
+**Dev `1-1.jsonl` (1 run):** macro-F1 **0.961**, e2e 0.982, case exact 91.7% → `results/5-prompt5-1-1.*`. Failures: case_010 EXTRA; case_011 missed+extra causal alignment.
+
+**Hard `2-4.jsonl` (3 runs):** macro-F1 mean **0.941** (0.924–0.962), e2e mean 0.915 (0.897–0.923) → `results/5-prompt5.*`. Reused `4-baseline` / `4-prompt2` / `4-prompt3` (not re-run).
+
+### Statistical check (prompt5 vs prompt2 / prompt3)
+
+Case-level paired bootstrap, 10000 resamples, seed 42, averaged over 3 runs.
+
+| Pair | Metric | A | B=prompt5 | diff | 95% CI |
+| --- | --- | ---: | ---: | ---: | --- |
+| vs prompt2 | macro-F1 | 0.950 | 0.941 | −0.009 | [−0.029, 0.012] |
+| vs prompt2 | end-to-end | 0.906 | 0.915 | +0.009 | [−0.017, 0.042] |
+| vs prompt3 | macro-F1 | 0.950 | 0.941 | −0.009 | [−0.042, 0.017] |
+| vs prompt3 | end-to-end | 0.910 | 0.915 | +0.004 | [−0.021, 0.030] |
+
+**Conclusion:** directionally negative on macro-F1 vs both baselines; **not significant at n=20** (CI includes 0).
+
+**Unstable cases (case exact differs across 3 runs):** prompt2 — hard_019; prompt3 — hard_017; prompt5 — hard_014, hard_017, hard_018, hard_019.
+
+### Per-group (with prompt5)
+
+Source: `results/5-byGroup.md`. Descriptive only; n per group too small for significance.
+
+| Group | prompt2 | prompt3 | prompt5 |
+| --- | ---: | ---: | ---: |
+| T1 | 0.854 | 0.875 | 0.854 |
+| T2 | 0.900 | 0.900 | 0.900 |
+| T3 | 0.850 | 0.900 | 0.900 |
+| general | 1.000 | 0.955 | 0.985 |
+
+Full write-up: `docs/5-conclusion.md`.

@@ -17,7 +17,9 @@ const verifiers: Record<string, Verifier> = {
 let llmReady: Promise<void> | null = null;
 
 function ensureLlmVerifiers(): Promise<void> {
-  if (verifiers.minimal && verifiers.optimized) return Promise.resolve();
+  if (verifiers.minimal && verifiers.optimized && verifiers.prompt5) {
+    return Promise.resolve();
+  }
   if (!hasLlmKey()) {
     return Promise.reject(
       new AppError(
@@ -33,8 +35,12 @@ function ensureLlmVerifiers(): Promise<void> {
       const { llmOptimizedVerifier } = await import(
         './verifiers/llmOptimized.js'
       );
+      const { llmWordingVerifier } = await import('./verifiers/llmWording.js');
+      const { llmPrompt5Verifier } = await import('./verifiers/llmPrompt5.js');
       verifiers.minimal = llmMinimalVerifier;
       verifiers.optimized = llmOptimizedVerifier;
+      verifiers.wording = llmWordingVerifier;
+      verifiers.prompt5 = llmPrompt5Verifier;
     })();
   }
   return llmReady;
@@ -51,7 +57,12 @@ const STATUS_BY_CODE: Record<ErrorCode, number> = {
 
 async function resolveApproach(raw: string | undefined): Promise<Verifier> {
   const name = raw ?? env.VERIFIER;
-  if (name === 'minimal' || name === 'optimized') {
+  if (
+    name === 'minimal' ||
+    name === 'optimized' ||
+    name === 'wording' ||
+    name === 'prompt5'
+  ) {
     await ensureLlmVerifiers();
   }
   const v = verifiers[name];
@@ -74,7 +85,9 @@ app.get('/health', (c) =>
     provider: env.LLM_PROVIDER,
     verifiers: [
       ...Object.keys(verifiers),
-      ...(hasLlmKey() ? ['minimal', 'optimized'] : []),
+      ...(hasLlmKey()
+        ? ['minimal', 'optimized', 'wording', 'prompt5']
+        : []),
     ].filter((v, i, a) => a.indexOf(v) === i),
   }),
 );

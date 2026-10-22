@@ -32,6 +32,8 @@ export type VerifyResponse = z.infer<typeof VerifyResponse>;
 
 /** Lenient LLM output; validate.ts enforces real invariants. */
 export const LlmOutput = z.object({
+  /** Optional scratchpad from prompt5; parsed then discarded (not part of Claim). */
+  facts: z.array(z.string()).optional(),
   claims: z.array(
     z.object({
       claim_text: z.string(),
