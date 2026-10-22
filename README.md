@@ -81,7 +81,7 @@ Claim matching: Jaccard over hybrid tokens (Latin words + CJK bigrams) + contain
 
 Paired bootstrap on `2-4` (10000 resamples, seed 42): optimized/prompt8 vs wording-only (prompt2) and vs prompt5 — macro-F1 CI **excludes 0**; vs early M6a-style prompt3 / intermediate prompt6–7 — directionally better, not always significant at n=20. Details: `docs/8-conclusion.md`, `docs/iteration-log.md`.
 
-**Blind confirmation `3-confirmation.jsonl`** (frozen sha256 `1fa1ea8c…`; analysis only, no prompt retune): baseline macro-F1 **0.425**; minimal **0.943** mean; optimized **0.932** mean / e2e **0.978** mean (3 runs). Full tables + prompt6 appendix: [`docs/confirmation-report.md`](docs/confirmation-report.md).
+**Blind confirmation `3-confirmation.jsonl`** (frozen sha256 `1fa1ea8c…`; analysis only, no prompt retune): baseline macro-F1 **0.425**; minimal **0.943** mean; optimized **0.932** mean / e2e **0.978** mean (3 runs). Appendix prompt6 ×3 is **slightly higher** than optimized on macro-F1 / e2e (**not significant**); we **do not** swap `optimized` to prompt6. Full tables: [`docs/confirmation-report.md`](docs/confirmation-report.md).
 
 ### Latency / cost (same model)
 
@@ -109,7 +109,7 @@ One change class at a time; keep if quality improves (or holds while cost drops)
 2. **M6a / early optimized** — atomic-split rules (compound / and / by–in); cleared the original fused/missed failures on `1-1` (macro-F1 → 1.000 on that set).
 3. **Held-out hard set** (`2-4`) — showed M6a alone did not fully generalize; wording-only ablation (prompt2) ≈ M6a on aggregate.
 4. **prompt5–8** — facts→claims + worked example; patches for from–to, conditions, relation-only claims, coref; removed topic-word leakage from examples; stopped when gains plateaued.
-5. **Ship `optimized` = prompt8** — best mean macro-F1 on hard split among single-call prompts tried; no prompt9 (diminishing returns / variance risk).
+5. **Ship `optimized` = prompt8** — best mean macro-F1 on hard split among single-call prompts tried; no prompt9 (diminishing returns / variance risk). Blind confirmation scores are recorded in [`docs/confirmation-report.md`](docs/confirmation-report.md) and are **not** used to rename `optimized`.
 
 ---
 

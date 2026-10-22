@@ -95,6 +95,6 @@ Source: [`c-bootstrap-minimal-vs-prompt6.md`](../results/c-bootstrap-minimal-vs-
 
 ## 4. Decision
 
-- Keep **`optimized` = prompt8** as the shipped approach (assignment + prior `2-4` best mean).
-- Confirmation is **analysis-only**: scores recorded; **no** prompt9, **no** SYSTEM / repair edits from failure cases.
-- Document the blind-set nuance: on confirmation, minimal ≈ / slightly above optimized on macro-F1; optimized clearly better on e2e.
+- Keep **`optimized` = prompt8**. Selection is the **held-out `2-4` climb freeze** (best mean macro-F1 among single-call prompts tried)—**not** whichever approach scores highest on confirmation.
+- On confirmation: vs **minimal**, macro-F1 is slightly lower (bootstrap **n.s.**) while e2e is **significantly higher**; vs appendix **prompt6** (×3), macro-F1 and e2e are directionally slightly lower (**both n.s.**).
+- Therefore: do **not** rename `optimized` back to prompt6, do **not** open prompt9, do **not** edit SYSTEM / repair from this split. Confirmation is **analysis / generalization caveat** only.
