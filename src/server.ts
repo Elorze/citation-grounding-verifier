@@ -1,13 +1,14 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
+import type { Context } from 'hono';
 import { env, hasLlmKey } from './config.js';
 import { AppError, toErrorBody, type ErrorCode } from './errors.js';
 import { VerifyRequest } from './schema.js';
 import { baselineVerifier } from './verifiers/baseline.js';
 import { stubVerifier } from './verifiers/stub.js';
-import type { Verifier } from './verifiers/types.js';
+import type { Verifier, VerifyStats } from './verifiers/types.js';
 
-const MAX_BODY_BYTES = 1_000_000;
+export const MAX_BODY_BYTES = 1_000_000;
 
 const verifiers: Record<string, Verifier> = {
   stub: stubVerifier,
@@ -92,6 +93,26 @@ async function resolveApproach(raw: string | undefined): Promise<Verifier> {
   return v;
 }
 
+function resolveRequestId(c: Context): string {
+  const fromHeader = c.req.header('x-request-id')?.trim();
+  if (fromHeader) return fromHeader;
+  const fromQuery = c.req.query('request_id')?.trim();
+  if (fromQuery) return fromQuery;
+  return crypto.randomUUID();
+}
+
+function statsForDebug(stats: VerifyStats) {
+  return {
+    latency_ms: stats.latencyMs,
+    llm_calls: stats.llmCalls,
+    validation_retries: stats.validationRetries,
+    input_tokens: stats.inputTokens,
+    output_tokens: stats.outputTokens,
+    raw_invalid_citations: stats.rawInvalidCitations,
+    repaired_claims: stats.repairedClaims,
+  };
+}
+
 export const app = new Hono();
 
 app.get('/health', (c) =>
@@ -116,8 +137,10 @@ app.get('/health', (c) =>
   }),
 );
 
+app.get('/healthz', (c) => c.json({ ok: true }));
+
 app.post('/verify', async (c) => {
-  const requestId = crypto.randomUUID();
+  const requestId = resolveRequestId(c);
   try {
     const raw = await c.req.text();
     if (Buffer.byteLength(raw, 'utf8') > MAX_BODY_BYTES) {
@@ -146,17 +169,29 @@ app.post('/verify', async (c) => {
     }
 
     const verifier = await resolveApproach(c.req.query('approach'));
-    const { response } = await verifier.verify(parsed.data);
-    return c.json(response);
+    const { response, stats } = await verifier.verify(parsed.data);
+    const debug = c.req.query('debug') === '1';
+    const body: Record<string, unknown> = {
+      ...response,
+      request_id: requestId,
+    };
+    if (debug) body.stats = statsForDebug(stats);
+    return c.json(body);
   } catch (err) {
     if (err instanceof AppError) {
-      return c.json(toErrorBody(err), STATUS_BY_CODE[err.code] as 400);
+      return c.json(
+        { ...toErrorBody(err), request_id: requestId },
+        STATUS_BY_CODE[err.code] as 400,
+      );
     }
     console.error(`[${requestId}]`, err);
     return c.json(
-      toErrorBody(
-        new AppError('INTERNAL_ERROR', 'Unexpected server error', 500),
-      ),
+      {
+        ...toErrorBody(
+          new AppError('INTERNAL_ERROR', 'Unexpected server error', 500),
+        ),
+        request_id: requestId,
+      },
       500,
     );
   }

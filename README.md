@@ -175,17 +175,18 @@ One change class at a time; keep if quality improves (or holds while cost drops)
 - **Bootstrap:** B=10000, seed 42 (`eval/bootstrap.ts`)
 - **Datasets + sha256:** table under [Datasets](#datasets)
 - **Main commands:** `pnpm test`, `pnpm typecheck`, `pnpm eval -- --approach optimized --dataset eval/2-4.jsonl --repeat 3`
-- **CI** (`.github/workflows/ci.yml`): typecheck + test only — **no** live LLM eval / no API key
+- **HTTP:** `GET /healthz`; `POST /verify?approach=optimized&debug=1` returns `request_id` and optional `stats` (tokens only when `debug=1`)
+- **CI** (`.github/workflows/ci.yml`): typecheck + test + stub `pnpm eval` — **no** live LLM eval / no API key
 
 ---
 
 ## Scripts
 
-CI runs `pnpm typecheck` and `pnpm test` on push/PR (no live LLM eval).
+CI runs `pnpm typecheck`, `pnpm test`, and stub `pnpm eval` on push/PR (no live LLM / no API key).
 
 | Script | Purpose |
 | --- | --- |
-| `pnpm dev` / `pnpm start` | HTTP server |
+| `pnpm dev` / `pnpm start` | HTTP server (`/health`, `/healthz`, `/verify?debug=1`) |
 | `pnpm eval -- --approach <name> [--dataset …] [--repeat N]` | Benchmark |
 | `pnpm test` | Unit tests |
 | `pnpm typecheck` | `tsc --noEmit` |

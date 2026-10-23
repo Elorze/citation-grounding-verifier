@@ -29,3 +29,6 @@ jobs:
       - run: pnpm typecheck
 
       - run: pnpm test
+
+      # Offline smoke: stub needs no API key
+      - run: pnpm eval -- --approach stub --dataset eval/1-1.jsonl --out-base ci-stub

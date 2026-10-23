@@ -19,9 +19,16 @@ export const Claim = z.object({
 });
 export type Claim = z.infer<typeof Claim>;
 
+/** Align with 1 MB HTTP body: cap passage count and per-passage size. Empty array still allowed (forces UNSUPPORTED). */
+export const MAX_CONTEXT_PASSAGES = 64;
+export const MAX_PASSAGE_CHARS = 100_000;
+export const MAX_ANSWER_CHARS = 100_000;
+
 export const VerifyRequest = z.object({
-  context_passages: z.array(z.string()),
-  generated_answer: z.string(),
+  context_passages: z
+    .array(z.string().max(MAX_PASSAGE_CHARS))
+    .max(MAX_CONTEXT_PASSAGES),
+  generated_answer: z.string().max(MAX_ANSWER_CHARS),
 });
 export type VerifyRequest = z.infer<typeof VerifyRequest>;
 
