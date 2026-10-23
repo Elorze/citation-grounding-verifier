@@ -1,5 +1,7 @@
 # Citation Grounding & Faithfulness Verifier
 
+[![CI](https://github.com/Elorze/citation-grounding-verifier/actions/workflows/ci.yml/badge.svg)](https://github.com/Elorze/citation-grounding-verifier/actions/workflows/ci.yml)
+
 HTTP service that splits an LLM answer into atomic claims, checks each against source passages (`SUPPORTED` / `CONTRADICTED` / `UNSUPPORTED`), and attaches **verbatim** citations. Benchmarks three required approaches: non-LLM **baseline**, **minimal** LLM, and **optimized** LLM (best prompt after eval-driven hill-climbing).
 
 ## Quick start
@@ -130,6 +132,8 @@ One change class at a time; keep if quality improves (or holds while cost drops)
 ---
 
 ## Scripts
+
+CI runs `pnpm typecheck` and `pnpm test` on push/PR (no live LLM eval).
 
 | Script | Purpose |
 | --- | --- |
