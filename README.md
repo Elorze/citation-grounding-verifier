@@ -21,7 +21,8 @@ pnpm eval -- --approach optimized --dataset eval/2-4.jsonl --repeat 3
 1. **README** (this report) — three-way scores + design
 2. **`src/validate.ts` + `src/verifiers/`** — citation invariants + prompts
 3. **[`docs/iteration-log.md`](docs/iteration-log.md)** — Scoreboard + climb details
-4. **[`docs/confirmation-report.md`](docs/confirmation-report.md)** — blind confirmation (analysis only)
+4. **[`docs/annotation-protocol.md`](docs/annotation-protocol.md)** — how gold claims were labeled
+5. **[`docs/confirmation-report.md`](docs/confirmation-report.md)** — blind confirmation (analysis only)
 
 Provider used for reported numbers: **DeepSeek `deepseek-chat`** (`LLM_THINKING=disabled`, `LLM_TEMPERATURE=0.1`). OpenAI-compatible client; legacy `ZHIPU_API_KEY` still works if `LLM_API_KEY` is unset.
 
@@ -51,14 +52,14 @@ Ablation aliases used during climbing (`wording`, `prompt5`…`prompt8`) remain 
 
 ## Datasets
 
-| File | Role |
-| --- | --- |
-| `eval/1-1.jsonl` | 24-case **dev** set (v1.1); primary tuning surface |
-| `eval/2-4.jsonl` | 20-case **held-out** hard split (groups T1/T2/T3/general); used to check generalization |
-| `eval/3-confirmation.jsonl` | 20-case **blind confirmation** set after prompt8 freeze (do not retune on it); see [`docs/confirmation-report.md`](docs/confirmation-report.md) |
-| `eval/cases_test.jsonl` | Earlier freeze of a hard split (related content) |
+| File | Role | sha256 (frozen content) |
+| --- | --- | --- |
+| `eval/1-1.jsonl` | 24-case **dev** set (v1.1); primary tuning surface | `0fb59a7e9172adc421c0e75365e785492ba5e4066a0703df46a90fc82007cf46` |
+| `eval/2-4.jsonl` | 20-case **held-out** hard split (groups T1/T2/T3/general) | `4d799be6929a03b6a03b21944afefd24210612be36fc76d23f0db4484410a684` |
+| `eval/3-confirmation.jsonl` | 20-case **blind confirmation** after prompt8 freeze (do not retune); [`confirmation-report`](docs/confirmation-report.md) | `1fa1ea8c976265df8c4687e3664c14d75d399af5ac948f0628b77b9d605efb2c` |
+| `eval/cases_test.jsonl` | Earlier freeze of a hard split (related content) | `c83ab8c18eb70e1b8943ef8430294078ffe614d5543b7d32673cb66631463a58` |
 
-Gold quotes are verbatim substrings. Labeling notes: `示范用例库.md`.
+Gold quotes are verbatim substrings. Labeling protocol: [`docs/annotation-protocol.md`](docs/annotation-protocol.md). Human-readable case cards: [`示范用例库.md`](示范用例库.md).
 
 ## Metrics
 
