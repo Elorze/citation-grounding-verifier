@@ -20,9 +20,9 @@ pnpm eval -- --approach optimized --dataset eval/2-4.jsonl --repeat 3
 
 ### Reading order
 
-1. **README** (this report) — three-way scores + design
+1. **README** (this report) — three-way scores + [Design decisions](#design-decisions)
 2. **`src/validate.ts` + `src/verifiers/`** — citation invariants + prompts
-3. **[`docs/iteration-log.md`](docs/iteration-log.md)** — Scoreboard + climb details
+3. **[`docs/iteration-log.md`](docs/iteration-log.md)** — Scoreboard, Why prompt8, [Architecture trade-off](docs/iteration-log.md#architecture-trade-off)
 4. **[`docs/annotation-protocol.md`](docs/annotation-protocol.md)** — how gold claims were labeled
 5. **[`docs/confirmation-report.md`](docs/confirmation-report.md)** — blind confirmation (analysis only)
 
@@ -51,6 +51,31 @@ Ablation aliases used during climbing (`wording`, `prompt5`…`prompt8`) remain 
 - **Empty context** → every claim forced to `UNSUPPORTED` with `[]` citations.
 - **Empty / non-factual answer** → `{ "claims": [] }`.
 - Eval runs **in-process** (no HTTP), sequentially; optional `EVAL_DELAY_MS` for rate limits.
+
+## Design decisions
+
+Same rationale as [`docs/iteration-log.md`](docs/iteration-log.md) § Architecture trade-off. Numbers below match existing result files; no multi-stage verifier was implemented.
+
+### Architecture: single-pass vs multi-stage
+
+Early on I weighed multi-stage pipelines (separate calls for draft facts / verdicts / repair) against one structured **single-pass** call.
+
+- Multi-stage can help on very long, multi-hop answers by splitting attention, but cost and latency scale roughly with the number of calls, and errors compound across stages.
+- This take-home prioritizes a reproducible, comparable verifier for RAG-style checks, not a production orchestrator. I therefore pushed the **single-pass** ceiling: a `facts` scratchpad in the prompt, anti-over-split rules (including from–to as one detail), and Zod + citation repair after the model returns.
+- Measured single-call latency on our evals is on the order of **~1–2s p50** (e.g. minimal on 1-1 ≈ 1.2s; optimized on 2-4 run 1 ≈ 1.6s — see result tables). I did **not** implement a multi-stage baseline in-repo; the trade-off is reasoned, not A/B’d against a half-finished pipeline.
+- Shipped point estimates: held-out `2-4` optimized macro-F1 **0.967**; blind `3-confirmation` optimized e2e **0.978**. Freeze = prompt8; no prompt9; confirmation does not rename the ship decision.
+
+### Eval design: controlled splits vs dumping public benchmarks as gold
+
+Public suites (e.g. RAGTruth) are useful for **failure taxonomies**, but gold granularity differs across papers—blind-scoring a whole dump can measure annotation mismatch more than system quality.
+
+Controlled ladder instead:
+
+1. Dev `eval/1-1.jsonl` (24) — prompt2…prompt8 hill-climb
+2. Held-out `eval/2-4.jsonl` (20) — generalization + paired bootstrap (B=10000, seed 42)
+3. Blind `eval/3-confirmation.jsonl` (20; real tech-doc excerpts; sha256 in the Datasets table) — freeze-then-check only
+
+Hard-set cases may carry RAGTruth/FRANK-style taxonomy **labels**; we do not treat an external corpus wholesale as our gold.
 
 ## Datasets
 
@@ -113,7 +138,13 @@ Optimized spends more **input** tokens (longer system prompt + example) for high
 
 ### Eval-driven hill-climbing (minimal → optimized)
 
-One change class at a time; keep if quality improves (or holds while cost drops). Intermediate prompts (`prompt2`…`prompt7`) are in the iteration-log Scoreboard only—not in the main quality table above.
+Causal chain (short):
+
+- Minimal errors on 1-1 were mostly **fused/missed claims** (decomposition), not wrong verdicts once matched → atomic-split and later rule patches.
+- **prompt7** raised run-to-run variance on 2-4 → **prompt8** leaner example, best 2-4 mean macro-F1 → freeze.
+- **Confirmation:** optimized macro-F1 slightly under minimal/prompt6 (**n.s.**) but e2e higher vs minimal (**significant**); ship stays prompt8; no retune from the blind set.
+
+One change class at a time; keep if quality improves (or holds while cost drops). Intermediate prompts (`prompt2`…`prompt7`) are in the iteration-log Scoreboard only—not in the main quality table above. Full tables: [`docs/iteration-log.md`](docs/iteration-log.md).
 
 | Split | baseline | minimal | optimized (=prompt8) |
 | --- | ---: | ---: | ---: |

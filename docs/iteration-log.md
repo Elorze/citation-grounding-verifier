@@ -52,6 +52,14 @@ Footnote: confirmation ran approach **`minimal`** (assignment short prompt), not
 
 Stop：prompt8 已是单次调用线上最好点估计；再开 prompt9 多半是对着残差题改半句规则/示例，n=20 上难变显著，却易抖别的题（prompt7 已出现过波动变大、均值不升）。故 **stop；no prompt9；confirmation 不用于 rename**。最终 SYSTEM（EN+CN）：[`docs/prompts/prompt8.md`](prompts/prompt8.md)。
 
+### Architecture trade-off
+
+Same text as README § Design decisions. Numbers match existing results; no multi-stage verifier in-repo.
+
+**Single-pass vs multi-stage.** Multi-stage pipelines (separate calls for draft facts / verdicts / repair) can help on very long, multi-hop answers by splitting attention, but cost and latency scale with call count and errors compound. This take-home prioritizes a reproducible RAG-style verifier, not a production orchestrator, so I pushed the **single-pass** ceiling: `facts` scratchpad, anti-over-split rules (from–to as one detail), Zod + citation repair after one model return. Measured single-call latency is ~**1–2s p50** on our evals (see result tables). The multi-stage alternative was reasoned, not A/B’d. Shipped: `2-4` optimized macro-F1 **0.967**; confirmation optimized e2e **0.978**; freeze = prompt8; no prompt9; confirmation does not rename.
+
+**Controlled splits vs public-benchmark dumps as gold.** Suites like RAGTruth inform **failure taxonomies**, but gold granularity differs—scoring a whole dump often measures annotation mismatch. Ladder: (1) `1-1` hill-climb, (2) `2-4` held-out + paired bootstrap (B=10000, seed 42), (3) `3-confirmation` freeze-then-check. Cases may carry RAGTruth/FRANK-style taxonomy labels; we do not use an external corpus wholesale as gold.
+
 ### Climb path (one line each)
 
 | Step | What changed | Keep? |
