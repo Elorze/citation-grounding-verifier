@@ -20,7 +20,7 @@ pnpm eval -- --approach optimized --dataset eval/2-4.jsonl --repeat 3
 
 ### Reading order
 
-1. **README** (this report) — three-way scores + [Design decisions](#design-decisions)
+1. **README** (this report) — three-way scores + [Design decisions](#design-decisions) + [Limitations](#limitations) / [Reproduce](#reproduce)
 2. **`src/validate.ts` + `src/verifiers/`** — citation invariants + prompts
 3. **[`docs/iteration-log.md`](docs/iteration-log.md)** — Scoreboard, Why prompt8, [Architecture trade-off](docs/iteration-log.md#architecture-trade-off)
 4. **[`docs/annotation-protocol.md`](docs/annotation-protocol.md)** — how gold claims were labeled
@@ -159,6 +159,23 @@ One change class at a time; keep if quality improves (or holds while cost drops)
 5. **Ship `optimized` = prompt8** — (1) freeze before confirmation, not by blind-set rank; (2) best 2-4 mean macro-F1 **0.967** (tight range; significant vs prompt2/5); (3) confirmation dip vs prompt6 is small and **n.s.**—no rename; (4) fuller rules + leaner example than prompt6, stabler than prompt7. No prompt9. Confirmation caveat: [`docs/confirmation-report.md`](docs/confirmation-report.md).
 
 **Full climb tables + freeze rationale → [`docs/iteration-log.md`](docs/iteration-log.md) § Scoreboard.** Confirmation caveat → [`docs/confirmation-report.md`](docs/confirmation-report.md).
+
+## Limitations
+
+- Held-out `2-4` and blind `3-confirmation` are **n=20** each; paired bootstrap CIs often include 0 — expected at this size. We report CIs, not only point estimates.
+- Gold is **single-annotator** (author); some cases were AI-assisted drafts then edited — see [`docs/annotation-protocol.md`](docs/annotation-protocol.md). No second-annotator agreement.
+- Claim matching is Jaccard ≥ 0.5 (+ containment); near-paraphrase splits can show as MISSED+EXTRA even when the idea is right (`eval/metrics.ts`).
+- The multi-stage architecture trade-off is **reasoned**, not A/B’d in-repo (no multi-stage verifier shipped).
+- Confirmation uses real tech-doc excerpts (SQLite / Postgres / Redis / Git / Docker / MDN-style) but remains a small blind check — not a claim of industrial-scale generalization.
+- Dev `1-1` can saturate (optimized macro-F1 **1.000**); do not over-read perfect scores on the tuning surface.
+
+## Reproduce
+
+- **Model:** DeepSeek `deepseek-chat`, `LLM_THINKING=disabled`, `LLM_TEMPERATURE=0.1`
+- **Bootstrap:** B=10000, seed 42 (`eval/bootstrap.ts`)
+- **Datasets + sha256:** table under [Datasets](#datasets)
+- **Main commands:** `pnpm test`, `pnpm typecheck`, `pnpm eval -- --approach optimized --dataset eval/2-4.jsonl --repeat 3`
+- **CI** (`.github/workflows/ci.yml`): typecheck + test only — **no** live LLM eval / no API key
 
 ---
 
