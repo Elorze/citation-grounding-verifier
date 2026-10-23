@@ -16,6 +16,13 @@ pnpm eval -- --approach optimized --dataset eval/1-1.jsonl
 pnpm eval -- --approach optimized --dataset eval/2-4.jsonl --repeat 3
 ```
 
+### Reading order
+
+1. **README** (this report) — three-way scores + design
+2. **`src/validate.ts` + `src/verifiers/`** — citation invariants + prompts
+3. **[`docs/iteration-log.md`](docs/iteration-log.md)** — Scoreboard + climb details
+4. **[`docs/confirmation-report.md`](docs/confirmation-report.md)** — blind confirmation (analysis only)
+
 Provider used for reported numbers: **DeepSeek `deepseek-chat`** (`LLM_THINKING=disabled`, `LLM_TEMPERATURE=0.1`). OpenAI-compatible client; legacy `ZHIPU_API_KEY` still works if `LLM_API_KEY` is unset.
 
 ```bash
@@ -30,7 +37,7 @@ curl -s -X POST "http://localhost:3100/verify?approach=optimized" \
 | --- | --- |
 | `baseline` | Sentence split + BM25 + coverage / number / negation heuristics (**no** LLM) |
 | `minimal` | Single LLM call with the assignment’s **minimal** system prompt + Zod parse + citation validate/retry/repair |
-| `optimized` | **Same stack as minimal**, but the system prompt is the best hill-climbed version (**prompt8**: facts→claims, from–to as one detail, condition handling, relation-only claims, coref; worked example with fictional entities). Implemented as an alias of `prompt8` in code |
+| `optimized` | **Same stack as minimal**, but the system prompt is the best hill-climbed version (**prompt8**: facts→claims, from–to as one detail, condition handling, relation-only claims, coref; worked example with fictional entities). Alias of `prompt8` in code; full EN+CN text: [`docs/prompts/prompt8.md`](docs/prompts/prompt8.md) |
 | `stub` | Fixed response for wiring tests |
 
 Ablation aliases used during climbing (`wording`, `prompt5`…`prompt8`) remain registered for reproduction; the assignment’s public three-way comparison is **baseline / minimal / optimized**.
@@ -103,13 +110,21 @@ Optimized spends more **input** tokens (longer system prompt + example) for high
 
 ### Eval-driven hill-climbing (minimal → optimized)
 
-One change class at a time; keep if quality improves (or holds while cost drops). Full log: [`docs/iteration-log.md`](docs/iteration-log.md).
+One change class at a time; keep if quality improves (or holds while cost drops). Intermediate prompts (`prompt2`…`prompt7`) are in the iteration-log Scoreboard only—not in the main quality table above.
 
-1. **minimal** — assignment baseline prompt; validate/retry/repair only.
-2. **M6a / early optimized** — atomic-split rules (compound / and / by–in); cleared the original fused/missed failures on `1-1` (macro-F1 → 1.000 on that set).
-3. **Held-out hard set** (`2-4`) — showed M6a alone did not fully generalize; wording-only ablation (prompt2) ≈ M6a on aggregate.
-4. **prompt5–8** — facts→claims + worked example; patches for from–to, conditions, relation-only claims, coref; removed topic-word leakage from examples; stopped when gains plateaued.
-5. **Ship `optimized` = prompt8** — best mean macro-F1 on hard split among single-call prompts tried; no prompt9 (diminishing returns / variance risk). Blind confirmation scores are recorded in [`docs/confirmation-report.md`](docs/confirmation-report.md) and are **not** used to rename `optimized`.
+| Split | baseline | minimal | optimized (=prompt8) |
+| --- | ---: | ---: | ---: |
+| 1-1 macro-F1 | 0.192 | 0.922 | 1.000 |
+| 2-4 macro-F1 (mean) | 0.253 | — (related hard freeze 0.913; prompt2 on 2-4 → iteration-log) | **0.967** |
+| 3-confirmation macro-F1 (mean) | 0.425 | 0.943 | 0.932 |
+
+1. **minimal** — assignment short prompt; validate/retry/repair only.
+2. **M6a / early optimized** — atomic-split rules (compound / and / by–in); cleared fused/missed failures on `1-1` (macro-F1 → 1.000 on that set).
+3. **Held-out hard set** (`2-4`) — M6a alone did not fully generalize; wording-only ablation (prompt2) ≈ M6a on aggregate.
+4. **prompt5–8** — facts→claims + worked example; patches for from–to, conditions, relation-only claims, coref; removed topic-word leakage; stopped when gains plateaued.
+5. **Ship `optimized` = prompt8** — (1) freeze before confirmation, not by blind-set rank; (2) best 2-4 mean macro-F1 **0.967** (tight range; significant vs prompt2/5); (3) confirmation dip vs prompt6 is small and **n.s.**—no rename; (4) fuller rules + leaner example than prompt6, stabler than prompt7. No prompt9. Confirmation caveat: [`docs/confirmation-report.md`](docs/confirmation-report.md).
+
+**Full climb tables + freeze rationale → [`docs/iteration-log.md`](docs/iteration-log.md) § Scoreboard.** Confirmation caveat → [`docs/confirmation-report.md`](docs/confirmation-report.md).
 
 ---
 

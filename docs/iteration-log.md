@@ -1,5 +1,74 @@
 # Iteration log
 
+## Scoreboard (author summary)
+
+Public README compares only **baseline / minimal / optimized(=prompt8)**. Intermediate prompts live here.
+
+### Dev `eval/1-1.jsonl`（24 cases，调参面，LLM 通常 ×1）
+
+| Approach | macro-F1 | e2e |
+| --- | ---: | ---: |
+| baseline | 0.192 | 0.200 |
+| prompt2 (wording) | 0.944 | 0.909 |
+| prompt3 (M6a) | 1.000 | 1.000 |
+| prompt5 | 0.961 | 0.982 |
+| prompt6 | 1.000 | 1.000 |
+| prompt7 | 1.000 | 1.000 |
+| prompt8 | 1.000 | 1.000 |
+
+Footnote: assignment `minimal` on 1-1 is macro-F1 **0.922** / e2e **0.909** (`results/minimal-20261021-224802.md`). The prompt2 row above is the **wording** ablation (minimal + pronoun rule), not the README `minimal` row.
+
+### Held-out `eval/2-4.jsonl`（20 cases；baseline ×1，LLM mean over 3，括号为 min–max）
+
+| Approach | macro-F1 | e2e |
+| --- | ---: | ---: |
+| baseline | 0.253 | 0.192 |
+| prompt2 | 0.950 (0.937–0.956) | 0.906 (0.897–0.910) |
+| prompt3 | 0.950 (0.947–0.952) | 0.910 (0.910–0.910) |
+| prompt5 | 0.941 (0.924–0.962) | 0.915 (0.897–0.923) |
+| prompt6 | 0.956 (0.938–0.968) | 0.936 (0.923–0.949) |
+| prompt7 | 0.953 (0.936–0.972) | 0.944 (0.923–0.974) |
+| prompt8 | **0.967 (0.963–0.972)** | **0.940 (0.936–0.949)** |
+
+Sources: `docs/8-conclusion.md`, `results/8-prompt8.md`, earlier `4-*` / `5-*` / `6-*` / `7-*` artifacts.
+
+### Blind confirmation `eval/3-confirmation.jsonl`（冻结后；sha256 `1fa1ea8c976265df8c4687e3664c14d75d399af5ac948f0628b77b9d605efb2c`；不调参）
+
+| Approach | macro-F1 | e2e |
+| --- | ---: | ---: |
+| baseline | 0.425 | 0.442 |
+| minimal (assignment) | 0.943 (0.939–0.945) | 0.896 (0.883–0.909) |
+| prompt6 (appendix) | 0.942 (0.940–0.943) | 0.983 (0.974–0.987) |
+| prompt8 = optimized | 0.932 (0.922–0.950) | 0.978 (0.974–0.987) |
+
+Footnote: confirmation ran approach **`minimal`** (assignment short prompt), not wording/prompt2. Author notes sometimes write “prompt2 ≈ minimal” for this row—do not confuse with 1-1 wording F1 0.944. Full analysis: `docs/confirmation-report.md`.
+
+### Why `optimized` = prompt8（frozen before confirmation）
+
+1. **冻结规则先于盲测排名**：prompt8 在 2-4 爬山结束后事先冻结；confirmation 的职责是检验泛化，不是重新选冠军。
+2. **主 held-out（2-4）上点估计最好**：macro-F1 mean **0.967**（0.963–0.972），区间窄；相对 prompt2 / prompt5 的 paired bootstrap（B=10000, seed 42）macro-F1 CI 不含 0。
+3. **confirmation 上的小幅落差不够换货**：prompt6 在 confirmation 上 macro-F1 / e2e 略高，但 vs optimized **不显著**；且 confirmation 禁止回写 SYSTEM。
+4. **规则更完整、示例更干净**：相对 prompt6，prompt8 保留 from–to / 条件 / relation-only / coref 补丁，并缩短 example、去掉易泄漏的 surface tokens；相对 prompt7，点估计更高且更稳（prompt7 在 2-4 上波动更大）。
+
+Stop：prompt8 已是单次调用线上最好点估计；再开 prompt9 多半是对着残差题改半句规则/示例，n=20 上难变显著，却易抖别的题（prompt7 已出现过波动变大、均值不升）。故 **stop；no prompt9；confirmation 不用于 rename**。最终 SYSTEM（EN+CN）：[`docs/prompts/prompt8.md`](prompts/prompt8.md)。
+
+### Climb path (one line each)
+
+| Step | What changed | Keep? |
+| --- | --- | --- |
+| baseline | BM25 + heuristics | floor |
+| minimal | assignment prompt + validate/retry | yes |
+| prompt2 wording | pronoun / full-name rule | ablation |
+| prompt3 M6a | atomic split rules | early optimized |
+| prompt5 | facts→claims + example | mixed |
+| prompt6 | detail / condition / relation rules | strong |
+| prompt7 | from–to / no cond-dup / relation-only patches | unstable |
+| prompt8 | leaner example on prompt7-style rules | **ship** |
+
+Details: sections below + `docs/4-conclusion.md` … `docs/8-conclusion.md`.
+
+---
+
 ## M1 stub wiring
 
 Hypothesis: empty HTTP shell + schema is enough to prove request/response path.
@@ -397,7 +466,7 @@ Full write-up: `docs/8-conclusion.md`.
 
 **Change:** `src/verifiers/llmOptimized.ts` now delegates to `llmPrompt8Verifier` (name remains `optimized`). README rewritten as the assignment evaluation report: baseline / minimal / optimized quality tables, latency/cost, key failures, and hill-climbing summary (minimal → M6a → hard set → prompt5–8 → ship prompt8). Ablation approaches (`wording`, `prompt5`…`prompt8`) stay registered for reproduction.
 
-**Decision:** stop climbing; no prompt9 (best hard-set mean so far; variance at n=20).
+**Decision:** see top-of-file **Scoreboard → Why `optimized` = prompt8** (freeze on 2-4 best mean; stop / no prompt9; confirmation does not rename).
 
 ## Confirmation blind set (`eval/3-confirmation.jsonl`)
 
